@@ -1,0 +1,24 @@
+language: dart
+dart:
+  - stable
+os:
+  - linux
+sudo: false
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libstdc++6
+      - fonts-droid-fallback
+install:
+  - echo 'Avoid default Travis CI install step'
+before_script:
+  - git clone https://github.com/flutter/flutter.git -b beta
+  - ./flutter/bin/flutter doctor
+script:
+  - cd $TRAVIS_BUILD_DIR
+  - ./flutter/bin/flutter test
+cache:
+  directories:
+    - $HOME/.pub-cache
