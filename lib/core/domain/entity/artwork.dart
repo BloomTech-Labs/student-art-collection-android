@@ -11,7 +11,7 @@ class Artwork extends Equatable {
   final int schoolId;
   final String description;
   final DateTime datePosted;
-  final Images images;
+  final List<Image> images;
 
   Artwork({
     @required this.artId,
@@ -57,12 +57,12 @@ class Category extends Equatable {
       ];
 }
 
-class Images extends Equatable {
+class Image extends Equatable {
   final int imageId;
   final int artId;
   final String imageUrl;
 
-  Images({
+  Image({
     @required this.imageId,
     @required this.artId,
     @required this.imageUrl,
