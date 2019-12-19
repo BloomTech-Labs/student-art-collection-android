@@ -6,6 +6,7 @@ import 'package:student_art_collection/core/network/network_info.dart';
 class MockDataConnectionChecker extends Mock implements DataConnectionChecker {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   NetworkInfoImpl networkInfoImpl;
   MockDataConnectionChecker mockDataConnectionChecker;
 
