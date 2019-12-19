@@ -55,6 +55,7 @@ class Category extends Equatable {
         categoryId,
         categoryName,
       ];
+
 }
 
 class Image extends Equatable {
@@ -70,4 +71,5 @@ class Image extends Equatable {
 
   @override
   List<Object> get props => [imageId, artId, imageUrl];
+
 }
