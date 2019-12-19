@@ -23,7 +23,6 @@ void main() {
       id: 1,
       schoolId: 'test',
       email: 'test@test.com',
-      password: 'password',
       schoolName: 'test',
       address: 'test',
       city: 'test',
