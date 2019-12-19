@@ -1,8 +1,7 @@
 import 'package:meta/meta.dart';
+import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/features/buy_art/data/model/category_model.dart';
-
-import 'image_model.dart';
+import 'package:student_art_collection/core/data/model/category_model.dart';
 
 class ArtworkModel extends Artwork {
   ArtworkModel({

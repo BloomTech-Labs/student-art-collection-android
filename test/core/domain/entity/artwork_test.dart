@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Artwork entity', () {
     final tImages1 = [Image(artId: 1, imageUrl: 'Test url', imageId: 1)];
     final tImages2 = [Image(artId: 1, imageUrl: 'Test url', imageId: 1)];
