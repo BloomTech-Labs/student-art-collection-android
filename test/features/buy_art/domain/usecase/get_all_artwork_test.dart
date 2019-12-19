@@ -22,7 +22,8 @@ void main() {
     Image(imageId: 2, artId: 1, imageUrl: 'https://picsum.photos/200/300')
   ];
   final tArtworkList = [
-    Artwork(artId: 1, schoolId: 1, price: 25, images: tImagesList)
+    Artwork(artId: 1, schoolId: 1, price: 25, images: tImagesList),
+    Artwork(artId:21, schoolId: 1, price: 25, images: tImagesList)
   ];
 
   test('should get all artwork from the repository', () async {
