@@ -5,12 +5,12 @@ import 'package:student_art_collection/features/list_art/domain/usecase/register
 abstract class ArtcoRemoteDataSource {
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister);
 
-  Future<School> loginSchool(Credentials credentials);
+  Future<School> loginSchool(String uid);
 }
 
 class GraphQLRemoteDataSource implements ArtcoRemoteDataSource {
   @override
-  Future<School> loginSchool(Credentials credentials) {
+  Future<School> loginSchool(String uid) {
     // TODO: implement loginSchool
     return null;
   }

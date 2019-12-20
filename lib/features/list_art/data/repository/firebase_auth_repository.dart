@@ -22,15 +22,33 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
       @required this.firebaseAuth});
 
   @override
-  Future<Either<Failure, School>> loginSchool(Credentials credentials) {
-    // TODO: implement loginSchool
-    return null;
+  Future<Either<Failure, School>> loginSchool(Credentials credentials) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final authResult = await firebaseAuth.signInWithEmailAndPassword(
+            email: credentials.email, password: credentials.password);
+        final school = await remoteDataSource.loginSchool(authResult.user.uid);
+        return Right(school);
+      } on PlatformException catch (e) {
+        return Left(FirebaseFailure(e.message));
+      } on ServerException {
+        final user = await firebaseAuth.currentUser();
+        user.delete();
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  Future<bool> _isNetworkAvailable() {
+    return networkInfo.isConnected;
   }
 
   @override
   Future<Either<Failure, School>> registerNewSchool(
       SchoolToRegister school) async {
-    if (await networkInfo.isConnected) {
+    if (await _isNetworkAvailable()) {
       try {
         final authResult = await firebaseAuth.createUserWithEmailAndPassword(
             email: school.email, password: school.password);
@@ -43,7 +61,8 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
       } on ServerException {
         return Left(ServerFailure());
       }
+    } else {
+      return Left(NetworkFailure());
     }
-    return null;
   }
 }

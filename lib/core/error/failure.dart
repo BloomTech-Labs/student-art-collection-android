@@ -23,6 +23,14 @@ class FirebaseFailure extends Failure {
   FirebaseFailure(this.message);
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
+}
+
+class NetworkFailure<T> extends Failure {
+  final T cacheData;
+
+  NetworkFailure([this.cacheData]);
+
+  @override
+  List<Object> get props => [cacheData];
 }
