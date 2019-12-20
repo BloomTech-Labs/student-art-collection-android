@@ -17,16 +17,18 @@ class RegisterNewSchool implements UseCase<School, SchoolToRegister> {
   }
 }
 
-class SchoolToRegister extends Equatable {
-  final String email;
-  final String password;
-  final String schoolName;
-  final String address;
-  final String city;
-  final String state;
-  final String zipcode;
+class SchoolToRegister {
+  String schoolId;
+  String email;
+  String password;
+  String schoolName;
+  String address;
+  String city;
+  String state;
+  String zipcode;
 
   SchoolToRegister({
+    this.schoolId,
     @required this.email,
     @required this.password,
     @required this.schoolName,
@@ -35,8 +37,4 @@ class SchoolToRegister extends Equatable {
     @required this.state,
     @required this.zipcode,
   });
-
-  @override
-  List<Object> get props =>
-      [email, password, schoolName, address, city, state, zipcode];
 }
