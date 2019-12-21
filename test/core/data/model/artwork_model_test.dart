@@ -5,7 +5,7 @@ import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 
-import '../../../../core/fixtures/fixture_reader.dart';
+import '../../fixtures/fixture_reader.dart';
 
 void main() {
   final tImageList = [ImageModel(

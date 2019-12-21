@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import '../../../../core/fixtures/fixture_reader.dart';
+import '../../fixtures/fixture_reader.dart';
 
 void main() {
   final tCategoryModel = CategoryModel(

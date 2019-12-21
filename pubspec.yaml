@@ -20,6 +20,8 @@ dependencies:
   dio: ^3.0.7
   flutter_bloc: ^2.1.1
   get_it: ^3.0.3
+  extended_image: ^0.6.8
+  flutter_screenutil: ^0.7.0
 
 
 dev_dependencies:
@@ -28,4 +30,8 @@ dev_dependencies:
   mockito: ^4.1.1
 
 flutter:
+
   uses-material-design: true
+
+  assets:
+    - images/
