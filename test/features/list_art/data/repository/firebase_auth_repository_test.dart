@@ -12,15 +12,8 @@ import 'package:student_art_collection/features/list_art/data/repository/firebas
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 
-class MockRemoteDataSource extends Mock implements GraphQLRemoteDataSource {}
-
-class MockNetworkInfo extends Mock implements NetworkInfo {}
-
-class MockFirebaseAuth extends Mock implements FirebaseAuth {}
-
-class MockFirebaseUser extends Mock implements FirebaseUser {}
-
-class MockAuthResult extends Mock implements AuthResult {}
+import '../../mock/mock_classes.dart';
+import '../../mock/mock_objects.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -62,34 +55,13 @@ void main() {
     });
   }
 
-  final SchoolModel tSchoolModel = SchoolModel(
-      id: 1,
-      schoolId: 'test',
-      email: 'test@test.com',
-      schoolName: 'test',
-      address: 'test',
-      city: 'test',
-      state: 'test',
-      zipcode: 'test');
-
   final School tSchool = tSchoolModel;
 
   group('registerNewSchool', () {
-    final schoolToRegister = SchoolToRegister(
-      schoolId: 'test',
-      email: 'test',
-      password: 'test',
-      schoolName: 'test',
-      address: 'test',
-      city: 'test',
-      state: 'test',
-      zipcode: 'test',
-    );
-
     void createNewUserSuccess() {
       when(mockFirebaseAuth.createUserWithEmailAndPassword(
-              email: schoolToRegister.email,
-              password: schoolToRegister.password))
+              email: tSchoolToRegister.email,
+              password: tSchoolToRegister.password))
           .thenAnswer((_) async => mockAuthResult);
       when(mockAuthResult.user).thenReturn(mockFirebaseUser);
       when(mockFirebaseUser.uid).thenReturn('test');
@@ -99,7 +71,7 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       createNewUserSuccess();
 
-      repository.registerNewSchool(schoolToRegister);
+      repository.registerNewSchool(tSchoolToRegister);
 
       verify(mockNetworkInfo.isConnected);
     });
@@ -108,11 +80,11 @@ void main() {
       test('should call firebaseAuth.createUserWithEmailAndPassword', () async {
         createNewUserSuccess();
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
         verify(mockFirebaseAuth.createUserWithEmailAndPassword(
-                email: schoolToRegister.email,
-                password: schoolToRegister.password))
+                email: tSchoolToRegister.email,
+                password: tSchoolToRegister.password))
             .called(1);
       });
 
@@ -120,16 +92,16 @@ void main() {
           'should return FirebaseFailure when Firebase registration attempt is unsuccessful',
           () async {
         when(mockFirebaseAuth.createUserWithEmailAndPassword(
-                email: schoolToRegister.email,
-                password: schoolToRegister.password))
+                email: tSchoolToRegister.email,
+                password: tSchoolToRegister.password))
             .thenThrow(
                 PlatformException(code: '1', message: 'Could not sign in'));
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
         verify(mockFirebaseAuth.createUserWithEmailAndPassword(
-                email: schoolToRegister.email,
-                password: schoolToRegister.password))
+                email: tSchoolToRegister.email,
+                password: tSchoolToRegister.password))
             .called(1);
 
         expect(result, Left(FirebaseFailure('Could not sign in')));
@@ -143,9 +115,9 @@ void main() {
         when(mockRemoteDataSource.registerNewSchool(any))
             .thenAnswer((_) async => tSchoolModel);
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
-        verify(mockRemoteDataSource.registerNewSchool(schoolToRegister));
+        verify(mockRemoteDataSource.registerNewSchool(tSchoolToRegister));
         expect(result, Right(tSchool));
       });
     });
@@ -156,7 +128,7 @@ void main() {
           () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
         expect(result, Left(NetworkFailure()));
       });

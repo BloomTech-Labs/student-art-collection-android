@@ -6,7 +6,7 @@ abstract class SchoolAuthState extends Equatable {
   const SchoolAuthState();
 }
 
-class Empty extends SchoolAuthState {
+class Unauthorized extends SchoolAuthState {
   @override
   List<Object> get props => [];
 }

@@ -5,7 +5,7 @@ abstract class SchoolAuthEvent extends Equatable {
   const SchoolAuthEvent();
 }
 
-class RegisterNewSchool extends SchoolAuthEvent {
+class RegisterNewSchoolEvent extends SchoolAuthEvent {
   final String email,
       password,
       verifyPassword,
@@ -15,7 +15,7 @@ class RegisterNewSchool extends SchoolAuthEvent {
       state,
       zipcode;
 
-  RegisterNewSchool({
+  RegisterNewSchoolEvent({
     @required this.email,
     @required this.password,
     @required this.verifyPassword,
@@ -39,10 +39,10 @@ class RegisterNewSchool extends SchoolAuthEvent {
       ];
 }
 
-class LoginSchool extends SchoolAuthEvent {
+class LoginSchoolEvent extends SchoolAuthEvent {
   final String email, password;
 
-  LoginSchool({
+  LoginSchoolEvent({
     @required this.email,
     @required this.password,
   });
@@ -54,7 +54,12 @@ class LoginSchool extends SchoolAuthEvent {
       ];
 }
 
-class LoginOnReturn extends SchoolAuthEvent {
+class LoginOnReturnEvent extends SchoolAuthEvent {
+  @override
+  List<Object> get props => null;
+}
+
+class LogoutEvent extends SchoolAuthEvent {
   @override
   List<Object> get props => null;
 }

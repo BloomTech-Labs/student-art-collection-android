@@ -65,4 +65,22 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
       return Left(NetworkFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> logoutSchool() async {
+    bool signOutSuccess;
+    await firebaseAuth.signOut().then((value) {
+      signOutSuccess = true;
+    }, onError: () {
+      signOutSuccess = false;
+    });
+    return signOutSuccess
+        ? Right(signOutSuccess)
+        : Left(FirebaseFailure('Couldn\'t sign out'));
+  }
+
+  @override
+  Future<Either<Failure, School>> loginSchoolOnReturn() {
+    return null;
+  }
 }
