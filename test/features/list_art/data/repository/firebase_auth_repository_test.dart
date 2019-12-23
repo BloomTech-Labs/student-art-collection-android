@@ -5,8 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
+import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
+import 'package:student_art_collection/core/util/Error.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/artco_remote_data_source.dart';
 import 'package:student_art_collection/features/list_art/data/repository/firebase_auth_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
@@ -197,6 +199,59 @@ void main() {
         verify(mockRemoteDataSource.loginSchool(any));
         expect(result, Right(tSchool));
       });
+    });
+  });
+
+  group('logoutSchool', () {
+    test('should log out school when and nullify current FirebaseUser',
+        () async {
+      when(mockFirebaseAuth.signOut()).thenAnswer((_) async => null);
+      when(mockFirebaseAuth.currentUser()).thenAnswer((_) async => null);
+
+      final result = await repository.logoutSchool();
+
+      verify(mockFirebaseAuth.signOut());
+      expect(result, Right(true));
+    });
+  });
+
+  group('loginSchoolOnReturn', () {
+    test(
+        'should login school on return when user exists and has not logged out',
+        () async {
+      when(mockFirebaseAuth.currentUser())
+          .thenAnswer((_) async => mockFirebaseUser);
+      when(mockRemoteDataSource.loginSchool(any))
+          .thenAnswer(((_) async => tRegisteredSchool));
+
+      final result = await repository.loginSchoolOnReturn();
+
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Right(tRegisteredSchool));
+    });
+
+    test('should return FirebaseFailure when unable to login school on return',
+        () async {
+      when(mockFirebaseAuth.currentUser()).thenAnswer((_) async => null);
+
+      final result = await repository.loginSchoolOnReturn();
+
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Left(FirebaseFailure(LOGIN_ON_RETURN_ERROR)));
+    });
+
+    test(
+        'should return ServerFailure and logout firebase user when server does not return school',
+        () async {
+      when(mockRemoteDataSource.loginSchool(any)).thenThrow(ServerException());
+      when(mockFirebaseAuth.currentUser())
+          .thenAnswer((_) async => mockFirebaseUser);
+      when(mockFirebaseUser.uid).thenReturn('test');
+
+      final result = await repository.loginSchoolOnReturn();
+
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Left(ServerFailure()));
     });
   });
 }
