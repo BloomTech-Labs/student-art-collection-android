@@ -1,8 +1,9 @@
+const BASE_URL = "https://student-artco-staging.herokuapp.com/graphql";
 
 //image
-const IMAGE_URL = "id";
+const IMAGE_ID = "id";
 const IMAGE_ART_ID = "art_id";
-const IMAGE_ID = "image_url";
+const IMAGE_URL = "image_url";
 
 //category
 const CATEGORY_ID = "id";

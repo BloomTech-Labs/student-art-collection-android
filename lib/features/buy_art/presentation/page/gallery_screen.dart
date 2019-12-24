@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:student_art_collection/core/util/api_constants.dart';
 import 'package:student_art_collection/core/util/page_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/core/util/fuctions.dart';
@@ -9,36 +10,16 @@ List<NetworkImage> images = List();
 List<int> imageHeights = List();
 
 final HttpLink httpLink = HttpLink(
-  uri: 'https://student-artco-staging.herokuapp.com/graphql',
+  uri: BASE_URL,
 );
 
 ValueNotifier<GraphQLClient> client = ValueNotifier(
-    GraphQLClient(
-      link: httpLink, cache: NormalizedInMemoryCache(dataIdFromObject: typenameDataIdFromObject),
-    ));
+  GraphQLClient(
+    link: httpLink,
+    cache: NormalizedInMemoryCache(dataIdFromObject: typenameDataIdFromObject),
+  ),
+);
 
-
-/*const int numberOfImages = 20;
-
-NetworkImage generateImage() {
-  var image = NetworkImage("https://picsum.photos/"
-      "${randomInRange(300, 700)}/"
-      "${randomInRange(300, 700)}");
-
-  if (image != null) {
-    return image;
-  } else
-    return NetworkImage(
-        'https://upload.wikimedia.org/wikipedia/commons/6/66/RiP2013_Paramore_Hayley_Williams_0003.jpg');
-}
-
-void populateImages() {
-  for (int i = 0; i < numberOfImages; i++) {
-    imageHeights.add(randomInRange(minImageHeight, maxImageHeight));
-    images.add(generateImage());
-  }
-}
-*/
 class GalleryScreen extends StatefulWidget {
   static const ID = '/';
 
@@ -49,16 +30,12 @@ class GalleryScreen extends StatefulWidget {
 class _GalleryScreenState extends State<GalleryScreen> {
   @override
   void initState() {
-
-    // TODO: implement initState
     super.initState();
   }
 
-  String readRepositories = """query getImages{
-  allImages{
-  image_url
-}
-}""";
+  String readRepositories =
+  """query getImages{
+  allImages{image_url}}""";
 
   @override
   Widget build(BuildContext context) {
@@ -70,39 +47,30 @@ class _GalleryScreenState extends State<GalleryScreen> {
           title: Text('Student Art Collection'),
         ),
         body: Query(
-          options: QueryOptions(
-              document: readRepositories
-            // this is the query string you just created
-          ),
-          // Just like in apollo refetch() could be used to manually trigger a refetch
-          // while fetchMore() can be used for pagination purpose
-          builder: (QueryResult result,
-              {VoidCallback refetch, FetchMore fetchMore}) {
-
-            if (result.loading) {
-              return Text('Loading');
-            }
-
-            // it can be either Map or List
-            List resultList = result.data['allImages'];
-
-
-            return GalleryExtraction(
-              images: resultList,
-            );
-          },
-        ),
+            options: QueryOptions(document: readRepositories),
+            builder: (QueryResult result,
+                {VoidCallback refetch, FetchMore fetchMore}) {
+              if (result.loading) {
+                return Text('Loading');
+              }
+              List resultList = result.data['allImages'];
+              return GalleryExtraction(
+                images: resultList,
+              );
+            }),
       ),
     );
   }
 }
 
-class GalleryExtraction extends StatelessWidget {
 
+//TODO: Refactor this hot mess
+class GalleryExtraction extends StatelessWidget {
   final List images;
 
   const GalleryExtraction({
-    Key key, this.images,
+    Key key,
+    this.images,
   }) : super(key: key);
 
   @override
@@ -119,7 +87,7 @@ class GalleryExtraction extends StatelessWidget {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                    Navigator.pushNamed(context, '/details');
+                  Navigator.pushNamed(context, '/details');
                 },
                 child: Container(
                   padding: EdgeInsets.all(2.0),
@@ -136,10 +104,12 @@ class GalleryExtraction extends StatelessWidget {
                   ),
                 ),
               ),
-            ],),
+            ],
+          ),
           staggeredTileBuilder: (int index) {
             StaggeredTile staggeredTile = StaggeredTile.count(
-                staggerCount ~/ numOfRows, 20);
+                staggerCount ~/ numOfRows,
+                20); //TODO: replace 20 with random number
             return staggeredTile;
           },
           mainAxisSpacing: 16.0,
