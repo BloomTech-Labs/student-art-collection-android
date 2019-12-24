@@ -3,7 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/util/page_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
-import 'package:student_art_collection/core/util/util_fuctions.dart';
+import 'package:student_art_collection/core/util/fuctions.dart';
 
 List<NetworkImage> images = List();
 List<int> imageHeights = List();
@@ -119,7 +119,7 @@ class GalleryExtraction extends StatelessWidget {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  //  Navigator.pushNamed(context, '/details');
+                    Navigator.pushNamed(context, '/details');
                 },
                 child: Container(
                   padding: EdgeInsets.all(2.0),
