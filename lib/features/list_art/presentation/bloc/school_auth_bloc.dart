@@ -50,6 +50,28 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
         },
       );
     }
+    if (event is RegisterNewSchoolEvent) {
+      final schoolToRegister = converter.registrationInfoToSchool(
+        email: event.email,
+        password: event.password,
+        verifyPassword: event.verifyPassword,
+        schoolName: event.schoolName,
+        address: event.address,
+        city: event.city,
+        state: event.state,
+        zipcode: event.zipcode,
+      );
+      yield* schoolToRegister.fold(
+        (failure) async* {
+          yield Error(message: failure.message);
+        },
+        (school) async* {
+          yield Loading();
+          final registrationResult = await registerNewSchool(school);
+          yield* _eitherAuthorizedOrErrorState(registrationResult);
+        },
+      );
+    }
   }
 
   Stream<SchoolAuthState> _eitherAuthorizedOrErrorState(
