@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
+import 'package:student_art_collection/core/util/api_constants.dart';
 
 class ArtworkModel extends Artwork {
   ArtworkModel({
@@ -30,7 +31,7 @@ class ArtworkModel extends Artwork {
   factory ArtworkModel.fromJson(Map<String, dynamic> json) {
 //extracts the json objects from the json array and
 // converts them to Image objects
-    var images = json['images'];
+    var images = json[ARTWORK_IMAGES];
     List<ImageModel> imageList = List<ImageModel>();
 
     List<Map<String, dynamic>> jsonImageList =
@@ -41,16 +42,16 @@ class ArtworkModel extends Artwork {
     }
 
     return ArtworkModel(
-        title: json['title'],
-        category: CategoryModel.fromJson(json['category']),
-        price: json['price'],
-        artistName: json['artist_name'],
-        sold: json['sold'],
-        artId: json['art_id'],
-        description: json['description'],
+        title: json[ARTWORK_TITLE],
+        category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),
+        price: json[ARTWORK_PRICE],
+        artistName: json[ARTWORK_ARTIST_NAME],
+        sold: json[ARTWORK_SOLD],
+        artId: json[ARTWORK_ID],
+        description: json[ARTWORK_DESCRIPTION],
         //ToDo : setup datetime to json conversions
-        //datePosted: json['date_posted'],
-        schoolId: json['school_id'],
+        //datePosted: json[ARTWORK_DATE_POSTED],
+        schoolId: json[ARTWORK_SCHOOL_ID],
         images: imageList);
   }
 
@@ -62,16 +63,16 @@ class ArtworkModel extends Artwork {
     }
     CategoryModel categoryModel = category;
     return {
-      'title': title,
-      'category': categoryModel.toJson(),
-      'price': price,
-      'artist_name': artistName,
-      'sold': sold,
-      'art_id': artId,
-      'description': description,
-      // 'date_posted': datePosted,
-      'school_id': schoolId,
-      'images': [imageString],
+      ARTWORK_TITLE: title,
+      ARTWORK_CATEGORY: categoryModel.toJson(),
+      ARTWORK_PRICE: price,
+      ARTWORK_ARTIST_NAME: artistName,
+      ARTWORK_SOLD: sold,
+      ARTWORK_ID: artId,
+      ARTWORK_DESCRIPTION: description,
+      // ARTWORK_DATE_POSTED: datePosted,
+      ARTWORK_SCHOOL_ID: schoolId,
+      ARTWORK_IMAGES: [imageString],
     };
   }
 }

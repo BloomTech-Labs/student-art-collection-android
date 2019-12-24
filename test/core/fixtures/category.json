@@ -1,4 +1,4 @@
 {
-  "category_id" : 1,
-  "category_name" : "test"
+  "id" : 1,
+  "category" : "test"
 }
