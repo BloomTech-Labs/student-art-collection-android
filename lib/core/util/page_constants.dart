@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 // Gallery Screen Constants
-const int heightMax = 1000;
-const int heightMin = 600;
-const int widthMax = 700;
-const int widthMin = 400;
-const int numberOfImages = 50;
+//determines the size ratios for image cards
 const int staggerCount = 20;
-const int portraitRows = 2;
-const int maxImageHeight = 22;
+//sets the number of rows
+const int numOfRows = 2;
+//sets the max image height based off of a ratio of the stagger count
+const int maxImageHeight = 20;
+//sets the min image height based off of a ratio of the stagger count
 const int minImageHeight = 10;
-const double cardCornerRadius = 30;
-const Color backgroundColor = Colors.white;
+//sets the radius of the image cards
+const double cardCornerRadius = 20;
+
+
+// Login Screen Constants
