@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import '../../../../core/fixtures/fixture_reader.dart';
+import 'package:student_art_collection/core/util/api_constants.dart';
+import '../../fixtures/fixture_reader.dart';
 
 void main() {
   final tCategoryModel = CategoryModel(
@@ -27,8 +28,8 @@ void main() {
       //act
       final result = tCategoryModel.toJson();
       final expectedMap = {
-        "category_id" : 1,
-        "category_name" : 'test',
+        CATEGORY_ID : 1,
+        CATEGORY_NAME : 'test',
       };
       //assert
       expect(result, expectedMap);

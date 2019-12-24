@@ -4,12 +4,13 @@ import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/util/api_constants.dart';
 
-import '../../../../core/fixtures/fixture_reader.dart';
+import '../../fixtures/fixture_reader.dart';
 
 void main() {
   final tImageList = [ImageModel(
-      imageId: 1, imageUrl: 'https://picsum.photos/200/300', artId: 1
+      imageId: 1, imageUrl: "test", artId: 1
   )];
 
   final tCategory = CategoryModel(
@@ -17,14 +18,14 @@ void main() {
 
   final tArtworkModel = ArtworkModel(
     artId: 1,
-    artistName: "name",
+    artistName: "test",
     category: tCategory,
     images: tImageList,
     price: 25.50,
     schoolId: 1,
     sold: false,
-    description: "description",
-    title: "title"
+    description: "test",
+    title: "test"
   );
 
   test('should be a subclass of Artwork entity', () async {
@@ -46,22 +47,22 @@ void main() {
       //act
       final result = tArtworkModel.toJson();
       final expectedMap = {
-        "title": "title",
-        "category": {
-          "category_id": 1,
-          "category_name": "test"
+        ARTWORK_TITLE: "test",
+        ARTWORK_CATEGORY: {
+          CATEGORY_ID: 1,
+          CATEGORY_NAME: "test"
         },
-        "price": 25.50,
-        "artist_name": "name",
-        "sold": false,
-        "art_id": 1,
-        "description": "description",
-        "school_id": 1,
-        "images": [
+        ARTWORK_PRICE: 25.50,
+        ARTWORK_ARTIST_NAME: "test",
+        ARTWORK_SOLD: false,
+        ARTWORK_ID: 1,
+        ARTWORK_DESCRIPTION: "test",
+        ARTWORK_SCHOOL_ID: 1,
+        ARTWORK_IMAGES: [
           {
-            "image_id": 1,
-            "art_id": 1,
-            "image_url": "https://picsum.photos/200/300"
+            IMAGE_ID: 1,
+            IMAGE_ART_ID: 1,
+            IMAGE_URL: "test"
           }
         ]
       };

@@ -1,5 +1,6 @@
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:meta/meta.dart';
+import 'package:student_art_collection/core/util/api_constants.dart';
 
 class CategoryModel extends Category {
   CategoryModel({@required int categoryId, @required String categoryName})
@@ -9,15 +10,15 @@ class CategoryModel extends Category {
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      categoryName: json['category_name'],
-      categoryId: json['category_id'],
+      categoryName: json[CATEGORY_NAME],
+      categoryId: json[CATEGORY_ID],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'category_id':categoryId,
-      'category_name':categoryName,
+      CATEGORY_ID:categoryId,
+      CATEGORY_NAME:categoryName,
     };
   }
 }
