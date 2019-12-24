@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:student_art_collection/core/domain/usecase/usecase.dart';
 import 'package:student_art_collection/core/error/failure.dart';
-import 'package:student_art_collection/core/util/Error.dart';
+import 'package:student_art_collection/core/util/error.dart';
 import 'package:student_art_collection/features/list_art/domain/repository/school_auth_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school_on_return.dart';
 

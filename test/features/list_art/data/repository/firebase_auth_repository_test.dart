@@ -8,7 +8,7 @@ import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
-import 'package:student_art_collection/core/util/Error.dart';
+import 'package:student_art_collection/core/util/error.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/artco_remote_data_source.dart';
 import 'package:student_art_collection/features/list_art/data/repository/firebase_auth_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';

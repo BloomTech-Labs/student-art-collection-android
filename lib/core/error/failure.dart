@@ -34,3 +34,12 @@ class NetworkFailure<T> extends Failure {
   @override
   List<Object> get props => [cacheData];
 }
+
+class UserInputFailure extends Failure {
+  final String message;
+
+  UserInputFailure({this.message});
+
+  @override
+  List<Object> get props => [message];
+}

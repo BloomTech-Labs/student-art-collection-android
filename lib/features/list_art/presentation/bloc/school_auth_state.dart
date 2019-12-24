@@ -16,10 +16,10 @@ class Loading extends SchoolAuthState {
   List<Object> get props => null;
 }
 
-class Loaded extends SchoolAuthState {
+class Authorized extends SchoolAuthState {
   final School school;
 
-  Loaded({@required this.school});
+  Authorized({@required this.school});
 
   @override
   List<Object> get props => [school];
