@@ -76,8 +76,10 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
 
   Stream<SchoolAuthState> _eitherAuthorizedOrErrorState(
       Either<Failure, School> failureOrSchool) async* {
-    yield failureOrSchool.fold(
-        (failure) => Error(message: 'Something went wrong'),
+    yield failureOrSchool.fold((failure) {
+      if (failure is FirebaseFailure) return Error(message: failure.message);
+      return Error(message: 'Something went wrong');
+    },
         (school) => Authorized(
               school: school,
             ));
