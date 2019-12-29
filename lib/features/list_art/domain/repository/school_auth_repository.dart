@@ -7,4 +7,6 @@ import 'package:student_art_collection/features/list_art/domain/usecase/register
 abstract class SchoolAuthRepository {
   Future<Either<Failure, School>> registerNewSchool(SchoolToRegister school);
   Future<Either<Failure, School>> loginSchool(Credentials credentials);
+  Future<Either<Failure, bool>> logoutSchool();
+  Future<Either<Failure, School>> loginSchoolOnReturn();
 }

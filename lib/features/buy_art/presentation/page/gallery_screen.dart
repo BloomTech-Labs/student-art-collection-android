@@ -33,8 +33,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     super.initState();
   }
 
-  String readRepositories =
-  """query getImages{
+  String readRepositories = """query getImages{
   allImages{image_url}}""";
 
   @override
@@ -62,7 +61,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
     );
   }
 }
-
 
 //TODO: Refactor this hot mess
 class GalleryExtraction extends StatelessWidget {

@@ -5,22 +5,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
+import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
+import 'package:student_art_collection/core/util/error.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/artco_remote_data_source.dart';
 import 'package:student_art_collection/features/list_art/data/repository/firebase_auth_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 
-class MockRemoteDataSource extends Mock implements GraphQLRemoteDataSource {}
-
-class MockNetworkInfo extends Mock implements NetworkInfo {}
-
-class MockFirebaseAuth extends Mock implements FirebaseAuth {}
-
-class MockFirebaseUser extends Mock implements FirebaseUser {}
-
-class MockAuthResult extends Mock implements AuthResult {}
+import '../../mock/mock_classes.dart';
+import '../../mock/mock_objects.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -62,34 +57,13 @@ void main() {
     });
   }
 
-  final SchoolModel tSchoolModel = SchoolModel(
-      id: 1,
-      schoolId: 'test',
-      email: 'test@test.com',
-      schoolName: 'test',
-      address: 'test',
-      city: 'test',
-      state: 'test',
-      zipcode: 'test');
-
   final School tSchool = tSchoolModel;
 
   group('registerNewSchool', () {
-    final schoolToRegister = SchoolToRegister(
-      schoolId: 'test',
-      email: 'test',
-      password: 'test',
-      schoolName: 'test',
-      address: 'test',
-      city: 'test',
-      state: 'test',
-      zipcode: 'test',
-    );
-
     void createNewUserSuccess() {
       when(mockFirebaseAuth.createUserWithEmailAndPassword(
-              email: schoolToRegister.email,
-              password: schoolToRegister.password))
+              email: tSchoolToRegister.email,
+              password: tSchoolToRegister.password))
           .thenAnswer((_) async => mockAuthResult);
       when(mockAuthResult.user).thenReturn(mockFirebaseUser);
       when(mockFirebaseUser.uid).thenReturn('test');
@@ -99,7 +73,7 @@ void main() {
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       createNewUserSuccess();
 
-      repository.registerNewSchool(schoolToRegister);
+      repository.registerNewSchool(tSchoolToRegister);
 
       verify(mockNetworkInfo.isConnected);
     });
@@ -108,11 +82,11 @@ void main() {
       test('should call firebaseAuth.createUserWithEmailAndPassword', () async {
         createNewUserSuccess();
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
         verify(mockFirebaseAuth.createUserWithEmailAndPassword(
-                email: schoolToRegister.email,
-                password: schoolToRegister.password))
+                email: tSchoolToRegister.email,
+                password: tSchoolToRegister.password))
             .called(1);
       });
 
@@ -120,16 +94,16 @@ void main() {
           'should return FirebaseFailure when Firebase registration attempt is unsuccessful',
           () async {
         when(mockFirebaseAuth.createUserWithEmailAndPassword(
-                email: schoolToRegister.email,
-                password: schoolToRegister.password))
+                email: tSchoolToRegister.email,
+                password: tSchoolToRegister.password))
             .thenThrow(
                 PlatformException(code: '1', message: 'Could not sign in'));
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
         verify(mockFirebaseAuth.createUserWithEmailAndPassword(
-                email: schoolToRegister.email,
-                password: schoolToRegister.password))
+                email: tSchoolToRegister.email,
+                password: tSchoolToRegister.password))
             .called(1);
 
         expect(result, Left(FirebaseFailure('Could not sign in')));
@@ -143,9 +117,9 @@ void main() {
         when(mockRemoteDataSource.registerNewSchool(any))
             .thenAnswer((_) async => tSchoolModel);
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
-        verify(mockRemoteDataSource.registerNewSchool(schoolToRegister));
+        verify(mockRemoteDataSource.registerNewSchool(tSchoolToRegister));
         expect(result, Right(tSchool));
       });
     });
@@ -156,7 +130,7 @@ void main() {
           () async {
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
-        final result = await repository.registerNewSchool(schoolToRegister);
+        final result = await repository.registerNewSchool(tSchoolToRegister);
 
         expect(result, Left(NetworkFailure()));
       });
@@ -225,6 +199,59 @@ void main() {
         verify(mockRemoteDataSource.loginSchool(any));
         expect(result, Right(tSchool));
       });
+    });
+  });
+
+  group('logoutSchool', () {
+    test('should log out school when and nullify current FirebaseUser',
+        () async {
+      when(mockFirebaseAuth.signOut()).thenAnswer((_) async => null);
+      when(mockFirebaseAuth.currentUser()).thenAnswer((_) async => null);
+
+      final result = await repository.logoutSchool();
+
+      verify(mockFirebaseAuth.signOut());
+      expect(result, Right(true));
+    });
+  });
+
+  group('loginSchoolOnReturn', () {
+    test(
+        'should login school on return when user exists and has not logged out',
+        () async {
+      when(mockFirebaseAuth.currentUser())
+          .thenAnswer((_) async => mockFirebaseUser);
+      when(mockRemoteDataSource.loginSchool(any))
+          .thenAnswer(((_) async => tRegisteredSchool));
+
+      final result = await repository.loginSchoolOnReturn();
+
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Right(tRegisteredSchool));
+    });
+
+    test('should return FirebaseFailure when unable to login school on return',
+        () async {
+      when(mockFirebaseAuth.currentUser()).thenAnswer((_) async => null);
+
+      final result = await repository.loginSchoolOnReturn();
+
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Left(FirebaseFailure(LOGIN_ON_RETURN_ERROR)));
+    });
+
+    test(
+        'should return ServerFailure and logout firebase user when server does not return school',
+        () async {
+      when(mockRemoteDataSource.loginSchool(any)).thenThrow(ServerException());
+      when(mockFirebaseAuth.currentUser())
+          .thenAnswer((_) async => mockFirebaseUser);
+      when(mockFirebaseUser.uid).thenReturn('test');
+
+      final result = await repository.loginSchoolOnReturn();
+
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Left(ServerFailure()));
     });
   });
 }
