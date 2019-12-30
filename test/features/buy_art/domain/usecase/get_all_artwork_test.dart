@@ -12,10 +12,10 @@ void main() {
   GetAllArtwork usecase;
   MockArtworkRepository mockArtworkRepository;
 
-  setUp((){
+  setUp(() {
     mockArtworkRepository = MockArtworkRepository();
     usecase = GetAllArtwork(mockArtworkRepository);
-    });
+  });
 
   final tImagesList = [
     Image(imageId: 1, artId: 1, imageUrl: 'https://picsum.photos/200/300'),
@@ -23,7 +23,7 @@ void main() {
   ];
   final tArtworkList = [
     Artwork(artId: 1, schoolId: 1, price: 25, images: tImagesList),
-    Artwork(artId:21, schoolId: 1, price: 25, images: tImagesList)
+    Artwork(artId: 21, schoolId: 1, price: 25, images: tImagesList)
   ];
 
   test('should get all artwork from the repository', () async {
