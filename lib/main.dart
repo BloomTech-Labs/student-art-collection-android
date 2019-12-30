@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_screen.dart';
 
 import 'core/presentation/page/login_screen.dart';

@@ -87,7 +87,7 @@ class GalleryExtraction extends StatelessWidget {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/details');
+                  //Navigate to carousel view
                 },
                 child: Container(
                   padding: EdgeInsets.all(2.0),
