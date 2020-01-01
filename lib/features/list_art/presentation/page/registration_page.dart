@@ -15,6 +15,7 @@ class SchoolRegistrationPage extends StatelessWidget {
     return BlocProvider<SchoolAuthBloc>(
       create: (context) => sl<SchoolAuthBloc>(),
       child: Scaffold(
+        resizeToAvoidBottomPadding: true,
         appBar: AppBar(
           title: Text('Login'),
           bottom: PreferredSize(
@@ -73,7 +74,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             SizedBox(
               height: 16,
@@ -121,6 +122,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 hintText: 'Enter your school\'s street address',
               ),
             ),
+            SizedBox(height: 10),
             TextField(
               keyboardType: TextInputType.text,
               onChanged: (value) {
@@ -163,25 +165,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 hintText: 'Enter your school\'s zipcode',
               ),
             ),
-            Expanded(
-              child: RaisedButton(
-                  child: Text(
-                    'Register',
-                  ),
-                  onPressed: () {
-                    BlocProvider.of<SchoolAuthBloc>(context)
-                        .add(RegisterNewSchoolEvent(
-                      email: email,
-                      password: password,
-                      verifyPassword: verifyPassword,
-                      schoolName: schoolName,
-                      address: address,
-                      city: city,
-                      state: state,
-                      zipcode: zipcode,
-                    ));
-                  }),
-            )
+            RaisedButton(
+                child: Text(
+                  'Register',
+                ),
+                onPressed: () {
+                  BlocProvider.of<SchoolAuthBloc>(context)
+                      .add(RegisterNewSchoolEvent(
+                    email: email,
+                    password: password,
+                    verifyPassword: verifyPassword,
+                    schoolName: schoolName,
+                    address: address,
+                    city: city,
+                    state: state,
+                    zipcode: zipcode,
+                  ));
+                })
           ],
         ),
       ),
