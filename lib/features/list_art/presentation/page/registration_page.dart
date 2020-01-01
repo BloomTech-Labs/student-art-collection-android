@@ -17,7 +17,7 @@ class SchoolRegistrationPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(
-          title: Text('Login'),
+          title: Text('Register'),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
@@ -76,9 +76,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: <Widget>[
-            SizedBox(
-              height: 16,
-            ),
             TextField(
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
@@ -165,22 +162,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 hintText: 'Enter your school\'s zipcode',
               ),
             ),
+            SizedBox(height: 10),
             RaisedButton(
                 child: Text(
                   'Register',
                 ),
                 onPressed: () {
-                  BlocProvider.of<SchoolAuthBloc>(context)
-                      .add(RegisterNewSchoolEvent(
-                    email: email,
-                    password: password,
-                    verifyPassword: verifyPassword,
-                    schoolName: schoolName,
-                    address: address,
-                    city: city,
-                    state: state,
-                    zipcode: zipcode,
-                  ));
+                  dispatchRegistration();
                 })
           ],
         ),

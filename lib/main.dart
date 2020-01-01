@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
         GalleryScreen.ID: (context) => GalleryScreen(),
         SchoolRegistrationPage.ID: (context) => SchoolRegistrationPage(),
       },
-      initialRoute: SchoolRegistrationPage.ID,
+      initialRoute: SchoolLoginPage.ID,
     );
   }
 }

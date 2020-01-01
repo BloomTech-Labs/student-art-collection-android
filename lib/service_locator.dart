@@ -12,7 +12,7 @@ import 'package:student_art_collection/features/list_art/domain/usecase/logout_s
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_bloc.dart';
 
-import 'features/list_art/data/data_source/artco_remote_data_source.dart';
+import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
 
 final sl = GetIt.instance;
@@ -42,9 +42,10 @@ Future init() async {
       remoteDataSource: sl(), networkInfo: sl(), firebaseAuth: sl()));
 
   // Data Sources
-  sl.registerLazySingleton<ArtcoRemoteDataSource>(() => GraphQLRemoteDataSource(
-        client: sl(),
-      ));
+  sl.registerLazySingleton<SchoolRemoteDataSource>(
+      () => GraphQLSchoolRemoteDataSource(
+            client: sl(),
+          ));
 
   sl.registerLazySingleton(() => FirebaseAuth.instance);
 

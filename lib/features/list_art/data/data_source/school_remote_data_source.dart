@@ -11,16 +11,16 @@ import 'package:student_art_collection/features/list_art/data/mock_data.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 
-abstract class ArtcoRemoteDataSource {
+abstract class SchoolRemoteDataSource {
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister);
 
   Future<School> loginSchool(String uid);
 }
 
-class GraphQLRemoteDataSource implements ArtcoRemoteDataSource {
+class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   final GraphQLClient client;
 
-  GraphQLRemoteDataSource({this.client});
+  GraphQLSchoolRemoteDataSource({this.client});
 
   @override
   Future<School> loginSchool(String uid) async {
