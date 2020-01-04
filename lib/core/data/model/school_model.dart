@@ -26,13 +26,13 @@ class SchoolModel extends School {
 
   factory SchoolModel.fromJson(Map<String, dynamic> json) {
     return SchoolModel(
-        id: json[SCHOOL_ID],
+        id: int.parse(json[SCHOOL_ID]),
         schoolId: json[SCHOOL_SCHOOL_ID],
         email: json[SCHOOL_EMAIL],
         schoolName: json[SCHOOL_NAME],
         address: json[SCHOOL_ADDRESS],
         city: json[SCHOOL_CITY],
-        state: json[SCHOOL_STATE],
+        // state: json[SCHOOL_STATE],
         zipcode: json[SCHOOL_ZIPCODE]);
   }
 

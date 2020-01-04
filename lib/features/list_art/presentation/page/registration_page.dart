@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
 import '../../../../service_locator.dart';
@@ -25,10 +27,7 @@ class SchoolRegistrationPage extends StatelessWidget {
                 if (state is Loading) {
                   return AppBarLoading();
                 }
-                return Container(
-                  width: 0,
-                  height: 0,
-                );
+                return EmptyContainer();
               },
             ),
           ),
@@ -81,10 +80,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 email = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter email address',
-              ),
+              decoration: getAuthInputDecoration('Enter your email'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -92,10 +88,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 password = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your password',
-              ),
+              decoration: getAuthInputDecoration('Enter your password'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -103,10 +96,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 verifyPassword = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your password again',
-              ),
+              decoration: getAuthInputDecoration('Enter your password again'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -114,10 +104,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 address = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s street address',
-              ),
+              decoration:
+                  getAuthInputDecoration('Enter your school\'s street address'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -125,10 +113,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 schoolName = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s name',
-              ),
+              decoration: getAuthInputDecoration('Enter your school\'s name'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -136,9 +121,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 city = value;
               },
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your school\'s city'),
+              decoration: getAuthInputDecoration('Enter your school\'s city'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -146,10 +129,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 state = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s state',
-              ),
+              decoration: getAuthInputDecoration('Enter your school\'s state'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -157,10 +137,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 zipcode = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s zipcode',
-              ),
+              decoration:
+                  getAuthInputDecoration('Enter your school\'s zipcode'),
             ),
             SizedBox(height: 10),
             RaisedButton(

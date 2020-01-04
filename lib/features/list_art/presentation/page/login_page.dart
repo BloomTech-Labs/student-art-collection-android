@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
 import '../../../../service_locator.dart';
@@ -25,10 +27,7 @@ class SchoolLoginPage extends StatelessWidget {
                 if (state is Loading) {
                   return AppBarLoading();
                 }
-                return Container(
-                  width: 0,
-                  height: 0,
-                );
+                return EmptyContainer();
               },
             ),
           ),
@@ -44,8 +43,6 @@ class SchoolLoginPage extends StatelessWidget {
             } else if (state is Error) {
               final snackBar = SnackBar(content: Text(state.message));
               Scaffold.of(context).showSnackBar(snackBar);
-            } else if (state is Unauthorized) {
-              print('Error');
             }
           },
           child: LoginForm(),
@@ -75,10 +72,7 @@ class _LoginFormState extends State<LoginForm> {
               onChanged: (value) {
                 email = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter email address',
-              ),
+              decoration: getAuthInputDecoration('Enter school email address'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -86,14 +80,11 @@ class _LoginFormState extends State<LoginForm> {
               onChanged: (value) {
                 password = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your password',
-              ),
+              decoration: getAuthInputDecoration('Enter your password'),
             ),
             RaisedButton(
                 child: Text(
-                  'Register',
+                  'Login',
                 ),
                 onPressed: () {
                   dispatchLogin();

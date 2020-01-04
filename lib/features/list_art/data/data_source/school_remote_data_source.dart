@@ -7,6 +7,7 @@ import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/mutation.dart';
+import 'package:student_art_collection/features/list_art/data/data_source/query.dart';
 import 'package:student_art_collection/features/list_art/data/mock_data.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
@@ -24,26 +25,38 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
 
   @override
   Future<School> loginSchool(String uid) async {
-    sleep(Duration(seconds: 3));
-    return SchoolModel.fromJson(mockRegisteredSchool);
+    final QueryOptions queryOptions = QueryOptions(
+      documentNode: gql(GET_SCHOOL_QUERY),
+      variables: <String, dynamic>{
+        'id': 1,
+      },
+    );
+    final QueryResult result = await client.query(queryOptions);
+    return handleQueryResult(result);
   }
 
   @override
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister) async {
     final MutationOptions options = MutationOptions(
-        documentNode: gql(ADD_SCHOOL_MUTATION),
-        variables: <String, dynamic>{
-          'schoolId': schoolToRegister.schoolId,
-          'schoolName': schoolToRegister.schoolName,
-          'email': schoolToRegister.email,
-          'address': schoolToRegister.address,
-          'city': schoolToRegister.city,
-          'zipcode': schoolToRegister.zipcode
-        });
+      documentNode: gql(ADD_SCHOOL_MUTATION),
+      variables: <String, dynamic>{
+        'schoolId': schoolToRegister.schoolId,
+        'schoolName': schoolToRegister.schoolName,
+        'email': schoolToRegister.email,
+        'address': schoolToRegister.address,
+        'city': schoolToRegister.city,
+        'zipcode': schoolToRegister.zipcode
+      },
+    );
     final QueryResult result = await client.mutate(options);
+    return handleQueryResult(result);
+  }
+
+  Future<School> handleQueryResult(QueryResult result) async {
     if (result.hasException) {
       throw ServerException();
     }
-    return SchoolModel.fromJson(result.data['action']);
+    final school = SchoolModel.fromJson(result.data["school"]);
+    return school;
   }
 }
