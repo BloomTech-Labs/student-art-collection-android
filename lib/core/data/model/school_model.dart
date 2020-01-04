@@ -32,13 +32,13 @@ class SchoolModel extends School {
         schoolName: json[SCHOOL_NAME],
         address: json[SCHOOL_ADDRESS],
         city: json[SCHOOL_CITY],
-        // state: json[SCHOOL_STATE],
+        state: json[SCHOOL_STATE],
         zipcode: json[SCHOOL_ZIPCODE]);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      SCHOOL_ID: id,
+      SCHOOL_ID: id.toString(),
       SCHOOL_SCHOOL_ID: schoolId,
       SCHOOL_EMAIL: email,
       SCHOOL_NAME: schoolName,
