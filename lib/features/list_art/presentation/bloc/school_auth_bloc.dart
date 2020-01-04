@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
+import 'package:student_art_collection/core/domain/usecase/usecase.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
@@ -71,6 +72,21 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
           yield* _eitherAuthorizedOrErrorState(registrationResult);
         },
       );
+    }
+    if (event is LoginSchoolOnReturn) {
+      yield Loading();
+      final loginResult = await loginSchoolOnReturn(NoParams());
+      yield* _eitherAuthorizedOrErrorState(loginResult);
+    }
+    if (event is LogoutSchool) {
+      yield Loading();
+      final logoutResult = await logoutSchool(NoParams());
+      yield logoutResult.fold((failure) {
+        if (failure is FirebaseFailure) return Error(message: failure.message);
+        return Error(message: 'Something went wrong');
+      }, (success) {
+        return Unauthorized();
+      });
     }
   }
 
