@@ -73,7 +73,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
         },
       );
     }
-    if (event is LoginSchoolOnReturn) {
+    if (event is LoginOnReturnEvent) {
       yield Loading();
       final loginResult = await loginSchoolOnReturn(NoParams());
       yield* _eitherAuthorizedOrErrorState(loginResult);
