@@ -9,8 +9,8 @@ import 'package:student_art_collection/features/list_art/domain/usecase/login_sc
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school_on_return.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/logout_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
-import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_event.dart';
-import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 import 'package:meta/meta.dart';
 
 class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
