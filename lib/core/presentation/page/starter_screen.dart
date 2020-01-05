@@ -9,50 +9,22 @@ import 'package:student_art_collection/features/list_art/presentation/page/login
 
 import '../../../service_locator.dart';
 
-class StarterScreen extends StatefulWidget {
+class StarterScreen extends StatelessWidget {
   static const ID = "/";
 
   @override
-  _StarterScreenState createState() {
-    return _StarterScreenState();
-  }
-}
-
-class _StarterScreenState extends State<StarterScreen> {
-  @override
   Widget build(BuildContext context) {
-    return BlocProvider<SchoolAuthBloc>(
-      create: (context) => sl<SchoolAuthBloc>(),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(
             'ArtCo',
           ),
         ),
-        body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
-            listener: (context, state) {
-              if (state is Authorized) {
-                final snackBar = SnackBar(
-                  content: Text(state.school.email),
-                  duration: Duration(seconds: 10),
-                );
-                Scaffold.of(context).showSnackBar(snackBar);
-              } else {
-                Navigator.pushReplacementNamed(context, SchoolLoginPage.ID);
-              }
-            },
-            child: StarterControls()),
-      ),
-    );
+        body: StarterControls());
   }
 }
 
-class StarterControls extends StatefulWidget {
-  @override
-  _StarterControlsState createState() => _StarterControlsState();
-}
-
-class _StarterControlsState extends State<StarterControls> {
+class StarterControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -64,7 +36,7 @@ class _StarterControlsState extends State<StarterControls> {
           children: <Widget>[
             RaisedButton(
               onPressed: () {
-                dispatchLoginOnReturn();
+                Navigator.pushNamed(context, SchoolLoginPage.ID);
               },
               child: Text('Login as School Admin'),
             ),
@@ -81,9 +53,5 @@ class _StarterControlsState extends State<StarterControls> {
         ),
       ),
     );
-  }
-
-  void dispatchLoginOnReturn() {
-    BlocProvider.of<SchoolAuthBloc>(context).add(LoginOnReturnEvent());
   }
 }

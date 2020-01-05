@@ -4,6 +4,7 @@ import 'package:student_art_collection/core/presentation/widget/empty_container.
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
@@ -35,11 +36,7 @@ class SchoolRegistrationPage extends StatelessWidget {
         body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
             listener: (context, state) {
               if (state is Authorized) {
-                final snackBar = SnackBar(
-                  content: Text(state.school.email),
-                  duration: Duration(seconds: 10),
-                );
-                Scaffold.of(context).showSnackBar(snackBar);
+                Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
               } else if (state is Error) {
                 final snackBar = SnackBar(content: Text(state.message));
                 Scaffold.of(context).showSnackBar(snackBar);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
@@ -16,6 +17,8 @@ abstract class SchoolRemoteDataSource {
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister);
 
   Future<School> loginSchool(String uid);
+
+  Future<List<Artwork>> getArtworksForSchool(String uid);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
@@ -58,5 +61,17 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
     }
     final school = SchoolModel.fromJson(result.data["school"]);
     return school;
+  }
+
+  @override
+  Future<List<Artwork>> getArtworksForSchool(String uid) async {
+    final QueryOptions options = QueryOptions(
+        documentNode: gql(GET_ARTWORK_FOR_SCHOOL),
+        variables: <String, dynamic>{
+          'school_id': uid,
+        });
+    final QueryResult result = await client.query(options);
+    var i = 0;
+    return null;
   }
 }

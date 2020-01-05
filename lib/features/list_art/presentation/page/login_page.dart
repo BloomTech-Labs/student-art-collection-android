@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
@@ -11,6 +14,7 @@ import '../../../../service_locator.dart';
 
 class SchoolLoginPage extends StatelessWidget {
   static const String ID = "login";
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SchoolAuthBloc>(
@@ -35,11 +39,7 @@ class SchoolLoginPage extends StatelessWidget {
         body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
           listener: (context, state) {
             if (state is Authorized) {
-              final snackBar = SnackBar(
-                content: Text(state.school.email),
-                duration: Duration(seconds: 10),
-              );
-              Scaffold.of(context).showSnackBar(snackBar);
+              Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
             } else if (state is Error) {
               final snackBar = SnackBar(content: Text(state.message));
               Scaffold.of(context).showSnackBar(snackBar);
@@ -59,6 +59,13 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   String email, password;
+  bool shouldRemember = false;
+
+  void _onCheckboxChange() {
+    setState(() {
+      shouldRemember = !shouldRemember;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,29 +73,73 @@ class _LoginFormState extends State<LoginForm> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              onChanged: (value) {
-                email = value;
-              },
-              decoration: getAuthInputDecoration('Enter school email address'),
+            Center(
+              child: TextField(
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration:
+                    getAuthInputDecoration('Enter school email address'),
+              ),
             ),
-            SizedBox(height: 10),
-            TextField(
-              keyboardType: TextInputType.visiblePassword,
-              onChanged: (value) {
-                password = value;
-              },
-              decoration: getAuthInputDecoration('Enter your password'),
+            Center(child: SizedBox(height: 10)),
+            Center(
+              child: TextField(
+                keyboardType: TextInputType.visiblePassword,
+                onChanged: (value) {
+                  password = value;
+                },
+                decoration: getAuthInputDecoration('Enter your password'),
+              ),
             ),
-            RaisedButton(
-                child: Text(
-                  'Login',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(right: 8),
+                      child: CustomCheckbox(
+                        value: shouldRemember,
+                        materialTapTargetSize: null,
+                        onChanged: (value) {
+                          _onCheckboxChange();
+                        },
+                        useTapTarget: false,
+                      ),
+                    ),
+                    Text(
+                      'Remember Me',
+                    )
+                  ],
                 ),
-                onPressed: () {
-                  dispatchLogin();
-                })
+                RaisedButton(
+                    child: Text(
+                      'Login',
+                    ),
+                    onPressed: () {
+                      dispatchLogin();
+                    }),
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Row(
+              children: <Widget>[
+                InkWell(
+                  child: Text(
+                    'Don\'t have an account? Register here!',
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, SchoolRegistrationPage.ID);
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
