@@ -21,7 +21,7 @@ ValueNotifier<GraphQLClient> client = ValueNotifier(
 );
 
 class GalleryScreen extends StatefulWidget {
-  static const ID = '/';
+  static const ID = '/gallery';
 
   @override
   _GalleryScreenState createState() => _GalleryScreenState();

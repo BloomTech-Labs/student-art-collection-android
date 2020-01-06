@@ -4,6 +4,7 @@ import 'package:student_art_collection/core/presentation/page/starter_screen.dar
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_screen.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/login_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
 
 import 'core/presentation/page/login_screen.dart';
 import 'service_locator.dart' as locator;
@@ -32,8 +33,9 @@ class _MyAppState extends State<MyApp> {
         SchoolLoginPage.ID: (context) => SchoolLoginPage(),
         GalleryScreen.ID: (context) => GalleryScreen(),
         SchoolRegistrationPage.ID: (context) => SchoolRegistrationPage(),
+        StarterScreen.ID: (context) => StarterScreen(),
+        SchoolGalleryPage.ID: (context) => SchoolGalleryPage(),
       },
-      initialRoute: SchoolRegistrationPage.ID,
     );
   }
 }
