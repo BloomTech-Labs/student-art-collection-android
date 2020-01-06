@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_bloc.dart';
-import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_event.dart';
-import 'package:student_art_collection/features/list_art/presentation/bloc/school_auth_state.dart';
+import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
 import '../../../../service_locator.dart';
@@ -15,8 +18,9 @@ class SchoolRegistrationPage extends StatelessWidget {
     return BlocProvider<SchoolAuthBloc>(
       create: (context) => sl<SchoolAuthBloc>(),
       child: Scaffold(
+        resizeToAvoidBottomPadding: true,
         appBar: AppBar(
-          title: Text('Login'),
+          title: Text('Register'),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
@@ -24,10 +28,7 @@ class SchoolRegistrationPage extends StatelessWidget {
                 if (state is Loading) {
                   return AppBarLoading();
                 }
-                return Container(
-                  width: 0,
-                  height: 0,
-                );
+                return EmptyContainer();
               },
             ),
           ),
@@ -35,11 +36,7 @@ class SchoolRegistrationPage extends StatelessWidget {
         body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
             listener: (context, state) {
               if (state is Authorized) {
-                final snackBar = SnackBar(
-                  content: Text(state.school.email),
-                  duration: Duration(seconds: 10),
-                );
-                Scaffold.of(context).showSnackBar(snackBar);
+                Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
               } else if (state is Error) {
                 final snackBar = SnackBar(content: Text(state.message));
                 Scaffold.of(context).showSnackBar(snackBar);
@@ -73,20 +70,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
+        child: ListView(
           children: <Widget>[
-            SizedBox(
-              height: 16,
-            ),
             TextField(
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
                 email = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter email address',
-              ),
+              decoration: getAuthInputDecoration('Enter your email'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -94,10 +85,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 password = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your password',
-              ),
+              decoration: getAuthInputDecoration('Enter your password'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -105,10 +93,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 verifyPassword = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your password again',
-              ),
+              decoration: getAuthInputDecoration('Enter your password again'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -116,20 +101,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 address = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s street address',
-              ),
+              decoration:
+                  getAuthInputDecoration('Enter your school\'s street address'),
             ),
+            SizedBox(height: 10),
             TextField(
               keyboardType: TextInputType.text,
               onChanged: (value) {
                 schoolName = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s name',
-              ),
+              decoration: getAuthInputDecoration('Enter your school\'s name'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -137,9 +118,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 city = value;
               },
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your school\'s city'),
+              decoration: getAuthInputDecoration('Enter your school\'s city'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -147,10 +126,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 state = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s state',
-              ),
+              decoration: getAuthInputDecoration('Enter your school\'s state'),
             ),
             SizedBox(height: 10),
             TextField(
@@ -158,30 +134,17 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 zipcode = value;
               },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your school\'s zipcode',
-              ),
+              decoration:
+                  getAuthInputDecoration('Enter your school\'s zipcode'),
             ),
-            Expanded(
-              child: RaisedButton(
-                  child: Text(
-                    'Register',
-                  ),
-                  onPressed: () {
-                    BlocProvider.of<SchoolAuthBloc>(context)
-                        .add(RegisterNewSchoolEvent(
-                      email: email,
-                      password: password,
-                      verifyPassword: verifyPassword,
-                      schoolName: schoolName,
-                      address: address,
-                      city: city,
-                      state: state,
-                      zipcode: zipcode,
-                    ));
-                  }),
-            )
+            SizedBox(height: 10),
+            RaisedButton(
+                child: Text(
+                  'Register',
+                ),
+                onPressed: () {
+                  dispatchRegistration();
+                })
           ],
         ),
       ),

@@ -26,7 +26,7 @@ class SchoolModel extends School {
 
   factory SchoolModel.fromJson(Map<String, dynamic> json) {
     return SchoolModel(
-        id: json[SCHOOL_ID],
+        id: int.parse(json[SCHOOL_ID]),
         schoolId: json[SCHOOL_SCHOOL_ID],
         email: json[SCHOOL_EMAIL],
         schoolName: json[SCHOOL_NAME],
@@ -38,7 +38,7 @@ class SchoolModel extends School {
 
   Map<String, dynamic> toJson() {
     return {
-      SCHOOL_ID: id,
+      SCHOOL_ID: id.toString(),
       SCHOOL_SCHOOL_ID: schoolId,
       SCHOOL_EMAIL: email,
       SCHOOL_NAME: schoolName,
