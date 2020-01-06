@@ -5,7 +5,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/galle
 
 class SchoolGalleryBloc extends Bloc<SchoolGalleryEvent, SchoolGalleryState> {
   @override
-  SchoolGalleryState get initialState => InitialSchoolGalleryState();
+  SchoolGalleryState get initialState => Empty();
 
   @override
   Stream<SchoolGalleryState> mapEventToState(
