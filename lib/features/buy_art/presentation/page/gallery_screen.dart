@@ -107,6 +107,10 @@ Widget buildInitial(){
 }
 
 Widget buildStaggeredGridViewWithData(BuildContext context, List<aw.Artwork> artworkList){
+List<int> sizeList = [];
+  for(aw.Artwork artwork in artworkList){
+    sizeList.add(randomInRange(12, 20));
+  }
 
   return StaggeredGridView.countBuilder(
     scrollDirection: Axis.vertical,
@@ -138,7 +142,7 @@ Widget buildStaggeredGridViewWithData(BuildContext context, List<aw.Artwork> art
     staggeredTileBuilder: (int index) {
       StaggeredTile staggeredTile = StaggeredTile.count(
           staggerCount ~/ numOfRows,
-          20); //TODO: Replace 20 with fixed random number
+          sizeList[index]);
       return staggeredTile;
     },
     mainAxisSpacing: 16.0,
