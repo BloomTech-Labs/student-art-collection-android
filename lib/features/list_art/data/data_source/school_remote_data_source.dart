@@ -31,11 +31,11 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
     final QueryOptions queryOptions = QueryOptions(
       documentNode: gql(GET_SCHOOL_QUERY),
       variables: <String, dynamic>{
-        'id': 1,
+        'school_id': uid,
       },
     );
     final QueryResult result = await client.query(queryOptions);
-    return handleQueryResult(result);
+    return handleAuthResult(result, "schoolBySchoolId");
   }
 
   @override
@@ -52,14 +52,14 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
       },
     );
     final QueryResult result = await client.mutate(options);
-    return handleQueryResult(result);
+    return handleAuthResult(result, "school");
   }
 
-  Future<School> handleQueryResult(QueryResult result) async {
+  Future<School> handleAuthResult(QueryResult result, String key) async {
     if (result.hasException) {
       throw ServerException();
     }
-    final school = SchoolModel.fromJson(result.data["school"]);
+    final school = SchoolModel.fromJson(result.data[key]);
     return school;
   }
 
