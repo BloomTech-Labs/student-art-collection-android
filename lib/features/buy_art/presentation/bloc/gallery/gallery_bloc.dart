@@ -13,7 +13,7 @@ part 'gallery_state.dart';
 class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   final ArtworkRepository artworkRepository;
 
-  GalleryBloc(this.artworkRepository);
+  GalleryBloc({@required this.artworkRepository});
   @override
   GalleryState get initialState => GalleryInitialState();
 
