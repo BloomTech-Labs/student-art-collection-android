@@ -42,6 +42,30 @@ class SchoolGalleryPage extends StatelessWidget {
           },
           child: ArtworkGallery(),
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.add,
+          ),
+          backgroundColor: primaryColor,
+          onPressed: () {},
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: primaryColor,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              title: Text('Search'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              title: Text('Messages'),
+            ),
+          ],
+        ),
       ),
     );
   }
