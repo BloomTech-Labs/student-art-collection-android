@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/domain/usecase/usecase.dart';
 import 'package:student_art_collection/core/error/failure.dart';
+import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school_on_return.dart';
@@ -19,6 +20,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
   final LoginSchoolOnReturn loginSchoolOnReturn;
   final LogoutSchool logoutSchool;
   final InputConverter converter;
+  final SessionManager sessionManager;
 
   SchoolAuthBloc({
     @required this.loginSchool,
@@ -26,6 +28,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
     @required this.loginSchoolOnReturn,
     @required this.logoutSchool,
     @required this.converter,
+    @required this.sessionManager,
   });
 
   @override
@@ -95,9 +98,11 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
     yield failureOrSchool.fold((failure) {
       if (failure is FirebaseFailure) return Error(message: failure.message);
       return Error(message: 'Something went wrong');
-    },
-        (school) => Authorized(
-              school: school,
-            ));
+    }, (school) {
+      sessionManager.currentUser = Authorized(school: school);
+      return Authorized(
+        school: school,
+      );
+    });
   }
 }
