@@ -30,6 +30,7 @@ class GraphQLArtworkRemoteDataSource implements ArtworkRemoteDataSource{
 
     //Todo: Untested will need revision
     final artworkList = result.data["image_url"];
+
     return artworkList;
   }
 
