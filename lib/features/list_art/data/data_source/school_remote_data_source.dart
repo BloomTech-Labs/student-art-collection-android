@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
@@ -18,7 +19,7 @@ abstract class SchoolRemoteDataSource {
 
   Future<School> loginSchool(String uid);
 
-  Future<List<Artwork>> getArtworksForSchool(String uid);
+  Future<List<Artwork>> getArtworksForSchool(int schoolId);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
@@ -64,14 +65,22 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   }
 
   @override
-  Future<List<Artwork>> getArtworksForSchool(String uid) async {
+  Future<List<Artwork>> getArtworksForSchool(int schoolId) async {
     final QueryOptions options = QueryOptions(
         documentNode: gql(GET_ARTWORK_FOR_SCHOOL),
         variables: <String, dynamic>{
-          'school_id': uid,
+          'school_id': 1,
         });
     final QueryResult result = await client.query(options);
-    var i = 0;
-    return null;
+    return convertResultToArtworks(result);
+  }
+
+  List<Artwork> convertResultToArtworks(QueryResult result) {
+    List<Artwork> artworks = List();
+    final List<dynamic> tempList = result.data['artBySchool'];
+    for (int i = 0; i < tempList.length; i++) {
+      artworks.add(ArtworkModel.fromJson(tempList[i]));
+    }
+    var j = 0;
   }
 }

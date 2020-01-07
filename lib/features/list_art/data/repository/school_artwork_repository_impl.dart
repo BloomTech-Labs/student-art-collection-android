@@ -9,24 +9,29 @@ import 'package:student_art_collection/features/list_art/data/data_source/school
 import 'package:student_art_collection/features/list_art/domain/repository/school_artwork_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/get_all_school_art.dart';
 
-class SchoolAuthRepositoryImpl implements SchoolArtworkRepository {
+class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
   final NetworkInfo networkInfo;
   final SchoolRemoteDataSource remoteDataSource;
-  final FirebaseAuth firebaseAuth;
 
-  SchoolAuthRepositoryImpl({
+  SchoolArtworkRepositoryImpl({
     @required this.networkInfo,
     @required this.remoteDataSource,
-    @required this.firebaseAuth,
   });
 
   @override
   Future<Either<Failure, List<Artwork>>> getArtworkForSchool(
       SchoolId schoolId) async {
     if (await _isNetworkAvailable()) {
-      try {} on ServerException {}
+      try {
+        final artworkResult =
+            await remoteDataSource.getArtworksForSchool(schoolId.schoolId);
+        return Right(artworkResult);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
     }
-    return null;
   }
 
   @override
