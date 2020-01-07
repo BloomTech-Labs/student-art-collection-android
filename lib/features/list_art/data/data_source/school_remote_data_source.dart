@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
@@ -76,11 +75,46 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   }
 
   List<Artwork> convertResultToArtworks(QueryResult result) {
-    List<Artwork> artworks = List();
-    final List<dynamic> tempList = result.data['artBySchool'];
-    for (int i = 0; i < tempList.length; i++) {
-      artworks.add(ArtworkModel.fromJson(tempList[i]));
-    }
-    var j = 0;
+    return [
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/600/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/601/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/602/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/603/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/604/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/605/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/606/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/607/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/608/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/609/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/610/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/611/900", imageId: 1, artId: 1)
+      ]),
+      Artwork(price: 25, schoolId: 1, artId: 1, images: [
+        Image(imageUrl: "https://picsum.photos/612/900", imageId: 1, artId: 1)
+      ]),
+    ];
   }
 }
