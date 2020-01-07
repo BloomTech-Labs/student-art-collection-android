@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
-import 'package:student_art_collection/core/util/fuctions.dart';
-import 'package:student_art_collection/core/util/page_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
-
 import '../../../../service_locator.dart';
 import 'artwork_details_page.dart';
 
@@ -53,9 +49,7 @@ class GalleryPage extends StatelessWidget {
                 return GalleryGrid(
                   artworkList: state.artworkList,
                   isStaggered: true,
-                  onTap: (){
-                    //Navigate to ArtworkDetails
-                  },
+                  onTap: (artwork){Navigator.pushNamed(context, ArtworkDetailsPage.ID, arguments: artwork);},
                 );
               } else if (state is GalleryErrorState) {
                 return buildError();
@@ -81,6 +75,7 @@ class GalleryPage extends StatelessWidget {
     final galleryBloc = BlocProvider.of<GalleryBloc>(context);
     galleryBloc.add(GetArtworkList());
   }
+
 }
 
 
