@@ -46,11 +46,15 @@ class SchoolGalleryPage extends StatelessWidget {
           child: Icon(
             Icons.add,
           ),
-          backgroundColor: primaryColor,
+          backgroundColor: accentColor,
           onPressed: () {},
         ),
         bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: primaryColor,
+          backgroundColor: primaryColor,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
