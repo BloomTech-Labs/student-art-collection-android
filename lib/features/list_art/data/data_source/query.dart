@@ -1,8 +1,8 @@
 const String GET_SCHOOL_QUERY = r'''
   query GetSchool(
-    $id: ID!
+    $school_id: ID!
     ) {
-      school(id: $id) {
+      schoolBySchoolId(school_id: $school_id) {
         id,
         school_id,
         school_name,

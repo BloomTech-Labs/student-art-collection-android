@@ -3,17 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql/client.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
+import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
 import 'package:student_art_collection/features/buy_art/data/repository/artwork_repository_impl.dart';
 import 'package:student_art_collection/features/buy_art/domain/usecase/get_artwork_by_id.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/data/repository/firebase_auth_repository.dart';
+import 'package:student_art_collection/features/list_art/data/repository/school_artwork_repository_impl.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/get_all_school_art.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school_on_return.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/logout_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 
 import 'features/buy_art/data/data_source/artwork_local_data_source.dart';
 import 'features/buy_art/data/data_source/artwork_remote_data_source.dart';
@@ -21,6 +25,7 @@ import 'features/buy_art/domain/repository/artwork_repository.dart';
 import 'features/buy_art/domain/usecase/get_all_artwork.dart';
 import 'features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
+import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
 
 final sl = GetIt.instance;
@@ -55,12 +60,17 @@ Future init() async {
   /** Feature: List Art */
 
   // Bloc
-  sl.registerLazySingleton(() => SchoolAuthBloc(
+  sl.registerFactory(() => SchoolAuthBloc(
         converter: sl(),
         loginSchool: sl(),
         registerNewSchool: sl(),
         loginSchoolOnReturn: sl(),
         logoutSchool: sl(),
+        sessionManager: sl(),
+      ));
+  sl.registerFactory(() => SchoolGalleryBloc(
+        sessionManager: sl(),
+        getAllSchoolArt: sl(),
       ));
 
   // Use cases
@@ -69,9 +79,20 @@ Future init() async {
   sl.registerLazySingleton(() => LoginSchoolOnReturn(sl()));
   sl.registerLazySingleton(() => LogoutSchool(sl()));
 
+  sl.registerLazySingleton(() => GetAllSchoolArt(sl()));
+
   // Repository
   sl.registerLazySingleton<SchoolAuthRepository>(() => FirebaseAuthRepository(
-      remoteDataSource: sl(), networkInfo: sl(), firebaseAuth: sl()));
+        remoteDataSource: sl(),
+        networkInfo: sl(),
+        firebaseAuth: sl(),
+      ));
+
+  sl.registerLazySingleton<SchoolArtworkRepository>(
+      () => SchoolArtworkRepositoryImpl(
+            networkInfo: sl(),
+            remoteDataSource: sl(),
+          ));
 
   // Data Sources
   sl.registerLazySingleton<SchoolRemoteDataSource>(
@@ -86,9 +107,12 @@ Future init() async {
   // Util
   sl.registerLazySingleton(() => InputConverter());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton(() => SessionManager());
 
   // External
   sl.registerLazySingleton(() => DataConnectionChecker());
-  sl.registerLazySingleton<GraphQLClient>(() =>
-      GraphQLClient(cache: InMemoryCache(), link: HttpLink(uri: BASE_URL)));
+  sl.registerLazySingleton<GraphQLClient>(() => GraphQLClient(
+        cache: InMemoryCache(),
+        link: HttpLink(uri: BASE_URL),
+      ));
 }
