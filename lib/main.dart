@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
-import 'package:student_art_collection/features/buy_art/presentation/page/gallery_screen.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/artwork_details_page.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/login_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
@@ -31,7 +32,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       routes: {
         SchoolLoginPage.ID: (context) => SchoolLoginPage(),
-        GalleryScreen.ID: (context) => GalleryScreen(),
+        GalleryPage.ID: (context) => GalleryPage(),
+        ArtworkDetailsPage.ID: (context) => ArtworkDetailsPage(),
         SchoolRegistrationPage.ID: (context) => SchoolRegistrationPage(),
         StarterScreen.ID: (context) => StarterScreen(),
         SchoolGalleryPage.ID: (context) => SchoolGalleryPage(),

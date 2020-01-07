@@ -14,3 +14,30 @@ abstract class ArtworkLocalDataSource{
 
   Future<void> cacheArtwork(ArtworkModel artworkToCache);
 }
+
+class ArtworkLocalDataSourceImpl implements ArtworkLocalDataSource{
+  @override
+  Future<void> cacheArtwork(ArtworkModel artworkToCache) {
+    // TODO: implement cacheArtwork
+    return null;
+  }
+
+  @override
+  Future<void> cacheArtworkList(List<ArtworkModel> artworkToCache) {
+    // TODO: implement cacheArtworkList
+    return null;
+  }
+
+  @override
+  Future<ArtworkModel> getArtworkById(int id) {
+    // TODO: implement getArtworkById
+    return null;
+  }
+
+  @override
+  Future<List<ArtworkModel>> getLastArtworkList() {
+    // TODO: implement getLastArtworkList
+    return null;
+  }
+
+}
