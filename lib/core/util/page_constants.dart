@@ -11,6 +11,8 @@ const int maxImageHeight = 20;
 const int minImageHeight = 10;
 //sets the radius of the image cards
 const double cardCornerRadius = 10;
+const double staggeredGridMainAxisSpacing = 16.0;
+const double staggeredGridCrossAxisSpacing = 16.0;
 
 
 // Login Screen Constants
