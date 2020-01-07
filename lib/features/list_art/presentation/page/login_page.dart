@@ -28,7 +28,7 @@ class SchoolLoginPage extends StatelessWidget {
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
               builder: (context, state) {
-                if (state is Loading) {
+                if (state is SchoolAuthLoading) {
                   return AppBarLoading();
                 }
                 return EmptyContainer();
@@ -40,7 +40,7 @@ class SchoolLoginPage extends StatelessWidget {
           listener: (context, state) {
             if (state is Authorized) {
               Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
-            } else if (state is Error) {
+            } else if (state is SchoolAuthError) {
               final snackBar = SnackBar(content: Text(state.message));
               Scaffold.of(context).showSnackBar(snackBar);
             }

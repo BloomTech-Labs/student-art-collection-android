@@ -45,10 +45,10 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       );
       yield* credentials.fold(
         (failure) async* {
-          yield Error(message: failure.message);
+          yield SchoolAuthError(message: failure.message);
         },
         (credentials) async* {
-          yield Loading();
+          yield SchoolAuthLoading();
           final loginResult = await loginSchool(credentials);
           yield* _eitherAuthorizedOrErrorState(loginResult);
         },
@@ -67,26 +67,27 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       );
       yield* schoolToRegister.fold(
         (failure) async* {
-          yield Error(message: failure.message);
+          yield SchoolAuthError(message: failure.message);
         },
         (school) async* {
-          yield Loading();
+          yield SchoolAuthLoading();
           final registrationResult = await registerNewSchool(school);
           yield* _eitherAuthorizedOrErrorState(registrationResult);
         },
       );
     }
     if (event is LoginOnReturnEvent) {
-      yield Loading();
+      yield SchoolAuthLoading();
       final loginResult = await loginSchoolOnReturn(NoParams());
       yield* _eitherAuthorizedOrErrorState(loginResult);
     }
     if (event is LogoutSchool) {
-      yield Loading();
+      yield SchoolAuthLoading();
       final logoutResult = await logoutSchool(NoParams());
       yield logoutResult.fold((failure) {
-        if (failure is FirebaseFailure) return Error(message: failure.message);
-        return Error(message: 'Something went wrong');
+        if (failure is FirebaseFailure)
+          return SchoolAuthError(message: failure.message);
+        return SchoolAuthError(message: 'Something went wrong');
       }, (success) {
         return Unauthorized();
       });
@@ -95,14 +96,18 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
 
   Stream<SchoolAuthState> _eitherAuthorizedOrErrorState(
       Either<Failure, School> failureOrSchool) async* {
-    yield failureOrSchool.fold((failure) {
-      if (failure is FirebaseFailure) return Error(message: failure.message);
-      return Error(message: 'Something went wrong');
-    }, (school) {
-      sessionManager.currentUser = Authorized(school: school);
-      return Authorized(
-        school: school,
-      );
-    });
+    yield failureOrSchool.fold(
+      (failure) {
+        if (failure is FirebaseFailure)
+          return SchoolAuthError(message: failure.message);
+        return SchoolAuthError(message: 'Something went wrong');
+      },
+      (school) {
+        sessionManager.currentUser = Authorized(school: school);
+        return Authorized(
+          school: school,
+        );
+      },
+    );
   }
 }
