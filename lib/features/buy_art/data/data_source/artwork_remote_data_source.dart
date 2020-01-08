@@ -33,7 +33,7 @@ class GraphQLArtworkRemoteDataSource implements ArtworkRemoteDataSource {
 
     //Todo: Untested will need revision
 
-    return convertResultToArtwork(result, "allArts");
+    return convertResultToArtworkList(result, "allArts");
   }
 
   @override

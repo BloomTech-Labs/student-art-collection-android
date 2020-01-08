@@ -7,6 +7,7 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/mutation.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/query.dart';
 import 'package:student_art_collection/features/list_art/data/mock_data.dart';
@@ -70,54 +71,10 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
     final QueryOptions options = QueryOptions(
         documentNode: gql(GET_ARTWORK_FOR_SCHOOL),
         variables: <String, dynamic>{
-          'school_id': 1,
+          'school_id': schoolId,
         });
     final QueryResult result = await client.query(options);
-    return convertResultToArtworks(result);
-  }
-
-  List<Artwork> convertResultToArtworks(QueryResult result) {
-    return [
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/600/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/601/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/602/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/603/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/604/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/605/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/606/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/607/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/608/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/609/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/610/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/611/900", imageId: 1, artId: 1)
-      ]),
-      Artwork(price: 25, schoolId: 1, artId: 1, images: [
-        Image(imageUrl: "https://picsum.photos/612/900", imageId: 1, artId: 1)
-      ]),
-    ];
+    return convertResultToArtworkList(result, 'artBySchool');
   }
 
   @override
