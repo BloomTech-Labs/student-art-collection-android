@@ -8,7 +8,7 @@ class ImageModel extends Image {
 
   factory ImageModel.fromJson(Map<String, dynamic> json) {
     return ImageModel(
-      imageId: json[IMAGE_ID],
+      imageId: int.parse(json[IMAGE_ID]),
       artId: json[IMAGE_ART_ID],
       imageUrl: json[IMAGE_URL],
     );

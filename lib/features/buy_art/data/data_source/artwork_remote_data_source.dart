@@ -1,16 +1,20 @@
+import 'dart:convert';
+
 import 'package:graphql/client.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/exception.dart';
+import 'package:student_art_collection/core/util/api_constants.dart';
+import 'package:student_art_collection/core/util/fuctions.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/query.dart';
 
 abstract class ArtworkRemoteDataSource{
 
   /// Throws a [ServerException] for all error codes
-  Future <List<ArtworkModel>> getAllArtwork();
+  Future <List<Artwork>> getAllArtwork();
 
   /// Throws a [ServerException] for all error codes
-  Future <ArtworkModel> getArtworkById(int id);
+  Future <Artwork> getArtworkById(int id);
 }
 
 class GraphQLArtworkRemoteDataSource implements ArtworkRemoteDataSource{
@@ -19,7 +23,7 @@ class GraphQLArtworkRemoteDataSource implements ArtworkRemoteDataSource{
   GraphQLArtworkRemoteDataSource({this.client});
 
   @override
-  Future<List<ArtworkModel>> getAllArtwork() async {
+  Future<List<Artwork>> getAllArtwork() async {
     final QueryOptions queryOptions = QueryOptions(
       documentNode: gql(GET_ALL_ARTWORK_FOR_BUYER),
     );
@@ -29,13 +33,13 @@ class GraphQLArtworkRemoteDataSource implements ArtworkRemoteDataSource{
     }
 
     //Todo: Untested will need revision
-    final artworkList = result.data["image_url"];
 
-    return artworkList;
+    return convertResultToArtwork(result, "allArts");
+
   }
 
   @override
-  Future<ArtworkModel> getArtworkById(int id) {
+  Future<Artwork> getArtworkById(int id) {
     // TODO: implement getArtworkById
     return null;
   }
