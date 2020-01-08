@@ -1,41 +1,42 @@
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
 
 abstract class ArtworkLocalDataSource{
 
-  /// Gets the cached List of [ArtworkModel] which was gotten the last time
+  /// Gets the cached List of [Artwork] which was gotten the last time
   /// the user had made a search for artwork
   ///
   /// Throws [CacheException] if no cached data is present.
-  Future<List<ArtworkModel>> getLastArtworkList();
+  Future<List<Artwork>> getLastArtworkList();
 
-  Future<ArtworkModel> getArtworkById(int id);
+  Future<Artwork> getArtworkById(int id);
 
-  Future<void> cacheArtworkList(List<ArtworkModel> artworkToCache);
+  Future<void> cacheArtworkList(List<Artwork> artworkToCache);
 
-  Future<void> cacheArtwork(ArtworkModel artworkToCache);
+  Future<void> cacheArtwork(Artwork artworkToCache);
 }
 
 class ArtworkLocalDataSourceImpl implements ArtworkLocalDataSource{
   @override
-  Future<void> cacheArtwork(ArtworkModel artworkToCache) {
+  Future<void> cacheArtwork(Artwork artworkToCache) {
     // TODO: implement cacheArtwork
     return null;
   }
 
   @override
-  Future<void> cacheArtworkList(List<ArtworkModel> artworkToCache) {
+  Future<void> cacheArtworkList(List<Artwork> artworkToCache) {
     // TODO: implement cacheArtworkList
     return null;
   }
 
   @override
-  Future<ArtworkModel> getArtworkById(int id) {
+  Future<Artwork> getArtworkById(int id) {
     // TODO: implement getArtworkById
     return null;
   }
 
   @override
-  Future<List<ArtworkModel>> getLastArtworkList() {
+  Future<List<Artwork>> getLastArtworkList() {
     // TODO: implement getLastArtworkList
     return null;
   }

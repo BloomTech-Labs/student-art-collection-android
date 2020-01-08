@@ -24,7 +24,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
 
     if(event is GetArtworkList){
       //Mock Data Until Backend is revised
-      final artworkList = [Artwork(price: 25,schoolId: 1,artId: 1,images: [
+      /*final artworkList = [Artwork(price: 25,schoolId: 1,artId: 1,images: [
         Image(imageUrl: "https://picsum.photos/60/900", imageId: 1, artId: 1),
         Image(imageUrl: "https://picsum.photos/60/901", imageId: 1, artId: 1),
         Image(imageUrl: "https://picsum.photos/60/902", imageId: 1, artId: 1),
@@ -111,9 +111,9 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
           Image(imageUrl: "https://picsum.photos/612/902", imageId: 1, artId: 1),
           Image(imageUrl: "https://picsum.photos/612/903", imageId: 1, artId: 1),
           Image(imageUrl: "https://picsum.photos/612/904", imageId: 1, artId: 1)
-        ]),];
-        //final artworkList = await artworkRepository.getAllArtwork();
-/*        yield* artworkList.fold(
+        ]),];*/
+        final artworkList = await artworkRepository.getAllArtwork();
+        yield* artworkList.fold(
             (failure) async* {
               //TODO: replace message with const
               yield GalleryErrorState(message: "Failed to load Artwork List");
@@ -121,8 +121,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
               (artworkList) async* {
               yield GalleryLoadedState(artworkList);
               }
-        );*/
-yield GalleryLoadedState(artworkList);
+        );
     }
     //TODO Implement Goto details Event
   }

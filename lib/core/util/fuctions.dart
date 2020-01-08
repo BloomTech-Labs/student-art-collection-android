@@ -1,6 +1,10 @@
+import 'dart:collection';
 import 'dart:math';
 
+import 'package:graphql/client.dart';
+import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart'as aw;
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
 
 /// Generates a Random Number within a range
 Random randomNum = Random();
@@ -12,4 +16,15 @@ List<String> imageListToUrlList(List<aw.Image> images){
     imageUrls.add(image.imageUrl);
   }
   return imageUrls;
+}
+
+List<Artwork> convertResultToArtwork(QueryResult result, String mainKey){
+  List<Artwork> artworkList = [];
+  int artworkIndex = 0;
+  for(Map map in result.data[mainKey]){
+    artworkList.add(ArtworkModel.fromJson(result.data[mainKey][artworkIndex]));
+    artworkIndex++;
+  }
+
+  return artworkList;
 }

@@ -34,14 +34,14 @@ void main() {
   });
 
   group('Json', () {
-    test('should return a valid model', () async {
+  /*  test('should return a valid model', () async {
       //arrange
       final Map<String, dynamic> jsonMap = json.decode(fixture('artwork.json'));
       //act
       final result = ArtworkModel.fromJson(jsonMap);
       //assert
       expect(result, tArtworkModel);
-    });
+    });*/
 
     test('should return a Json map containing the proper data', () async {
       //act

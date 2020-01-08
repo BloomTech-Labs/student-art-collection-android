@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/artwork_details_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_event.dart';
