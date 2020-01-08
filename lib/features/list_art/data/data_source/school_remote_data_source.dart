@@ -19,6 +19,8 @@ abstract class SchoolRemoteDataSource {
   Future<School> loginSchool(String uid);
 
   Future<List<Artwork>> getArtworksForSchool(int schoolId);
+
+  Future<Artwork> uploadArtwork(Artwork artwork);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
@@ -116,5 +118,11 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
         Image(imageUrl: "https://picsum.photos/612/900", imageId: 1, artId: 1)
       ]),
     ];
+  }
+
+  @override
+  Future<Artwork> uploadArtwork(Artwork artwork) {
+    // TODO: implement uploadArtwork
+    return null;
   }
 }
