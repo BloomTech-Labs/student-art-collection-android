@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
+import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
@@ -78,7 +79,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   }
 
   @override
-  Future<Artwork> uploadArtwork(Artwork artwork) {
+  Future<Artwork> uploadArtwork(Artwork artwork) async {
     final MutationOptions options = MutationOptions(
         documentNode: gql(ADD_ARTWORK_MUTATION),
         variables: <String, dynamic>{
@@ -90,7 +91,23 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
           'artist_name': artwork.artistName,
           'description': artwork.description,
         });
-    
-    return null;
+    final QueryResult result = await client.mutate(options);
+    final Artwork savedArtwork = convertResultToArtwork(result, 'test');
+    for (Image image in artwork.images) {
+      Image imageToSave = Image(
+        imageId: 0,
+        artId: savedArtwork.artId,
+        imageUrl: image.imageUrl,
+      );
+      final MutationOptions imageOptions = MutationOptions(
+          documentNode: gql(ADD_IMAGE_TO_ARTWORK_MUTATION),
+          variables: <String, dynamic>{
+            'art_id': savedArtwork.artId,
+            'image_url': imageToSave.imageUrl
+          });
+      final QueryResult imageResult = await client.mutate(imageOptions);
+      savedArtwork.images.add(ImageModel.fromJson(imageResult.data));
+    }
+    return savedArtwork;
   }
 }
