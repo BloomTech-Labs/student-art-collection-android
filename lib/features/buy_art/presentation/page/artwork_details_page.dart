@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
-import 'package:student_art_collection/core/util/fuctions.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 
 class ArtworkDetailsPage extends StatelessWidget {
   static const ID = "/artwork_details";
