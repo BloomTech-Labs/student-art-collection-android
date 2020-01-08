@@ -23,7 +23,6 @@ import 'features/buy_art/data/data_source/artwork_local_data_source.dart';
 import 'features/buy_art/data/data_source/artwork_remote_data_source.dart';
 import 'features/buy_art/domain/repository/artwork_repository.dart';
 import 'features/buy_art/domain/usecase/get_all_artwork.dart';
-import 'features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
@@ -37,8 +36,6 @@ Future init() async {
   sl.registerFactory(() => GalleryBloc(
     artworkRepository: sl()
   ));
-
-  sl.registerFactory(() => ArtworkDetailsBloc());
 
   // Use Cases
   sl.registerLazySingleton(() => GetAllArtwork(sl()));

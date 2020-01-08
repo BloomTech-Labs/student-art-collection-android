@@ -89,7 +89,6 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
           return GalleryGrid(
             artworkList: state.artworks,
             isStaggered: false,
-            onTap: () {},
           );
         } else if (state is SchoolGalleryEmpty) {
           _dispatchGetSchoolArtEvent();
