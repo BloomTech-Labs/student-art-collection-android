@@ -14,7 +14,7 @@ class ArtworkModel extends Artwork {
     bool sold,
     @required int schoolId,
     String description,
-    DateTime dateTime,
+    DateTime datePosted,
     @required List<ImageModel> images,
   }) : super(
             title: title,
@@ -24,7 +24,7 @@ class ArtworkModel extends Artwork {
             sold: sold,
             artId: artId,
             description: description,
-            datePosted: dateTime,
+            datePosted: datePosted,
             schoolId: schoolId,
             images: images);
 
@@ -43,15 +43,15 @@ class ArtworkModel extends Artwork {
 
     return ArtworkModel(
         title: json[ARTWORK_TITLE],
-        category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),
-        price: json[ARTWORK_PRICE],
+      //  category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),
+        price: json[ARTWORK_PRICE].toDouble(),
         artistName: json[ARTWORK_ARTIST_NAME],
         sold: json[ARTWORK_SOLD],
-        artId: json[ARTWORK_ID],
+        artId: int.parse(json[ARTWORK_ID]),
         description: json[ARTWORK_DESCRIPTION],
         //ToDo : setup datetime to json conversions
-        //datePosted: json[ARTWORK_DATE_POSTED],
-        schoolId: json[ARTWORK_SCHOOL_ID],
+        datePosted: DateTime.fromMillisecondsSinceEpoch(int.parse(json[ARTWORK_DATE_POSTED])),
+        schoolId: int.parse(json[ARTWORK_SCHOOL_ID]),
         images: imageList);
   }
 

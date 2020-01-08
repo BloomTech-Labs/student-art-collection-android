@@ -42,7 +42,7 @@ class GalleryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<int> sizeList = [];
-    for (aw.Artwork artwork in artworkList) {
+    for (int i = 0; i< 1000; i++) {
       sizeList.add(randomInRange((minImageHeight+maxImageHeight)~/2.5, maxImageHeight));
     }
 
