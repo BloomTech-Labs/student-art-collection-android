@@ -79,7 +79,18 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
 
   @override
   Future<Artwork> uploadArtwork(Artwork artwork) {
-    // TODO: implement uploadArtwork
+    final MutationOptions options = MutationOptions(
+        documentNode: gql(ADD_ARTWORK_MUTATION),
+        variables: <String, dynamic>{
+          'school_id': artwork.schoolId,
+          'category': artwork.category,
+          'price': artwork.price,
+          'sold': artwork.sold,
+          'title': artwork.title,
+          'artist_name': artwork.artistName,
+          'description': artwork.description,
+        });
+    
     return null;
   }
 }
