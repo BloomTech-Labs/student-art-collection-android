@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
-import 'package:student_art_collection/core/util/fuctions.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 
 class ArtworkDetailsPage extends StatelessWidget {
   static const ID = "/artwork_details";
@@ -24,9 +24,7 @@ class ArtworkDetailsPage extends StatelessWidget {
 
   Widget buildLoaded() {
     List<String> imageUrls = imageListToUrlList(artwork.images);
-    return Container(
-      child: CarouselImageViewer(imageList: imageUrls)
-    );
+    return Container(child: CarouselImageViewer(imageList: imageUrls));
   }
 }
 
@@ -56,22 +54,23 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
           CarouselSlider(
             height: 400.0,
             initialPage: 0,
-            onPageChanged: (index){
+            onPageChanged: (index) {
               setState(() {
                 _current = index;
               });
             },
-            items: imageList.map((imageUrl){
+            items: imageList.map((imageUrl) {
               return Builder(
-                builder: (BuildContext context){
-                 return Container(
-                   width: MediaQuery.of(context).size.width,
-                   margin: EdgeInsets.symmetric(horizontal: 16.0),
-                   decoration: BoxDecoration(
-                     color: Colors.green
-                   ),
-                   child: Image.network(imageUrl, fit: BoxFit.fill,),
-                 );
+                builder: (BuildContext context) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 16.0),
+                    decoration: BoxDecoration(color: Colors.green),
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.fill,
+                    ),
+                  );
                 },
               );
             }).toList(),

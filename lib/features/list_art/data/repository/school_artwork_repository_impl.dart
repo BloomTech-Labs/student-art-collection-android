@@ -36,7 +36,6 @@ class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
 
   @override
   Future<Either<Failure, Artwork>> uploadArtwork(Artwork artwork) {
-    // TODO: implement uploadArtwork
     return null;
   }
 

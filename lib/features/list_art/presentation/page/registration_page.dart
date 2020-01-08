@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
@@ -20,6 +21,7 @@ class SchoolRegistrationPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(
+          backgroundColor: primaryColor,
           title: Text('Register'),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
@@ -139,8 +141,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             SizedBox(height: 10),
             RaisedButton(
+                color: accentColor,
                 child: Text(
                   'Register',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
                 onPressed: () {
                   dispatchRegistration();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
 import 'package:student_art_collection/core/util/route_generator.dart';
 import 'service_locator.dart' as locator;
 
@@ -22,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
+      initialRoute: StarterScreen.ID,
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

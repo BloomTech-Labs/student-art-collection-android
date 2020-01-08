@@ -43,6 +43,34 @@ class SchoolGalleryPage extends StatelessWidget {
           },
           child: ArtworkGallery(),
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.add,
+          ),
+          backgroundColor: accentColor,
+          onPressed: () {},
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: primaryColor,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              title: Text('Search'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              title: Text('Messages'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -62,7 +90,6 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
           return GalleryGrid(
             artworkList: state.artworks,
             isStaggered: false,
-            //onTap: () {},
           );
         } else if (state is SchoolGalleryEmpty) {
           _dispatchGetSchoolArtEvent();
