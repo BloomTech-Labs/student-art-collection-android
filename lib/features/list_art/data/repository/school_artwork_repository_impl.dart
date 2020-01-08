@@ -35,8 +35,17 @@ class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
   }
 
   @override
-  Future<Either<Failure, Artwork>> uploadArtwork(Artwork artwork) {
-    return null;
+  Future<Either<Failure, Artwork>> uploadArtwork(Artwork artwork) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final uploadedArtwork = await remoteDataSource.uploadArtwork(artwork);
+        return Right(uploadedArtwork);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   Future<bool> _isNetworkAvailable() {
