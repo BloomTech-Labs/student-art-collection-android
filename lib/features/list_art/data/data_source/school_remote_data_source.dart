@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -93,21 +94,21 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
           'description': artworkToUpload.description,
         });
     final QueryResult result = await client.mutate(options);
-    final Artwork savedArtwork = convertResultToArtwork(result, 'test');
-    for (ImageToUpload image in artworkToUpload.imagesToUpload) {
-      Image imageToSave = Image(
-        imageId: 0,
+    final Artwork savedArtwork = convertResultToArtwork(result, 'action');
+    log('before');
+    for (String imageUrl in artworkToUpload.imagesToUpload) {
+      final imageToUpload = ImageToUpload(
         artId: savedArtwork.artId,
-        imageUrl: image.imageUrl,
+        imageUrl: imageUrl,
       );
       final MutationOptions imageOptions = MutationOptions(
           documentNode: gql(ADD_IMAGE_TO_ARTWORK_MUTATION),
           variables: <String, dynamic>{
             'art_id': savedArtwork.artId,
-            'image_url': imageToSave.imageUrl
+            'image_url': imageToUpload.imageUrl
           });
       final QueryResult imageResult = await client.mutate(imageOptions);
-      savedArtwork.images.add(ImageModel.fromJson(imageResult.data));
+      savedArtwork.images.add(ImageModel.fromJson(imageResult.data['action']));
     }
     return savedArtwork;
   }

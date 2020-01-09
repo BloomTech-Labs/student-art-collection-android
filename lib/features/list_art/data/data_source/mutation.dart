@@ -45,7 +45,10 @@ const String ADD_ARTWORK_MUTATION = r'''
         description: $description,
       ) {
         id,
-        category,
+        category {
+          id,
+          category
+        },
         school_id,
         price,
         sold,
@@ -53,17 +56,21 @@ const String ADD_ARTWORK_MUTATION = r'''
         artist_name,
         description,
         date_posted,
-        images
+        images {
+          id,
+          art_id,
+          image_url
+        }
       }
     }
 ''';
 
 const String ADD_IMAGE_TO_ARTWORK_MUTATION = r'''
   mutation AddImageToArtwork(
-    $art_id: ID!,
+    $art_id: Int,
     $image_url: String) {
-      action addImage(
-        art_id: $art:id, 
+      action: addImage(
+        art_id: $art_id, 
         image_url: $image_url
       ) {
         id,

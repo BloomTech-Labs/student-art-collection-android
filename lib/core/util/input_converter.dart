@@ -38,16 +38,16 @@ class InputConverter {
     ));
   }
 
-  Either<ArtworkInputFailure, ArtworkToUpload> uploadInfoToArtwork({
-    schoolId: String,
-    category: int,
-    price: int,
-    sold: bool,
-    title: String,
-    artistName: String,
-    description: String,
-    imagesToUpload: List,
-  }) {
+  Either<ArtworkInputFailure, ArtworkToUpload> uploadInfoToArtwork(
+    int schoolId,
+    int category,
+    int price,
+    bool sold,
+    String title,
+    String artistName,
+    String description,
+    List<String> imagesToUpload,
+  ) {
     return Right(ArtworkToUpload(
       schoolId: schoolId,
       category: category,

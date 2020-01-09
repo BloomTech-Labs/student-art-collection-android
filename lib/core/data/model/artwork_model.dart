@@ -40,19 +40,20 @@ class ArtworkModel extends Artwork {
     for (Map<String, dynamic> jsonImage in jsonImageList) {
       imageList.add(ImageModel.fromJson(jsonImage));
     }
-
-    return ArtworkModel(
+    final artworkModel = ArtworkModel(
         title: json[ARTWORK_TITLE],
-      //  category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),
+        //  category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),
         price: json[ARTWORK_PRICE].toDouble(),
         artistName: json[ARTWORK_ARTIST_NAME],
         sold: json[ARTWORK_SOLD],
         artId: int.parse(json[ARTWORK_ID]),
         description: json[ARTWORK_DESCRIPTION],
         //ToDo : setup datetime to json conversions
-        datePosted: DateTime.fromMillisecondsSinceEpoch(int.parse(json[ARTWORK_DATE_POSTED])),
+        datePosted: DateTime.fromMillisecondsSinceEpoch(
+            int.parse(json[ARTWORK_DATE_POSTED])),
         schoolId: int.parse(json[ARTWORK_SCHOOL_ID]),
         images: imageList);
+    return artworkModel;
   }
 
   Map<String, dynamic> toJson() {

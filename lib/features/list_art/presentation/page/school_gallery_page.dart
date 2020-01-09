@@ -8,6 +8,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/auth/
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/artwork_upload_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
 import '../../../../service_locator.dart';
@@ -48,7 +49,9 @@ class SchoolGalleryPage extends StatelessWidget {
             Icons.add,
           ),
           backgroundColor: accentColor,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, ArtworkUploadPage.ID);
+          },
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: primaryColor,

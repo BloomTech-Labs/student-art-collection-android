@@ -16,8 +16,10 @@ import 'package:student_art_collection/features/list_art/domain/usecase/login_sc
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school_on_return.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/logout_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 
 import 'features/buy_art/data/data_source/artwork_local_data_source.dart';
 import 'features/buy_art/data/data_source/artwork_remote_data_source.dart';
@@ -33,9 +35,7 @@ Future init() async {
   /** Feature: Buy Art */
 
   // Bloc
-  sl.registerFactory(() => GalleryBloc(
-    artworkRepository: sl()
-  ));
+  sl.registerFactory(() => GalleryBloc(artworkRepository: sl()));
 
   // Use Cases
   sl.registerLazySingleton(() => GetAllArtwork(sl()));
@@ -47,12 +47,12 @@ Future init() async {
 
   // Data Sources
   sl.registerLazySingleton<ArtworkRemoteDataSource>(
-          () => GraphQLArtworkRemoteDataSource(
-        client: sl(),
-      ));
+      () => GraphQLArtworkRemoteDataSource(
+            client: sl(),
+          ));
 
   sl.registerLazySingleton<ArtworkLocalDataSource>(
-          () => ArtworkLocalDataSourceImpl());
+      () => ArtworkLocalDataSourceImpl());
 
   /** Feature: List Art */
 
@@ -69,12 +69,18 @@ Future init() async {
         sessionManager: sl(),
         getAllSchoolArt: sl(),
       ));
+  sl.registerFactory(() => ArtworkUploadBloc(
+        sessionManager: sl(),
+        uploadArtwork: sl(),
+        converter: sl(),
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => LoginSchool(sl()));
   sl.registerLazySingleton(() => RegisterNewSchool(sl()));
   sl.registerLazySingleton(() => LoginSchoolOnReturn(sl()));
   sl.registerLazySingleton(() => LogoutSchool(sl()));
+  sl.registerLazySingleton(() => UploadArtwork(sl()));
 
   sl.registerLazySingleton(() => GetAllSchoolArt(sl()));
 

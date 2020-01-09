@@ -34,14 +34,14 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
     if (currentUser is Authorized) {
       if (event is UploadNewArtworkEvent) {
         final artworkToUpload = converter.uploadInfoToArtwork(
-          schoolId: currentUser.school.schoolId,
-          category: event.category,
-          price: event.price,
-          sold: event.sold,
-          title: event.title,
-          artistName: event.artistName,
-          description: event.description,
-          imagesToUpload: event.imageUrls,
+          currentUser.school.id,
+          event.category,
+          event.price,
+          event.sold,
+          event.title,
+          event.artistName,
+          event.description,
+          event.imageUrls,
         );
         yield* artworkToUpload.fold(
           (failure) async* {
