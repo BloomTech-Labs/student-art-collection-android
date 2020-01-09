@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/get_all_school_art.dart';

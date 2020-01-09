@@ -28,6 +28,11 @@ const String GET_ARTWORK_FOR_SCHOOL = r'''
       artist_name,
       description,
       date_posted
+      images {
+        id,
+        art_id,
+        image_url
+      }
      }
   }
 ''';
