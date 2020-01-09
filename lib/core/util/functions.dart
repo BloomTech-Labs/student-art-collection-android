@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:graphql/client.dart';
@@ -21,6 +20,7 @@ List<String> imageListToUrlList(List<aw.Image> images) {
 List<Artwork> convertResultToArtworkList(QueryResult result, String mainKey) {
   List<Artwork> artworkList = [];
   int artworkIndex = 0;
+  // ignore: unused_local_variable
   for (Map map in result.data[mainKey]) {
     artworkList.add(ArtworkModel.fromJson(result.data[mainKey][artworkIndex]));
     artworkIndex++;

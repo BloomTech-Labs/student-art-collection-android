@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:graphql/client.dart';
-import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/exception.dart';
-import 'package:student_art_collection/core/util/api_constants.dart';
-import 'package:student_art_collection/core/util/fuctions.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/query.dart';
 
 abstract class ArtworkRemoteDataSource{

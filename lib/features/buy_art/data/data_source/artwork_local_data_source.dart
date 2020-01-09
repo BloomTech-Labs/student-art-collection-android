@@ -1,4 +1,3 @@
-import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 
 abstract class ArtworkLocalDataSource{

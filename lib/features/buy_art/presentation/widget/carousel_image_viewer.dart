@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/core/util/fuctions.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 
 const double carouselCardCornerRadius = 10;
