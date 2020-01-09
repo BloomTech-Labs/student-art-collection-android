@@ -11,7 +11,5 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
   @override
   Stream<ArtworkUploadState> mapEventToState(
     ArtworkUploadEvent event,
-  ) async* {
- 
-  }
+  ) async* {}
 }
