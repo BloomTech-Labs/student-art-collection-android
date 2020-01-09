@@ -7,13 +7,13 @@ import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
-import 'package:student_art_collection/features/buy_art/data/data_source/artwork_local_data_source.dart';
-import 'package:student_art_collection/features/buy_art/data/data_source/artwork_remote_data_source.dart';
-import 'package:student_art_collection/features/buy_art/data/repository/artwork_repository_impl.dart';
+import 'package:student_art_collection/features/buy_art/data/data_source/buyer_local_data_source.dart';
+import 'package:student_art_collection/features/buy_art/data/data_source/buyer_remote_data_source.dart';
+import 'package:student_art_collection/features/buy_art/data/repository/buyer_artwork_repository_impl.dart';
 
-class MockRemoteDataSource extends Mock implements ArtworkRemoteDataSource {}
+class MockRemoteDataSource extends Mock implements BuyerRemoteDataSource {}
 
-class MockLocalDataSource extends Mock implements ArtworkLocalDataSource {}
+class MockLocalDataSource extends Mock implements BuyerLocalDataSource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 

@@ -115,7 +115,7 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _current == index ? Colors.red.shade900 : primaryColor,
+                  color: _current == index ? accentColor : primaryColor,
                 ),
               );
             }),

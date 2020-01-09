@@ -1,6 +1,6 @@
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 
-abstract class ArtworkLocalDataSource{
+abstract class BuyerLocalDataSource{
 
   /// Gets the cached List of [Artwork] which was gotten the last time
   /// the user had made a search for artwork
@@ -15,7 +15,7 @@ abstract class ArtworkLocalDataSource{
   Future<void> cacheArtwork(Artwork artworkToCache);
 }
 
-class ArtworkLocalDataSourceImpl implements ArtworkLocalDataSource{
+class BuyerLocalDataSourceImpl implements BuyerLocalDataSource{
   @override
   Future<void> cacheArtwork(Artwork artworkToCache) {
     // TODO: implement cacheArtwork
