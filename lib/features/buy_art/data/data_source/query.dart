@@ -6,6 +6,7 @@ query getAllArtwork{
     price
     sold
     title
+    artist_name
     description
     date_posted
   images{

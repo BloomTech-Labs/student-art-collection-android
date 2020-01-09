@@ -6,25 +6,29 @@ import 'package:student_art_collection/core/util/theme_constants.dart';
 
 const double carouselCardCornerRadius = 10;
 
-
 class CarouselImageViewer extends StatefulWidget {
   final Artwork artwork;
   final height;
 
-  const CarouselImageViewer({Key key, @required this.artwork, @required this.height})
+  const CarouselImageViewer(
+      {Key key, @required this.artwork, @required this.height})
       : super(key: key);
 
   @override
-  _CarouselImageViewerState createState() =>
-      _CarouselImageViewerState(imageList: imageListToUrlList(artwork.images), height: height);
+  _CarouselImageViewerState createState() => _CarouselImageViewerState(
+      imageList: imageListToUrlList(artwork.images),
+      height: height,
+      artistName: artwork.artistName);
 }
 
 class _CarouselImageViewerState extends State<CarouselImageViewer> {
   final List<String> imageList;
   var height;
+  final String artistName;
   int _current = 0;
 
-  _CarouselImageViewerState({@required this.imageList, @required this.height});
+  _CarouselImageViewerState(
+      {this.artistName, @required this.imageList, @required this.height});
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -59,24 +63,41 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
                       width: MediaQuery.of(context).size.width,
                       margin: EdgeInsets.symmetric(horizontal: 16.0),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(carouselCardCornerRadius),
+                          borderRadius:
+                              BorderRadius.circular(carouselCardCornerRadius),
                           color: Colors.white10,
-                        border: Border.all(color: Colors.grey)
+                          border: Border.all(color: Colors.grey)),
+                    ),
+                    Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
-                    ),
-                    Container(child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       margin: EdgeInsets.symmetric(horizontal: 16.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(carouselCardCornerRadius),
+                        borderRadius:
+                            BorderRadius.circular(carouselCardCornerRadius),
                         image: DecorationImage(
                             image: NetworkImage(imageUrl), fit: BoxFit.cover),
                       ),
                     ),
+                    Positioned(
+                      child: Container(
+                        child: Text(
+                          artistName == "" ? "Anonymous" : artistName,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                carouselCardCornerRadius / 2),
+                            color: Colors.black.withOpacity(.5)),
+                        padding: EdgeInsets.all(4),
+                      ),
+                      right: 24,
+                      bottom: 8,
+                    )
                   ]);
                 },
               );
