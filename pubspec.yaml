@@ -27,6 +27,7 @@ dependencies:
   carousel_slider: ^1.4.0
   graphql_flutter: ^2.1.1-beta.5
   graphql: ^2.1.1-beta.5
+  cached_network_image: ^2.0.0
 
 
 

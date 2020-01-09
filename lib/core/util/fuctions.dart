@@ -18,7 +18,7 @@ List<String> imageListToUrlList(List<aw.Image> images){
   return imageUrls;
 }
 
-List<Artwork> convertResultToArtwork(QueryResult result, String mainKey){
+List<Artwork> convertResultToArtworkList(QueryResult result, String mainKey){
   List<Artwork> artworkList = [];
   int artworkIndex = 0;
   for(Map map in result.data[mainKey]){
@@ -27,4 +27,9 @@ List<Artwork> convertResultToArtwork(QueryResult result, String mainKey){
   }
 
   return artworkList;
+}
+
+
+Artwork convertResultToArtwork(QueryResult result, String mainKey){
+  return ArtworkModel.fromJson(result.data[mainKey][0]);
 }
