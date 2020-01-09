@@ -34,6 +34,5 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
               }
         );
     }
-    //TODO Implement Goto details Event
   }
 }

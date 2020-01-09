@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
 import 'package:student_art_collection/features/buy_art/presentation/widget/carousel_image_viewer.dart';
+
+import '../../../../service_locator.dart';
 
 //for initial commit
 
@@ -18,13 +22,16 @@ class ArtworkDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String title = artwork.title != '' ? artwork.title : 'Untitled';
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        centerTitle: true,
-        title: Text(title),
+    return BlocProvider<ArtworkDetailsBloc>(
+      create: (context) => sl<ArtworkDetailsBloc>(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          centerTitle: true,
+          title: Text(title),
+        ),
+        body: buildLoaded(context),
       ),
-      body: buildLoaded(context),
     );
   }
 
