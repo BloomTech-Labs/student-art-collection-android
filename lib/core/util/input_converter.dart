@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 
 class InputConverter {
   Either<UserInputFailure, Credentials> loginInfoToCredentials({
@@ -33,6 +35,28 @@ class InputConverter {
       city: city,
       state: state,
       zipcode: zipcode,
+    ));
+  }
+
+  Either<ArtworkInputFailure, ArtworkToUpload> uploadInfoToArtwork({
+    schoolId: String,
+    category: int,
+    price: int,
+    sold: bool,
+    title: String,
+    artistName: String,
+    description: String,
+    imagesToUpload: List,
+  }) {
+    return Right(ArtworkToUpload(
+      schoolId: schoolId,
+      category: category,
+      price: price,
+      sold: sold,
+      title: title,
+      artistName: artistName,
+      description: description,
+      imagesToUpload: imagesToUpload,
     ));
   }
 }

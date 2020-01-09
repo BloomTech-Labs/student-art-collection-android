@@ -14,6 +14,7 @@ import 'package:student_art_collection/features/list_art/data/data_source/query.
 import 'package:student_art_collection/features/list_art/data/mock_data.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 
 abstract class SchoolRemoteDataSource {
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister);
@@ -22,7 +23,7 @@ abstract class SchoolRemoteDataSource {
 
   Future<List<Artwork>> getArtworksForSchool(int schoolId);
 
-  Future<Artwork> uploadArtwork(Artwork artwork);
+  Future<Artwork> uploadArtwork(ArtworkToUpload artwork);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
@@ -79,21 +80,21 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   }
 
   @override
-  Future<Artwork> uploadArtwork(Artwork artwork) async {
+  Future<Artwork> uploadArtwork(ArtworkToUpload artworkToUpload) async {
     final MutationOptions options = MutationOptions(
         documentNode: gql(ADD_ARTWORK_MUTATION),
         variables: <String, dynamic>{
-          'school_id': artwork.schoolId,
-          'category': artwork.category,
-          'price': artwork.price,
-          'sold': artwork.sold,
-          'title': artwork.title,
-          'artist_name': artwork.artistName,
-          'description': artwork.description,
+          'school_id': artworkToUpload.schoolId,
+          'category': artworkToUpload.category,
+          'price': artworkToUpload.price,
+          'sold': artworkToUpload.sold,
+          'title': artworkToUpload.title,
+          'artist_name': artworkToUpload.artistName,
+          'description': artworkToUpload.description,
         });
     final QueryResult result = await client.mutate(options);
     final Artwork savedArtwork = convertResultToArtwork(result, 'test');
-    for (Image image in artwork.images) {
+    for (ImageToUpload image in artworkToUpload.imagesToUpload) {
       Image imageToSave = Image(
         imageId: 0,
         artId: savedArtwork.artId,
