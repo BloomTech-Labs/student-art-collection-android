@@ -31,3 +31,7 @@ List<Artwork> convertResultToArtworkList(QueryResult result, String mainKey) {
 Artwork convertResultToArtwork(QueryResult result, String mainKey) {
   return ArtworkModel.fromJson(result.data[mainKey]);
 }
+
+bool emailValidation(String email){
+  return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+}
