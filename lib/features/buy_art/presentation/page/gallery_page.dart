@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
@@ -20,6 +19,7 @@ class GalleryPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: primaryColor,
           title: Text('Student Art Gallery'),
           bottom: PreferredSize(
