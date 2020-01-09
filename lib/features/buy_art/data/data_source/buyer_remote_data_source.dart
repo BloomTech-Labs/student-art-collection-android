@@ -4,19 +4,21 @@ import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/query.dart';
 
-abstract class ArtworkRemoteDataSource{
+abstract class BuyerRemoteDataSource{
 
   /// Throws a [ServerException] for all error codes
   Future <List<Artwork>> getAllArtwork();
+
+  Future <bool> contactFormConfirmation();
 
   /// Throws a [ServerException] for all error codes
   Future <Artwork> getArtworkById(int id);
 }
 
-class GraphQLArtworkRemoteDataSource implements ArtworkRemoteDataSource{
+class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource{
   final GraphQLClient client;
 
-  GraphQLArtworkRemoteDataSource({this.client});
+  GraphQLBuyerRemoteDataSource({this.client});
 
   @override
   Future<List<Artwork>> getAllArtwork() async {
@@ -37,6 +39,12 @@ class GraphQLArtworkRemoteDataSource implements ArtworkRemoteDataSource{
   @override
   Future<Artwork> getArtworkById(int id) {
     // TODO: implement getArtworkById
+    return null;
+  }
+
+  @override
+  Future<bool> contactFormConfirmation() {
+    // TODO: implement contactFormConfirmation
     return null;
   }
 

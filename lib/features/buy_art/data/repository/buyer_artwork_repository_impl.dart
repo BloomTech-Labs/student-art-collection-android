@@ -3,14 +3,14 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
-import 'package:student_art_collection/features/buy_art/data/data_source/artwork_local_data_source.dart';
-import 'package:student_art_collection/features/buy_art/data/data_source/artwork_remote_data_source.dart';
-import 'package:student_art_collection/features/buy_art/domain/repository/artwork_repository.dart';
+import 'package:student_art_collection/features/buy_art/data/data_source/buyer_local_data_source.dart';
+import 'package:student_art_collection/features/buy_art/data/data_source/buyer_remote_data_source.dart';
+import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'package:meta/meta.dart';
 
 class ArtworkRepositoryImpl implements ArtworkRepository {
-  final ArtworkRemoteDataSource remoteDataSource;
-  final ArtworkLocalDataSource localDataSource;
+  final BuyerRemoteDataSource remoteDataSource;
+  final BuyerLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
   ArtworkRepositoryImpl(
