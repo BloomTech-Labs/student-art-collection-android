@@ -40,5 +40,15 @@ bool emailValidation(String email) {
 }
 
 String formatDate(DateTime dateTime) {
-  return DateFormat('mm-dd-yyyy').format(dateTime);
+  return DateFormat('MM-dd-yyyy').format(dateTime);
+}
+
+String pickerValueToDollarPrice(String value) {
+  final newValue = value.replaceAll(RegExp('[\\[\\]]'), '');
+  return newValue;
+}
+
+int pickerValueToInt(String value) {
+  final newValue = value.replaceAll(RegExp('[\\p{P}\$]'), '');
+  return int.parse(newValue);
 }

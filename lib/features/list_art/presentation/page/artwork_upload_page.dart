@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_picker/Picker.dart';
 import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
@@ -44,18 +45,52 @@ class _UploadWidgetState extends State<UploadWidget> {
   final dateTextController = TextEditingController();
   final priceTextController = TextEditingController();
 
-  Future<Null> _selectDate(BuildContext context) async {
+  _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2000),
-      lastDate: selectedDate,
+      lastDate: DateTime.now(),
     );
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
         dateTextController.text = formatDate(selectedDate);
       });
+  }
+
+  _showPicker(BuildContext context) {
+    Picker picker = new Picker(
+        adapter: PickerDataAdapter<String>(
+          pickerdata: _getPrices(),
+        ),
+        changeToFirst: false,
+        textAlign: TextAlign.left,
+        columnPadding: const EdgeInsets.all(8.0),
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            priceTextController.text =
+                pickerValueToDollarPrice(picker.adapter.text);
+            price =
+                pickerValueToInt(pickerValueToDollarPrice(picker.adapter.text));
+          });
+        });
+    picker.showModal(context);
+  }
+
+  List<String> _getPrices() {
+    return [
+      '\$5',
+      '\$10',
+      '\$15',
+      '\$20',
+      '\$25',
+      '\$30',
+      '\$35',
+      '\$40',
+      '\$45',
+      '\$50',
+    ];
   }
 
   @override
@@ -133,6 +168,22 @@ class _UploadWidgetState extends State<UploadWidget> {
                           decoration:
                               getAuthInputDecoration('Select artwork price'),
                           controller: priceTextController,
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.attach_money,
+                                color: accentColor,
+                              ),
+                              onPressed: () {
+                                _showPicker(context);
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),

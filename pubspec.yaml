@@ -29,6 +29,8 @@ dependencies:
   graphql: ^2.1.1-beta.5
   cached_network_image: ^2.0.0
   intl: ^0.16.1
+  flutter_picker: ^1.1.0
+
 
 
 
