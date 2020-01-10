@@ -11,7 +11,7 @@ class CategoryModel extends Category {
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
       categoryName: json[CATEGORY_NAME],
-      categoryId: json[CATEGORY_ID],
+      categoryId: int.parse(json[CATEGORY_ID]),
     );
   }
 
