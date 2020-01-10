@@ -9,6 +9,7 @@
   "sold": false,
   "id": 1,
   "description": "test",
+  "date_posted": 1578619470,
   "school_id": 1,
   "images": [
     {
