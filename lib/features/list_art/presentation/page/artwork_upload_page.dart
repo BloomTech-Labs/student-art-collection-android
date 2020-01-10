@@ -141,7 +141,6 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     imageFiles = List();
   }
@@ -300,5 +299,15 @@ class _UploadWidgetState extends State<UploadWidget> {
     );
   }
 
-  dispatchUpload() {}
+  dispatchUpload() {
+    BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
+      title: title,
+      category: category,
+      price: price,
+      artistName: artistName,
+      description: description,
+      imageFiles: imageFiles,
+      sold: sold,
+    ));
+  }
 }

@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloudinary_client/cloudinary_client.dart';
+import 'package:cloudinary_client/models/CloudinaryResponse.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
@@ -29,8 +31,12 @@ abstract class SchoolRemoteDataSource {
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   final GraphQLClient client;
+  final CloudinaryClient cloudinaryClient;
 
-  GraphQLSchoolRemoteDataSource({this.client});
+  GraphQLSchoolRemoteDataSource({
+    this.client,
+    this.cloudinaryClient,
+  });
 
   @override
   Future<School> loginSchool(String uid) async {
@@ -82,6 +88,15 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
 
   @override
   Future<Artwork> uploadArtwork(ArtworkToUpload artworkToUpload) async {
+    final imagePaths = List<String>();
+    for (File file in artworkToUpload.imagesToUpload) {
+      imagePaths.add(file.path);
+    }
+    final response = await cloudinaryClient.uploadImages(imagePaths);
+    final imageUrls = List<String>();
+    response.forEach((CloudinaryResponse cReponse) {
+      imageUrls.add(cReponse.url);
+    });
     final MutationOptions options = MutationOptions(
         documentNode: gql(ADD_ARTWORK_MUTATION),
         variables: <String, dynamic>{
@@ -95,8 +110,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
         });
     final QueryResult result = await client.mutate(options);
     final Artwork savedArtwork = convertResultToArtwork(result, 'action');
-    log('before');
-    for (String imageUrl in artworkToUpload.imagesToUpload) {
+    for (String imageUrl in imageUrls) {
       final imageToUpload = ImageToUpload(
         artId: savedArtwork.artId,
         imageUrl: imageUrl,

@@ -33,9 +33,6 @@ dependencies:
   cloudinary_client: ^0.0.9
   image_picker: ^0.6.3
 
-
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

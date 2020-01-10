@@ -107,6 +107,7 @@ Future init() async {
   sl.registerLazySingleton<SchoolRemoteDataSource>(
       () => GraphQLSchoolRemoteDataSource(
             client: sl(),
+            cloudinaryClient: sl(),
           ));
 
   sl.registerLazySingleton(() => FirebaseAuth.instance);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 
 abstract class ArtworkUploadEvent extends Equatable {
@@ -8,7 +10,7 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
   final int category, price;
   final bool sold;
   final String title, artistName, description;
-  final List<String> imageUrls;
+  final List<File> imageFiles;
 
   UploadNewArtworkEvent({
     this.category,
@@ -17,7 +19,7 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
     this.title,
     this.artistName,
     this.description,
-    this.imageUrls,
+    this.imageFiles,
   });
 
   @override
@@ -28,7 +30,7 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
         title,
         artistName,
         description,
-        imageUrls,
+        imageFiles,
       ];
 }
 
