@@ -89,7 +89,7 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
     // TODO: implement initState
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
