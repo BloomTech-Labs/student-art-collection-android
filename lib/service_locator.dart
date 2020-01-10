@@ -44,7 +44,7 @@ Future init() async {
   sl.registerLazySingleton(() => GetAllArtwork(sl()));
 
   // Repository
-  sl.registerLazySingleton<ArtworkRepository>(() => ArtworkRepositoryImpl(
+  sl.registerLazySingleton<BuyerArtworkRepository>(() => BuyerArtworkRepositoryImpl(
       remoteDataSource: sl(), networkInfo: sl(), localDataSource: sl()));
 
   // Data Sources

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
+import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
@@ -42,6 +43,16 @@ class ArtworkDetailsPage extends StatelessWidget {
   Widget buildError() {
     return Container(
       child: Center(child: Text('Error')),
+    );
+  }
+
+  Widget buildFormLoading({@required double screenHeight}){
+    return Column(
+      children: <Widget>[
+        topBannerWidget(screenHeight: screenHeight),
+        carouselWidget(screenHeight: screenHeight),
+        BuildLoading(),
+      ],
     );
   }
 
@@ -194,4 +205,5 @@ class ArtworkDetailsPage extends StatelessWidget {
   Widget contactFormConfirmationWidget({@required double screenHeight}) {
     return Container();
   }
+
 }

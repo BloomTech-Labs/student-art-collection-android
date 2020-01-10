@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 const BASE_URL = 'https://student-artco-staging.herokuapp.com/graphql';
 
 //image
@@ -18,6 +16,7 @@ const ARTWORK_CATEGORY = 'category';
 const ARTWORK_PRICE = 'price';
 const ARTWORK_ARTIST_NAME = 'artist_name';
 const ARTWORK_SOLD = 'sold';
+const ARTWORK_SCHOOL_INFO = 'school';
 const ARTWORK_SCHOOL_ID = 'school_id';
 const ARTWORK_DESCRIPTION = 'description';
 const ARTWORK_DATE_POSTED = 'date_posted';
@@ -36,8 +35,8 @@ const SCHOOL_ARTWORKS = 'artworks'; //not implemented yet
 
 //TODO: fill this in when backend is setup
 //Contact Form
-const CONTACT_FORM_ART_ID =  '';
-const CONTACT_FORM_ART_PRICE = '';
-const CONTACT_FORM_MESSAGE =  '';
-const CONTACT_FORM_EMAIL =  '';
-const CONTACT_FORM_BUYER_NAME =  '';
+const CONTACT_FORM_ART_ID =  'art_id';
+const CONTACT_FORM_ART_PRICE = 'price';
+const CONTACT_FORM_MESSAGE =  'message';
+const CONTACT_FORM_EMAIL =  'email';
+const CONTACT_FORM_BUYER_NAME =  'buyer_name';
