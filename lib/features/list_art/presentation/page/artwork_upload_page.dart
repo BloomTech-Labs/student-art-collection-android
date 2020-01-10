@@ -6,12 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_state.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
+import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
 import '../../../../service_locator.dart';
 
@@ -23,9 +25,29 @@ class ArtworkUploadPage extends StatelessWidget {
     return BlocProvider<ArtworkUploadBloc>(
       create: (context) => sl<ArtworkUploadBloc>(),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          bottom: PreferredSize(
+            preferredSize: Size(double.infinity, 1.0),
+            child: BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(
+              builder: (context, state) {
+                if (state is ArtworkUploadLoading) {
+                  return AppBarLoading();
+                }
+                return EmptyContainer();
+              },
+            ),
+          ),
+        ),
         body: BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is ArtworkUploadLoading) {
+              final snackBar = SnackBar(content: Text(state.message));
+              Scaffold.of(context).showSnackBar(snackBar);
+            } else if (state is ArtworkUploadError) {
+              final snackBar = SnackBar(content: Text(state.message));
+              Scaffold.of(context).showSnackBar(snackBar);
+            }
+          },
           child: UploadWidget(),
         ),
       ),
@@ -42,11 +64,13 @@ class _UploadWidgetState extends State<UploadWidget> {
   String title, artistName, description;
   bool sold;
   int category, price;
-  List<String> imageUrls;
   List<File> imageFiles;
 
   DateTime selectedDate = DateTime.now();
 
+  final titleTextController = TextEditingController();
+  final studentTextController = TextEditingController();
+  final descriptionTextController = TextEditingController();
   final dateTextController = TextEditingController();
   final priceTextController = TextEditingController();
   final categoryTextController = TextEditingController();
@@ -147,156 +171,185 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height * 0.4,
-                width: double.infinity,
-                child: OutlineButton(
-                  child: Icon(
-                    Icons.image,
-                    color: accentColor,
+    return BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
+      listener: (context, state) {
+        if (state is ArtworkUploadSuccess) {
+          setState(() {
+            nullifyState();
+          });
+        }
+      },
+      child: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  width: double.infinity,
+                  child: OutlineButton(
+                    child: Icon(
+                      Icons.image,
+                      color: accentColor,
+                    ),
+                    onPressed: () {
+                      _getImage();
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
                   ),
-                  onPressed: () {
-                    _getImage();
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6)),
                 ),
-              ),
-              Flexible(
-                flex: 6,
-                fit: FlexFit.loose,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 10),
-                    TextField(
-                      keyboardType: TextInputType.text,
-                      onChanged: (value) {
-                        title = value;
-                      },
-                      decoration: getAuthInputDecoration('Enter Artwork Title'),
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      keyboardType: TextInputType.text,
-                      onChanged: (value) {
-                        artistName = value;
-                      },
-                      decoration: getAuthInputDecoration('Enter Student Name'),
-                    ),
-                    SizedBox(height: 10),
-                    Stack(
-                      overflow: Overflow.visible,
-                      children: <Widget>[
-                        TextField(
-                          enabled: false,
-                          decoration:
-                              getAuthInputDecoration('Select Date Created'),
-                          controller: dateTextController,
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.date_range,
-                                color: accentColor,
+                Flexible(
+                  flex: 6,
+                  fit: FlexFit.loose,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: 10),
+                      TextField(
+                        controller: titleTextController,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          title = value;
+                        },
+                        decoration:
+                            getAuthInputDecoration('Enter Artwork Title'),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        controller: studentTextController,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          artistName = value;
+                        },
+                        decoration:
+                            getAuthInputDecoration('Enter Student Name'),
+                      ),
+                      SizedBox(height: 10),
+                      Stack(
+                        overflow: Overflow.visible,
+                        children: <Widget>[
+                          TextField(
+                            enabled: false,
+                            decoration:
+                                getAuthInputDecoration('Select Date Created'),
+                            controller: dateTextController,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.date_range,
+                                  color: accentColor,
+                                ),
+                                onPressed: () {
+                                  _selectDate(context);
+                                },
                               ),
-                              onPressed: () {
-                                _selectDate(context);
-                              },
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Stack(
-                      overflow: Overflow.visible,
-                      children: <Widget>[
-                        TextField(
-                          enabled: false,
-                          decoration:
-                              getAuthInputDecoration('Select Artwork Price'),
-                          controller: priceTextController,
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.attach_money,
-                                color: accentColor,
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Stack(
+                        overflow: Overflow.visible,
+                        children: <Widget>[
+                          TextField(
+                            enabled: false,
+                            decoration:
+                                getAuthInputDecoration('Select Artwork Price'),
+                            controller: priceTextController,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.attach_money,
+                                  color: accentColor,
+                                ),
+                                onPressed: () {
+                                  _showPricePicker(context);
+                                },
                               ),
-                              onPressed: () {
-                                _showPricePicker(context);
-                              },
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Stack(
-                      overflow: Overflow.visible,
-                      children: <Widget>[
-                        TextField(
-                          enabled: false,
-                          decoration:
-                              getAuthInputDecoration('Select Artwork Category'),
-                          controller: categoryTextController,
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.category,
-                                color: accentColor,
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Stack(
+                        overflow: Overflow.visible,
+                        children: <Widget>[
+                          TextField(
+                            enabled: false,
+                            decoration: getAuthInputDecoration(
+                                'Select Artwork Category'),
+                            controller: categoryTextController,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.category,
+                                  color: accentColor,
+                                ),
+                                onPressed: () {
+                                  _showCategoryPicker(context);
+                                },
                               ),
-                              onPressed: () {
-                                _showCategoryPicker(context);
-                              },
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        RaisedButton(
-                          onPressed: () {
-                            dispatchUpload();
-                          },
-                          color: accentColor,
-                          textColor: Colors.white,
-                          child: Text(
-                            'Submit',
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          RaisedButton(
+                            onPressed: () {
+                              dispatchUpload();
+                            },
+                            color: accentColor,
+                            textColor: Colors.white,
+                            child: Text(
+                              'Submit',
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void nullifyState() {
+    title = null;
+    titleTextController.text = "";
+    description = null;
+    descriptionTextController.text = "";
+    artistName = null;
+    studentTextController.text = "";
+    dateTextController.text = "";
+    sold = null;
+    category = null;
+    categoryTextController.text = "";
+    price = null;
+    priceTextController.text = "";
+    imageFiles.clear();
   }
 
   dispatchUpload() {
