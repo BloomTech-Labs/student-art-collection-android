@@ -43,7 +43,7 @@ Future init() async {
   // Bloc
   sl.registerFactory(() => GalleryBloc(artworkRepository: sl()));
 
-  sl.registerFactory(() => ArtworkDetailsBloc());
+  sl.registerFactory(() => ArtworkDetailsBloc(artworkRepository: sl()));
 
   // Use Cases
   sl.registerLazySingleton(() => GetAllArtwork(sl()));

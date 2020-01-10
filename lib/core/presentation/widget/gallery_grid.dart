@@ -25,6 +25,7 @@ class GalleryGrid extends StatelessWidget {
   final int mainAxisSpacing;
   final int crossAxisSpacing;
   final Function(aw.Artwork) onTap;
+  final bool heroOnURL;
 
   const GalleryGrid(
       {Key key,
@@ -33,7 +34,7 @@ class GalleryGrid extends StatelessWidget {
       this.padding,
       this.mainAxisSpacing,
       this.crossAxisSpacing,
-      this.onTap})
+      this.onTap, this.heroOnURL})
       : super(key: key);
 
   @override
@@ -55,6 +56,7 @@ class GalleryGrid extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) => GridTile(
           artwork: validatedArtworkList[index],
           onTap: onTap,
+          heroOnURL: heroOnURL,
         ),
         staggeredTileBuilder: (int index) {
           StaggeredTile staggeredTile = StaggeredTile.count(
@@ -85,6 +87,7 @@ class GridTile extends StatelessWidget {
   final aw.Artwork artwork;
   final double setCornerRadius;
   final Color borderColor;
+  final bool heroOnURL;
   final Function(aw.Artwork artwork) onTap;
 
   const GridTile({
@@ -93,6 +96,7 @@ class GridTile extends StatelessWidget {
     this.borderColor,
     this.setCornerRadius,
     this.onTap,
+    this.heroOnURL,
   }) : super(key: key);
 
   @override
