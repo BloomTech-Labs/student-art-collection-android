@@ -7,6 +7,7 @@ import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
+import 'package:student_art_collection/core/util/secret.dart';
 import 'package:student_art_collection/features/buy_art/data/repository/buyer_artwork_repository_impl.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/data/repository/firebase_auth_repository.dart';
@@ -21,6 +22,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/auth/
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 
+import 'core/util/secret_loader.dart';
 import 'features/buy_art/data/data_source/buyer_local_data_source.dart';
 import 'features/buy_art/data/data_source/buyer_remote_data_source.dart';
 import 'features/buy_art/domain/repository/buyer_artwork_repository.dart';
@@ -44,8 +46,9 @@ Future init() async {
   sl.registerLazySingleton(() => GetAllArtwork(sl()));
 
   // Repository
-  sl.registerLazySingleton<BuyerArtworkRepository>(() => BuyerArtworkRepositoryImpl(
-      remoteDataSource: sl(), networkInfo: sl(), localDataSource: sl()));
+  sl.registerLazySingleton<BuyerArtworkRepository>(() =>
+      BuyerArtworkRepositoryImpl(
+          remoteDataSource: sl(), networkInfo: sl(), localDataSource: sl()));
 
   // Data Sources
   sl.registerLazySingleton<BuyerRemoteDataSource>(
@@ -121,4 +124,9 @@ Future init() async {
         cache: InMemoryCache(),
         link: HttpLink(uri: BASE_URL),
       ));
+
+  CloudinarySecret secret =
+      await SecretLoader(secretPath: "secrets.json").load();
+  sl.registerLazySingleton(() =>
+      CloudinaryClient(secret.apiKey, secret.apiSecret, secret.cloudName));
 }

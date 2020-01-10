@@ -1,16 +1,16 @@
-class Secret {
+class CloudinarySecret {
   final String cloudName;
   final String apiKey;
   final String apiSecret;
 
-  Secret({
+  CloudinarySecret({
     this.cloudName = "",
     this.apiKey = "",
     this.apiSecret = "",
   });
 
-  factory Secret.fromJson(Map<String, dynamic> jsonMap) {
-    return Secret(
+  factory CloudinarySecret.fromJson(Map<String, dynamic> jsonMap) {
+    return CloudinarySecret(
         cloudName: jsonMap["cloud_name"],
         apiKey: jsonMap["api_key"],
         apiSecret: jsonMap["api_secret"]);

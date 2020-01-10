@@ -8,10 +8,10 @@ class SecretLoader {
 
   SecretLoader({this.secretPath = 'secrets.json'});
 
-  Future<Secret> load() {
-    return rootBundle.loadStructuredData<Secret>(this.secretPath,
+  Future<CloudinarySecret> load() {
+    return rootBundle.loadStructuredData<CloudinarySecret>(this.secretPath,
         (jsonStr) async {
-      final secret = Secret.fromJson(json.decode(jsonStr));
+      final secret = CloudinarySecret.fromJson(json.decode(jsonStr));
       return secret;
     });
   }
