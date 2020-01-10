@@ -24,7 +24,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
         final artworkList = await artworkRepository.getAllArtwork();
         yield* artworkList.fold(
             (failure) async* {
-              //TODO: replace message with const
+              //TODO: replace message with cons
               yield GalleryErrorState(message: "Failed to load Artwork List");
             },
               (artworkList) async* {
