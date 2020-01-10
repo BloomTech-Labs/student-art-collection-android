@@ -1,3 +1,4 @@
+import 'package:cloudinary_client/cloudinary_client.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -15,8 +16,10 @@ import 'package:student_art_collection/features/list_art/domain/usecase/login_sc
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school_on_return.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/logout_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 
 import 'features/buy_art/data/data_source/buyer_local_data_source.dart';
 import 'features/buy_art/data/data_source/buyer_remote_data_source.dart';
@@ -33,12 +36,9 @@ Future init() async {
   /** Feature: Buy Art */
 
   // Bloc
-  sl.registerFactory(() => GalleryBloc(
-    artworkRepository: sl()
-  ));
+  sl.registerFactory(() => GalleryBloc(artworkRepository: sl()));
 
-  sl.registerFactory(() => ArtworkDetailsBloc(
-  ));
+  sl.registerFactory(() => ArtworkDetailsBloc());
 
   // Use Cases
   sl.registerLazySingleton(() => GetAllArtwork(sl()));
@@ -49,12 +49,12 @@ Future init() async {
 
   // Data Sources
   sl.registerLazySingleton<BuyerRemoteDataSource>(
-          () => GraphQLBuyerRemoteDataSource(
-        client: sl(),
-      ));
+      () => GraphQLBuyerRemoteDataSource(
+            client: sl(),
+          ));
 
   sl.registerLazySingleton<BuyerLocalDataSource>(
-          () => BuyerLocalDataSourceImpl());
+      () => BuyerLocalDataSourceImpl());
 
   /** Feature: List Art */
 
@@ -72,6 +72,12 @@ Future init() async {
         getAllSchoolArt: sl(),
       ));
 
+  sl.registerFactory(() => ArtworkUploadBloc(
+        sessionManager: sl(),
+        uploadArtwork: sl(),
+        converter: sl(),
+      ));
+
   // Use cases
   sl.registerLazySingleton(() => LoginSchool(sl()));
   sl.registerLazySingleton(() => RegisterNewSchool(sl()));
@@ -79,6 +85,7 @@ Future init() async {
   sl.registerLazySingleton(() => LogoutSchool(sl()));
 
   sl.registerLazySingleton(() => GetAllSchoolArt(sl()));
+  sl.registerLazySingleton(() => UploadArtwork(sl()));
 
   // Repository
   sl.registerLazySingleton<SchoolAuthRepository>(() => FirebaseAuthRepository(

@@ -21,7 +21,6 @@ class SchoolRegistrationPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(
-          backgroundColor: primaryColor,
           title: Text('Register'),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),

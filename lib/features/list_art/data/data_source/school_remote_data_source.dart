@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
+import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
@@ -13,6 +15,7 @@ import 'package:student_art_collection/features/list_art/data/data_source/query.
 import 'package:student_art_collection/features/list_art/data/mock_data.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 
 abstract class SchoolRemoteDataSource {
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister);
@@ -21,7 +24,7 @@ abstract class SchoolRemoteDataSource {
 
   Future<List<Artwork>> getArtworksForSchool(int schoolId);
 
-  Future<Artwork> uploadArtwork(Artwork artwork);
+  Future<Artwork> uploadArtwork(ArtworkToUpload artwork);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
@@ -78,8 +81,36 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   }
 
   @override
-  Future<Artwork> uploadArtwork(Artwork artwork) {
-    // TODO: implement uploadArtwork
-    return null;
+  Future<Artwork> uploadArtwork(ArtworkToUpload artworkToUpload) async {
+    final MutationOptions options = MutationOptions(
+        documentNode: gql(ADD_ARTWORK_MUTATION),
+        variables: <String, dynamic>{
+          'school_id': artworkToUpload.schoolId,
+          'category': artworkToUpload.category,
+          'price': artworkToUpload.price,
+          'sold': artworkToUpload.sold,
+          'title': artworkToUpload.title,
+          'artist_name': artworkToUpload.artistName,
+          'description': artworkToUpload.description,
+        });
+    final QueryResult result = await client.mutate(options);
+    final Artwork savedArtwork = convertResultToArtwork(result, 'action');
+    log('before');
+    for (String imageUrl in artworkToUpload.imagesToUpload) {
+      final imageToUpload = ImageToUpload(
+        artId: savedArtwork.artId,
+        imageUrl: imageUrl,
+      );
+      final MutationOptions imageOptions = MutationOptions(
+          documentNode: gql(ADD_IMAGE_TO_ARTWORK_MUTATION),
+          variables: <String, dynamic>{
+            'art_id': savedArtwork.artId,
+            'image_url': imageToUpload.imageUrl
+          });
+      final QueryResult imageResult = await client.mutate(imageOptions);
+      savedArtwork.images.add(ImageModel.fromJson(imageResult.data['action']));
+    }
+    var i = 0;
+    return savedArtwork;
   }
 }

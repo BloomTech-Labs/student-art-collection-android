@@ -28,14 +28,13 @@ class ArtworkDetailsPage extends StatelessWidget {
       create: (context) => sl<ArtworkDetailsBloc>(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
           centerTitle: true,
           title: Text(title),
         ),
         body: SafeArea(
-            child: SingleChildScrollView(
-                child: buildLoaded(screenHeight: screenHeight),
-            ),
+          child: SingleChildScrollView(
+            child: buildLoaded(screenHeight: screenHeight),
+          ),
         ),
       ),
     );
