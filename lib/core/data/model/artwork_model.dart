@@ -13,7 +13,7 @@ class ArtworkModel extends Artwork {
     @required double price,
     String artistName,
     bool sold,
-    @required SchoolInfoModel schoolInfo,
+    SchoolInfoModel schoolInfo,
     String description,
     DateTime datePosted,
     @required List<ImageModel> images,
@@ -41,7 +41,6 @@ class ArtworkModel extends Artwork {
     for (Map<String, dynamic> jsonImage in jsonImageList) {
       imageList.add(ImageModel.fromJson(jsonImage));
     }
-
     return ArtworkModel(
         title: json[ARTWORK_TITLE],
         category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),
@@ -50,7 +49,8 @@ class ArtworkModel extends Artwork {
         sold: json[ARTWORK_SOLD],
         artId: int.parse(json[ARTWORK_ID]),
         description: json[ARTWORK_DESCRIPTION],
-        datePosted: DateTime.fromMillisecondsSinceEpoch(int.parse(json[ARTWORK_DATE_POSTED])),
+        datePosted: DateTime.fromMillisecondsSinceEpoch(
+            int.parse(json[ARTWORK_DATE_POSTED])),
         schoolInfo: SchoolInfoModel.fromJson(json[ARTWORK_SCHOOL_INFO]),
         images: imageList);
   }

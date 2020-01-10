@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
@@ -46,7 +48,7 @@ class InputConverter {
     String title,
     String artistName,
     String description,
-    List<String> imagesToUpload,
+    List<File> imagesToUpload,
   ) {
     return Right(ArtworkToUpload(
       schoolId: schoolId,
