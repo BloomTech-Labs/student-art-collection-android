@@ -2,12 +2,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
+import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 
 part 'artwork_details_event.dart';
 part 'artwork_details_state.dart';
 
 class ArtworkDetailsBloc
     extends Bloc<ArtworkDetailsEvent, ArtworkDetailsState> {
+  final BuyerArtworkRepository artworkRepository;
+
+  ArtworkDetailsBloc({this.artworkRepository});
+
   @override
   ArtworkDetailsState get initialState => ArtworkDetailsInitialState();
 
@@ -16,7 +22,21 @@ class ArtworkDetailsBloc
       ArtworkDetailsEvent event) async* {
 
     if(event is SubmitContactForm){
-      //TODO : Pass off form to be verified
+      yield ArtworkDetailsLoadingState();
+
+      final confirmation = await artworkRepository.contactFormConfirmation(contactForm: event.contactForm);
+
+      yield* confirmation.fold(
+              (failure) async* {
+            //TODO: replace message with const
+            yield ArtworkDetailsErrorState(message: "Error Please Try Again");
+          },
+              (confirmation) async* {
+                if(confirmation == event.contactForm){
+            yield ArtworkDetailsFormSubmittedState();}
+                else { yield ArtworkDetailsErrorState(message: "Error Please Try Again");}
+          }
+      );
     }
   }
 }
