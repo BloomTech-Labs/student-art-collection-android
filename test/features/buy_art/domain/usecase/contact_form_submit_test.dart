@@ -17,7 +17,7 @@ void main() {
     usecase = ContactFormSubmit(mockArtworkRepository);
   });
 
-final ContactForm tContactForm = ContactForm(artId: 1,message: "test", buyerName: "test", email: "test@gmail.com", price: 50);
+final ContactForm tContactForm = ContactForm(subject: "test",message: "test", name: "test", sendTo: "test@gmail.com", from: "test");
 
   test('should get ContactForm reply from the repository when data is valid', () async {
     //arrange

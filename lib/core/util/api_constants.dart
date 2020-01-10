@@ -35,8 +35,8 @@ const SCHOOL_ARTWORKS = 'artworks'; //not implemented yet
 
 //TODO: fill this in when backend is setup
 //Contact Form
-const CONTACT_FORM_ART_ID =  'art_id';
-const CONTACT_FORM_ART_PRICE = 'price';
+const CONTACT_FORM_SEND_TO =  'sendto';
+const CONTACT_FORM_NAME = 'name';
 const CONTACT_FORM_MESSAGE =  'message';
-const CONTACT_FORM_EMAIL =  'email';
-const CONTACT_FORM_BUYER_NAME =  'buyer_name';
+const CONTACT_FORM_FROM =  'fromUser';
+const CONTACT_FORM_SUBJECT =  'subject';

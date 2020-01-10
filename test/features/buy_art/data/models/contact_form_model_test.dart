@@ -7,14 +7,12 @@ import 'package:student_art_collection/features/buy_art/domain/entity/contact_fo
 import '../../../../core/fixtures/fixture_reader.dart';
 
 void main() {
-
-  final tContactFormModel = ContactFormModel(
-    artId: 1,
-    message: 'test',
-    price: 50.0,
-    email: 'test@gmail.com',
-    buyerName: 'test'
-  );
+  final ContactFormModel tContactFormModel = ContactFormModel(
+      subject: "test",
+      message: "test",
+      name: "test",
+      sendTo: "test@gmail.com",
+      from: "test");
 
   test('should be a subclass of ContactForm entity', () async {
     //assert
@@ -22,9 +20,10 @@ void main() {
   });
 
   group('Json', () {
-      test('should return a valid model', () async {
+    test('should return a valid model', () async {
       //arrange
-      final Map<String, dynamic> jsonMap = json.decode(fixture('contact_form.json'));
+      final Map<String, dynamic> jsonMap =
+          json.decode(fixture('contact_form.json'));
       //act
       final result = ContactFormModel.fromJson(jsonMap);
       //assert
@@ -35,10 +34,10 @@ void main() {
       //act
       final result = tContactFormModel.toJson();
       final expectedMap = {
-        CONTACT_FORM_ART_ID: tContactFormModel.artId,
-        CONTACT_FORM_ART_PRICE: tContactFormModel.price,
-        CONTACT_FORM_BUYER_NAME: tContactFormModel.buyerName,
-        CONTACT_FORM_EMAIL: tContactFormModel.email,
+        CONTACT_FORM_SEND_TO: tContactFormModel.sendTo,
+        CONTACT_FORM_NAME: tContactFormModel.name,
+        CONTACT_FORM_SUBJECT: tContactFormModel.subject,
+        CONTACT_FORM_FROM: tContactFormModel.from,
         CONTACT_FORM_MESSAGE: tContactFormModel.message
       };
       //assert
