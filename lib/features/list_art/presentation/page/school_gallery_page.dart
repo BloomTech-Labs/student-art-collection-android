@@ -86,7 +86,6 @@ class ArtworkGallery extends StatefulWidget {
 class _ArtworkGalleryState extends State<ArtworkGallery> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

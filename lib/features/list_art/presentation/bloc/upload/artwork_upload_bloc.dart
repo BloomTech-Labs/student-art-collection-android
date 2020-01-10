@@ -48,7 +48,9 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
             yield ArtworkUploadError(message: failure.message);
           },
           (artwork) async* {
-            yield ArtworkUploadLoading();
+            yield ArtworkUploadLoading(
+              message: 'Uploading artwork, please do not close the App.',
+            );
             final artworkUploadResult = await uploadArtwork(artwork);
             yield* _eitherUploadedOrErrorState(artworkUploadResult);
           },

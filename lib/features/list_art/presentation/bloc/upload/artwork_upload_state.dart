@@ -18,6 +18,12 @@ class ArtworkUploadInitial extends ArtworkUploadState {
 }
 
 class ArtworkUploadLoading extends ArtworkUploadState {
+  final String message;
+
+  ArtworkUploadLoading({
+    this.message,
+  });
+
   @override
   List<Object> get props => null;
 }
@@ -41,6 +47,5 @@ class ArtworkUploadSuccess extends ArtworkUploadState {
   });
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }

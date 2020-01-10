@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloudinary_client/cloudinary_client.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,6 +33,7 @@ import 'features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
+import 'dart:convert';
 
 final sl = GetIt.instance;
 
@@ -128,6 +131,9 @@ Future init() async {
 
   CloudinarySecret secret =
       await SecretLoader(secretPath: "secrets.json").load();
-  sl.registerLazySingleton(() =>
-      CloudinaryClient(secret.apiKey, secret.apiSecret, secret.cloudName));
+  final decodedKey = latin1.decode(base64.decode(secret.apiKey));
+  final decodedSecret = latin1.decode(base64.decode(secret.apiSecret));
+  final decodedName = latin1.decode(base64.decode(secret.cloudName));
+  sl.registerLazySingleton(
+      () => CloudinaryClient(decodedKey, decodedSecret, decodedName));
 }
