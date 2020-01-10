@@ -20,7 +20,6 @@ class GalleryPage extends StatelessWidget {
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: primaryColor,
           title: Text('Student Art Gallery'),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
@@ -49,7 +48,10 @@ class GalleryPage extends StatelessWidget {
                 return GalleryGrid(
                   artworkList: state.artworkList,
                   isStaggered: true,
-                  onTap: (artwork){Navigator.pushNamed(context, ArtworkDetailsPage.ID, arguments: artwork);},
+                  onTap: (artwork) {
+                    Navigator.pushNamed(context, ArtworkDetailsPage.ID,
+                        arguments: artwork);
+                  },
                 );
               } else if (state is GalleryErrorState) {
                 return buildError();
@@ -75,7 +77,4 @@ class GalleryPage extends StatelessWidget {
     final galleryBloc = BlocProvider.of<GalleryBloc>(context);
     galleryBloc.add(GetArtworkList());
   }
-
 }
-
-

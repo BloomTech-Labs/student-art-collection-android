@@ -20,7 +20,10 @@ const String GET_ARTWORK_FOR_SCHOOL = r'''
   ) {
      artBySchool(school_id: $school_id) {
       id,
-      category,
+      category {
+        id,
+        category
+      },
       school_id,
       price,
       sold,

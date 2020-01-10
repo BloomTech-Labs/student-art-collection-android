@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
 import 'package:student_art_collection/core/util/route_generator.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'service_locator.dart' as locator;
 
 void main() async {
@@ -23,6 +24,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: primaryColor,
+        ),
+        primaryColor: primaryColor,
+        accentColor: accentColor,
+      ),
       initialRoute: StarterScreen.ID,
       onGenerateRoute: RouteGenerator.generateRoute,
     );
