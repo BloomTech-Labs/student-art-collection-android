@@ -22,7 +22,6 @@ class SchoolLoginPage extends StatelessWidget {
       create: (context) => sl<SchoolAuthBloc>(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
           title: Text(
             'Login',
           ),

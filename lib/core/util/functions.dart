@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:graphql/client.dart';
+import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
@@ -32,6 +33,22 @@ Artwork convertResultToArtwork(QueryResult result, String mainKey) {
   return ArtworkModel.fromJson(result.data[mainKey]);
 }
 
-bool emailValidation(String email){
-  return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+bool emailValidation(String email) {
+  return RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(email);
+}
+
+String formatDate(DateTime dateTime) {
+  return DateFormat('MM-dd-yyyy').format(dateTime);
+}
+
+String pickerValueToPureValue(String value) {
+  final newValue = value.replaceAll(RegExp('[\\[\\]]'), '');
+  return newValue;
+}
+
+int pricePickerValueToInt(String value) {
+  final newValue = value.replaceAll(RegExp('[\\p{P}\$]'), '');
+  return int.parse(newValue);
 }
