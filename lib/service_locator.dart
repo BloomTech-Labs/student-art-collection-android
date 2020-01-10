@@ -7,7 +7,6 @@ import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
 import 'package:student_art_collection/features/buy_art/data/repository/buyer_artwork_repository_impl.dart';
-import 'package:student_art_collection/features/buy_art/domain/usecase/get_artwork_by_id.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/data/repository/firebase_auth_repository.dart';
 import 'package:student_art_collection/features/list_art/data/repository/school_artwork_repository_impl.dart';
@@ -43,7 +42,6 @@ Future init() async {
 
   // Use Cases
   sl.registerLazySingleton(() => GetAllArtwork(sl()));
-  sl.registerLazySingleton(() => GetArtworkByID(sl()));
 
   // Repository
   sl.registerLazySingleton<ArtworkRepository>(() => ArtworkRepositoryImpl(

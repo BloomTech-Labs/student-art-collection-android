@@ -5,6 +5,7 @@ import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/buyer_local_data_source.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/buyer_remote_data_source.dart';
+import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -40,22 +41,17 @@ class ArtworkRepositoryImpl implements ArtworkRepository {
   }
 
   @override
-  Future<Either<Failure, Artwork>> getArtworkById(int id) async {
+  Future<Either<Failure, bool>> contactFormConfirmation({ContactForm contactForm}) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteArtwork = await remoteDataSource.getArtworkById(id);
-        localDataSource.cacheArtwork(remoteArtwork);
-        return Right(await remoteDataSource.getArtworkById(id));
+        final bool result = await remoteDataSource.contactFormConfirmation(contactForm: contactForm);
+        return Right(result);
       } on ServerException {
         return Left(ServerFailure());
       }
     } else {
-      try {
-        final localArtwork = await localDataSource.getArtworkById(id);
-        return Right(localArtwork);
-      } on CacheException {
-        return Left(CacheFailure());
-      }
+      //todo: Setup Queueing Service
+      return Left(ServerFailure());
     }
   }
 }

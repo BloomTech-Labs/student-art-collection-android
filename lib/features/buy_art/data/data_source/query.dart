@@ -14,6 +14,10 @@ query getAllArtwork{
     art_id
     image_url
   }
+    category{
+  id
+  category
+  }
 }
 }
     ''';

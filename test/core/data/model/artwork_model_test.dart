@@ -21,6 +21,7 @@ void main() {
     artistName: "test",
     category: tCategory,
     images: tImageList,
+    datePosted: DateTime.fromMillisecondsSinceEpoch(1578619470),
     price: 25.50,
     schoolId: 1,
     sold: false,
@@ -58,6 +59,7 @@ void main() {
         ARTWORK_ID: 1,
         ARTWORK_DESCRIPTION: "test",
         ARTWORK_SCHOOL_ID: 1,
+        ARTWORK_DATE_POSTED: 1578619470,
         ARTWORK_IMAGES: [
           {
             IMAGE_ID: 1,
