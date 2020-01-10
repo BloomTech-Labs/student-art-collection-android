@@ -26,6 +26,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
         appBarTheme: AppBarTheme(
+          textTheme: TextTheme(
+            title: TextStyle(color: Colors.black, fontSize: 20),
+          ),
+          iconTheme: IconThemeData(color: Colors.black),
           color: primaryColor,
         ),
         primaryColor: primaryColor,

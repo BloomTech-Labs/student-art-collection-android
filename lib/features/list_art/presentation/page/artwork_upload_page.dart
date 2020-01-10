@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:student_art_collection/core/util/functions.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_state.dart';
@@ -35,6 +38,25 @@ class _UploadWidgetState extends State<UploadWidget> {
   String title, artistName, description;
   bool sold;
   int category, price;
+
+  DateTime selectedDate = DateTime.now();
+
+  final dateTextController = TextEditingController();
+  final priceTextController = TextEditingController();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: selectedDate,
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        dateTextController.text = formatDate(selectedDate);
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +95,46 @@ class _UploadWidgetState extends State<UploadWidget> {
                       },
                       decoration:
                           getAuthInputDecoration('Enter student\'s name'),
+                    ),
+                    SizedBox(height: 10),
+                    Stack(
+                      overflow: Overflow.visible,
+                      children: <Widget>[
+                        TextField(
+                          enabled: false,
+                          decoration:
+                              getAuthInputDecoration('Select created date'),
+                          controller: dateTextController,
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.date_range,
+                                color: accentColor,
+                              ),
+                              onPressed: () {
+                                _selectDate(context);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Stack(
+                      overflow: Overflow.visible,
+                      children: <Widget>[
+                        TextField(
+                          enabled: false,
+                          decoration:
+                              getAuthInputDecoration('Select artwork price'),
+                          controller: priceTextController,
+                        ),
+                      ],
                     ),
                     RaisedButton(
                       onPressed: () {
