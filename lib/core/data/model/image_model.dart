@@ -15,6 +15,6 @@ class ImageModel extends Image {
   }
 
   Map<String, dynamic> toJson() {
-    return {IMAGE_ID: imageId, IMAGE_ART_ID: artId, IMAGE_URL: imageUrl};
+    return {IMAGE_ID: imageId.toString(), IMAGE_ART_ID: artId, IMAGE_URL: imageUrl};
   }
 }

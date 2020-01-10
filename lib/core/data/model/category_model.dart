@@ -17,7 +17,7 @@ class CategoryModel extends Category {
 
   Map<String, dynamic> toJson() {
     return {
-      CATEGORY_ID:categoryId,
+      CATEGORY_ID:categoryId.toString(),
       CATEGORY_NAME:categoryName,
     };
   }

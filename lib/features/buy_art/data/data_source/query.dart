@@ -2,7 +2,12 @@ const String GET_ALL_ARTWORK_FOR_BUYER = r'''
 query getAllArtwork{
   allArts{
     id
+    school{
+    email
+    id
     school_id
+    school_name
+    }
     price
     sold
     title

@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
+import 'package:student_art_collection/core/data/model/school_info_model.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
@@ -34,13 +35,20 @@ void main() {
     categoryName: 'test',
   );
 
+  final tSchoolInfo = SchoolInfoModel(
+    id: 1,
+    schoolId: "1",
+    email: 'test@gmail.com',
+    schoolName: 'test'
+  );
+
   final tArtworkModel = ArtworkModel(
       artId: tID,
       artistName: "name",
       category: tCategory,
       images: tImageList,
       price: 25.50,
-      schoolId: 1,
+      schoolInfo: tSchoolInfo,
       sold: false,
       description: "description",
       title: "title");

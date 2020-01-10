@@ -8,7 +8,7 @@ class Artwork extends Equatable {
   final double price;
   final String artistName;
   final bool sold;
-  final int schoolId;
+  final SchoolInfo schoolInfo;
   final String description;
   final DateTime datePosted;
   final List<Image> images;
@@ -20,7 +20,7 @@ class Artwork extends Equatable {
     @required this.price,
     this.artistName,
     this.sold,
-    @required this.schoolId,
+    @required this.schoolInfo,
     this.description,
     this.datePosted,
     @required this.images,
@@ -34,7 +34,7 @@ class Artwork extends Equatable {
         price,
         artistName,
         sold,
-        schoolId,
+        schoolInfo,
         description,
         datePosted,
         images,
@@ -73,3 +73,22 @@ class Image extends Equatable {
   List<Object> get props => [imageId, artId, imageUrl];
 
 }
+
+
+class SchoolInfo extends Equatable {
+  final int id;
+  final String schoolId;
+  final String schoolName;
+  final String email;
+
+  SchoolInfo(
+      {@required this.id,
+        @required this.schoolId,
+        @required this.email,
+        this.schoolName,});
+
+  @override
+  List<Object> get props =>
+      [id, schoolId, schoolName, email];
+}
+

@@ -16,6 +16,7 @@ const ARTWORK_CATEGORY = 'category';
 const ARTWORK_PRICE = 'price';
 const ARTWORK_ARTIST_NAME = 'artist_name';
 const ARTWORK_SOLD = 'sold';
+const ARTWORK_SCHOOL_INFO = 'school';
 const ARTWORK_SCHOOL_ID = 'school_id';
 const ARTWORK_DESCRIPTION = 'description';
 const ARTWORK_DATE_POSTED = 'date_posted';

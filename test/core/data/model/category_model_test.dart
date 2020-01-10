@@ -28,7 +28,7 @@ void main() {
       //act
       final result = tCategoryModel.toJson();
       final expectedMap = {
-        CATEGORY_ID : 1,
+        CATEGORY_ID : "1",
         CATEGORY_NAME : 'test',
       };
       //assert

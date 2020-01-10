@@ -1,19 +1,24 @@
 {
   "title": "test",
   "category": {
-    "id": 1,
+    "id": "1",
     "category": "test"
   },
   "price": 25.50,
   "artist_name": "test",
   "sold": false,
-  "id": 1,
+  "id": "1",
   "description": "test",
-  "date_posted": 1578619470,
-  "school_id": 1,
+  "date_posted": "1578619470",
+  "school": {
+    "id": "1",
+    "school_id": "1",
+    "email": "test@gmail.com",
+    "school_name": "test"
+  },
   "images": [
     {
-      "id": 1,
+      "id": "1",
       "art_id": 1,
       "image_url": "test"
     }
