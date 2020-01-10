@@ -6,7 +6,7 @@ import 'package:student_art_collection/core/domain/usecase/usecase.dart';
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'package:student_art_collection/features/buy_art/domain/usecase/get_all_artwork.dart';
 
-class MockArtworkRepository extends Mock implements ArtworkRepository {}
+class MockArtworkRepository extends Mock implements BuyerArtworkRepository {}
 
 void main() {
   GetAllArtwork usecase;

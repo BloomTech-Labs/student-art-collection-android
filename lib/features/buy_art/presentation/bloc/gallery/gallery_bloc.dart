@@ -10,7 +10,7 @@ part 'gallery_event.dart';
 part 'gallery_state.dart';
 
 class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
-  final ArtworkRepository artworkRepository;
+  final BuyerArtworkRepository artworkRepository;
 
   GalleryBloc({@required this.artworkRepository});
   @override

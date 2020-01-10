@@ -10,6 +10,7 @@ import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/buyer_local_data_source.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/buyer_remote_data_source.dart';
 import 'package:student_art_collection/features/buy_art/data/repository/buyer_artwork_repository_impl.dart';
+import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 
 class MockRemoteDataSource extends Mock implements BuyerRemoteDataSource {}
 
@@ -18,7 +19,7 @@ class MockLocalDataSource extends Mock implements BuyerLocalDataSource {}
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
-  ArtworkRepositoryImpl repository;
+  BuyerArtworkRepositoryImpl repository;
   MockRemoteDataSource mockRemoteDataSource;
   MockLocalDataSource mockLocalDataSource;
   MockNetworkInfo mockNetworkInfo;
@@ -44,11 +45,19 @@ void main() {
       description: "description",
       title: "title");
 
+  final tContactForm = ContactForm(
+    artId: tID,
+    email: 'test@gmail.com',
+    buyerName: 'test',
+    price: 50,
+    message: 'test'
+  );
+
   setUp(() {
     mockNetworkInfo = MockNetworkInfo();
     mockLocalDataSource = MockLocalDataSource();
     mockRemoteDataSource = MockRemoteDataSource();
-    repository = ArtworkRepositoryImpl(
+    repository = BuyerArtworkRepositoryImpl(
       remoteDataSource: mockRemoteDataSource,
       localDataSource: mockLocalDataSource,
       networkInfo: mockNetworkInfo,
@@ -136,4 +145,60 @@ void main() {
       });
     });
   });
+
+  group('contactFormSubmit', () {
+
+    group('device is online', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      test(
+          'should return remote data when the call to remote data source is successful',
+              () async {
+            //arrange
+            when(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm))
+                .thenAnswer((_) async => tContactForm);
+            //act
+            final result = await repository.contactFormConfirmation(contactForm: tContactForm);
+            //assert
+            verify(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm));
+            expect(result, equals(Right(tContactForm)));
+          });
+
+
+      test(
+          'should return server failure when the call to remote data source is unsuccesful',
+              () async {
+            //arrange
+            when(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm)).thenThrow(ServerException());
+            //act
+            final result = await repository.contactFormConfirmation(contactForm: tContactForm);
+            //assert
+            verify(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm));
+            verifyZeroInteractions(mockLocalDataSource);
+            expect(result, equals(Left(ServerFailure())));
+          });
+    });
+
+    group('device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
+
+      test(
+          'should return ServerFailure when device is offline',
+              () async {
+            //arrange
+            when(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm)).thenThrow(ServerFailure());
+            //act
+            final result = await repository.contactFormConfirmation(contactForm:tContactForm );
+            //assert
+            expect(result, equals(Left(ServerFailure())));
+          });
+    });
+  });
+
+
+
 }

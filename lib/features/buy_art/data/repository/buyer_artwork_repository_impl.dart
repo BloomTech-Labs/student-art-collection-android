@@ -9,12 +9,12 @@ import 'package:student_art_collection/features/buy_art/domain/entity/contact_fo
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'package:meta/meta.dart';
 
-class ArtworkRepositoryImpl implements ArtworkRepository {
+class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
   final BuyerRemoteDataSource remoteDataSource;
   final BuyerLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  ArtworkRepositoryImpl(
+  BuyerArtworkRepositoryImpl(
       {@required this.remoteDataSource,
       @required this.localDataSource,
       @required this.networkInfo});
@@ -41,10 +41,10 @@ class ArtworkRepositoryImpl implements ArtworkRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> contactFormConfirmation({ContactForm contactForm}) async {
+  Future<Either<Failure, ContactForm>> contactFormConfirmation({ContactForm contactForm}) async {
     if (await networkInfo.isConnected) {
       try {
-        final bool result = await remoteDataSource.contactFormConfirmation(contactForm: contactForm);
+        final ContactForm result = await remoteDataSource.contactFormConfirmation(contactForm: contactForm);
         return Right(result);
       } on ServerException {
         return Left(ServerFailure());
