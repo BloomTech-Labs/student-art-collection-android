@@ -22,7 +22,6 @@ class SchoolGalleryPage extends StatelessWidget {
       create: (context) => sl<SchoolGalleryBloc>(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
           title: Text(
             'School Art Gallery',
           ),

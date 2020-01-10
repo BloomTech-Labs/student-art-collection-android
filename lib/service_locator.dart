@@ -6,7 +6,7 @@ import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
-import 'package:student_art_collection/features/buy_art/data/repository/artwork_repository_impl.dart';
+import 'package:student_art_collection/features/buy_art/data/repository/buyer_artwork_repository_impl.dart';
 import 'package:student_art_collection/features/buy_art/domain/usecase/get_artwork_by_id.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/data/repository/firebase_auth_repository.dart';
@@ -21,10 +21,11 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/auth/
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 
-import 'features/buy_art/data/data_source/artwork_local_data_source.dart';
-import 'features/buy_art/data/data_source/artwork_remote_data_source.dart';
-import 'features/buy_art/domain/repository/artwork_repository.dart';
+import 'features/buy_art/data/data_source/buyer_local_data_source.dart';
+import 'features/buy_art/data/data_source/buyer_remote_data_source.dart';
+import 'features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'features/buy_art/domain/usecase/get_all_artwork.dart';
+import 'features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
@@ -37,6 +38,8 @@ Future init() async {
   // Bloc
   sl.registerFactory(() => GalleryBloc(artworkRepository: sl()));
 
+  sl.registerFactory(() => ArtworkDetailsBloc());
+
   // Use Cases
   sl.registerLazySingleton(() => GetAllArtwork(sl()));
   sl.registerLazySingleton(() => GetArtworkByID(sl()));
@@ -46,13 +49,13 @@ Future init() async {
       remoteDataSource: sl(), networkInfo: sl(), localDataSource: sl()));
 
   // Data Sources
-  sl.registerLazySingleton<ArtworkRemoteDataSource>(
-      () => GraphQLArtworkRemoteDataSource(
+  sl.registerLazySingleton<BuyerRemoteDataSource>(
+      () => GraphQLBuyerRemoteDataSource(
             client: sl(),
           ));
 
-  sl.registerLazySingleton<ArtworkLocalDataSource>(
-      () => ArtworkLocalDataSourceImpl());
+  sl.registerLazySingleton<BuyerLocalDataSource>(
+      () => BuyerLocalDataSourceImpl());
 
   /** Feature: List Art */
 
@@ -69,6 +72,7 @@ Future init() async {
         sessionManager: sl(),
         getAllSchoolArt: sl(),
       ));
+
   sl.registerFactory(() => ArtworkUploadBloc(
         sessionManager: sl(),
         uploadArtwork: sl(),
@@ -80,9 +84,9 @@ Future init() async {
   sl.registerLazySingleton(() => RegisterNewSchool(sl()));
   sl.registerLazySingleton(() => LoginSchoolOnReturn(sl()));
   sl.registerLazySingleton(() => LogoutSchool(sl()));
-  sl.registerLazySingleton(() => UploadArtwork(sl()));
 
   sl.registerLazySingleton(() => GetAllSchoolArt(sl()));
+  sl.registerLazySingleton(() => UploadArtwork(sl()));
 
   // Repository
   sl.registerLazySingleton<SchoolAuthRepository>(() => FirebaseAuthRepository(

@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/features/buy_art/domain/repository/artwork_repository.dart';
+import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'package:student_art_collection/features/buy_art/domain/usecase/get_artwork_by_id.dart';
 
 class MockArtworkRepository extends Mock implements ArtworkRepository {}

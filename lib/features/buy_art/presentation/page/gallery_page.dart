@@ -20,7 +20,6 @@ class GalleryPage extends StatelessWidget {
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: primaryColor,
           title: Text('Student Art Gallery'),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),

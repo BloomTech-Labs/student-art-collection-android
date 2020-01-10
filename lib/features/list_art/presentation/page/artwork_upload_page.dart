@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 
 import '../../../../service_locator.dart';
 
@@ -17,28 +19,74 @@ class ArtworkUploadPage extends StatelessWidget {
         appBar: AppBar(),
         body: BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
           listener: (context, state) {},
-          child: UploadForm(),
+          child: UploadWidget(),
         ),
       ),
     );
   }
 }
 
-class UploadForm extends StatefulWidget {
+class UploadWidget extends StatefulWidget {
   @override
-  _UploadFormState createState() => _UploadFormState();
+  _UploadWidgetState createState() => _UploadWidgetState();
 }
 
-class _UploadFormState extends State<UploadForm> {
+class _UploadWidgetState extends State<UploadWidget> {
+  String title, artistName, description;
+  bool sold;
+  int category, price;
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: RaisedButton(
-        onPressed: () {
-          dispatchUpload();
-        },
-        child: Text(
-          'Test',
+    return SingleChildScrollView(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Flexible(
+                fit: FlexFit.loose,
+                flex: 4,
+                child: Container(
+                  color: Colors.blue,
+                ),
+              ),
+              Flexible(
+                flex: 6,
+                fit: FlexFit.loose,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 10),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        title = value;
+                      },
+                      decoration: getAuthInputDecoration('Enter artwork title'),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        artistName = value;
+                      },
+                      decoration:
+                          getAuthInputDecoration('Enter student\'s name'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        dispatchUpload();
+                      },
+                      child: Text(
+                        'Test',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
