@@ -32,4 +32,7 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
       ];
 }
 
-class ImageHostEvent extends
+class HostImageEvent extends Equatable {
+  @override
+  List<Object> get props => null;
+}
