@@ -30,7 +30,7 @@ void main() {
       //act
       final result = tImageModel.toJson();
       final expectedMap = {
-        IMAGE_ID : 1,
+        IMAGE_ID : "1",
         IMAGE_ART_ID : 1,
         IMAGE_URL : "test"
       };

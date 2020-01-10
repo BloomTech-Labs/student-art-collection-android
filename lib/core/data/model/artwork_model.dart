@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
+import 'package:student_art_collection/core/data/model/school_info_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
@@ -12,7 +13,7 @@ class ArtworkModel extends Artwork {
     @required double price,
     String artistName,
     bool sold,
-    @required int schoolId,
+    @required SchoolInfoModel schoolInfo,
     String description,
     DateTime datePosted,
     @required List<ImageModel> images,
@@ -25,7 +26,7 @@ class ArtworkModel extends Artwork {
             artId: artId,
             description: description,
             datePosted: datePosted,
-            schoolId: schoolId,
+            schoolInfo: schoolInfo,
             images: images);
 
   factory ArtworkModel.fromJson(Map<String, dynamic> json) {
@@ -50,7 +51,7 @@ class ArtworkModel extends Artwork {
         artId: int.parse(json[ARTWORK_ID]),
         description: json[ARTWORK_DESCRIPTION],
         datePosted: DateTime.fromMillisecondsSinceEpoch(int.parse(json[ARTWORK_DATE_POSTED])),
-        schoolId: int.parse(json[ARTWORK_SCHOOL_ID]),
+        schoolInfo: SchoolInfoModel.fromJson(json[ARTWORK_SCHOOL_INFO]),
         images: imageList);
   }
 
@@ -67,10 +68,10 @@ class ArtworkModel extends Artwork {
       ARTWORK_PRICE: price,
       ARTWORK_ARTIST_NAME: artistName,
       ARTWORK_SOLD: sold,
-      ARTWORK_ID: artId,
+      ARTWORK_ID: artId.toString(),
       ARTWORK_DESCRIPTION: description,
-      ARTWORK_DATE_POSTED: datePosted.millisecondsSinceEpoch,
-      ARTWORK_SCHOOL_ID: schoolId,
+      ARTWORK_DATE_POSTED: datePosted.millisecondsSinceEpoch.toString(),
+      ARTWORK_SCHOOL_ID: schoolInfo.schoolId,
       ARTWORK_IMAGES: [imageString],
     };
   }

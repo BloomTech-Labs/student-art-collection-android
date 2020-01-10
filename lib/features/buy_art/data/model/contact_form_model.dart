@@ -25,4 +25,14 @@ class ContactFormModel extends ContactForm {
       CONTACT_FORM_BUYER_NAME: buyerName,
     };
   }
+
+  factory ContactFormModel.fromJson(Map<String, dynamic> json) {
+    return ContactFormModel(
+      artId: json[CONTACT_FORM_ART_ID],
+      price: json[CONTACT_FORM_ART_PRICE],
+      message: json[CONTACT_FORM_MESSAGE],
+      email: json[CONTACT_FORM_EMAIL],
+      buyerName: json[CONTACT_FORM_BUYER_NAME],
+    );
+  }
 }

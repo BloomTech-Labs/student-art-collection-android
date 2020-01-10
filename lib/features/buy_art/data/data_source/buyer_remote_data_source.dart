@@ -11,7 +11,7 @@ abstract class BuyerRemoteDataSource{
   /// Throws a [ServerException] for all error codes
   Future <List<Artwork>> getAllArtwork();
 
-  Future <bool> contactFormConfirmation({@required ContactForm contactForm});
+  Future <ContactForm> contactFormConfirmation({@required ContactForm contactForm});
 }
 
 class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource{
@@ -32,9 +32,9 @@ class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource{
   }
 
   @override
-  Future<bool> contactFormConfirmation({@required ContactForm contactForm}) {
+  Future<ContactForm> contactFormConfirmation({@required ContactForm contactForm}) async {
     // TODO: implement contactFormConfirmation
-    return null;
+    return contactForm;
   }
 
 
