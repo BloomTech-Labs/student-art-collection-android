@@ -14,5 +14,4 @@ class GetAllArtwork implements UseCase<List<Artwork>, NoParams> {
   Future<Either<Failure, List<Artwork>>> call(NoParams params) async {
     return await artworkRepository.getAllArtwork();
   }
-
 }

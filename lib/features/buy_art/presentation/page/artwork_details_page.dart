@@ -31,9 +31,9 @@ class ArtworkDetailsPage extends StatelessWidget {
           title: Text(title),
         ),
         body: SafeArea(
-            child: SingleChildScrollView(
-                child: buildLoaded(screenHeight: screenHeight),
-            ),
+          child: SingleChildScrollView(
+            child: buildLoaded(screenHeight: screenHeight),
+          ),
         ),
       ),
     );

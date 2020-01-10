@@ -48,7 +48,10 @@ class GalleryPage extends StatelessWidget {
                 return GalleryGrid(
                   artworkList: state.artworkList,
                   isStaggered: true,
-                  onTap: (artwork){Navigator.pushNamed(context, ArtworkDetailsPage.ID, arguments: artwork);},
+                  onTap: (artwork) {
+                    Navigator.pushNamed(context, ArtworkDetailsPage.ID,
+                        arguments: artwork);
+                  },
                 );
               } else if (state is GalleryErrorState) {
                 return buildError();
@@ -74,7 +77,4 @@ class GalleryPage extends StatelessWidget {
     final galleryBloc = BlocProvider.of<GalleryBloc>(context);
     galleryBloc.add(GetArtworkList());
   }
-
 }
-
-
