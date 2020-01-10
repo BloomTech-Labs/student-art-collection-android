@@ -85,6 +85,12 @@ class ArtworkGallery extends StatefulWidget {
 
 class _ArtworkGalleryState extends State<ArtworkGallery> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
       builder: (context, state) {

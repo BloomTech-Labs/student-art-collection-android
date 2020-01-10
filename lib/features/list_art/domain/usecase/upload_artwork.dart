@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
@@ -22,7 +24,7 @@ class ArtworkToUpload extends Equatable {
   final int schoolId, category, price;
   final bool sold;
   final String title, artistName, description;
-  final List<String> imagesToUpload;
+  final List<File> imagesToUpload;
 
   ArtworkToUpload({
     @required this.schoolId,

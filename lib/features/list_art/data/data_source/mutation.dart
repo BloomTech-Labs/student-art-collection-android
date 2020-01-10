@@ -49,7 +49,12 @@ const String ADD_ARTWORK_MUTATION = r'''
           id,
           category
         },
-        school_id,
+        school{
+          school_name,
+           id,
+          school_id,
+          email
+        }
         price,
         sold,
         title,

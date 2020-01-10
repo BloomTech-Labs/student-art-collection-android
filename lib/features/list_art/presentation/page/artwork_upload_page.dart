@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
@@ -39,6 +42,8 @@ class _UploadWidgetState extends State<UploadWidget> {
   String title, artistName, description;
   bool sold;
   int category, price;
+  List<String> imageUrls;
+  List<File> imageFiles;
 
   DateTime selectedDate = DateTime.now();
 
@@ -127,6 +132,19 @@ class _UploadWidgetState extends State<UploadWidget> {
     ];
   }
 
+  Future _getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      imageFiles.add(image);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    imageFiles = List();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -136,11 +154,19 @@ class _UploadWidgetState extends State<UploadWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Flexible(
-                fit: FlexFit.loose,
-                flex: 4,
-                child: Container(
-                  color: Colors.blue,
+              Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: double.infinity,
+                child: OutlineButton(
+                  child: Icon(
+                    Icons.image,
+                    color: accentColor,
+                  ),
+                  onPressed: () {
+                    _getImage();
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)),
                 ),
               ),
               Flexible(
@@ -275,17 +301,13 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   dispatchUpload() {
     BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
-        category: 1,
-        price: 20,
-        sold: false,
-        title: 'Android Test Art',
-        artistName: 'Test Student',
-        description: 'Test description',
-        imageUrls: [
-          'https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-          'https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=940',
-          'https://images.pexels.com/photos/2303796/pexels-photo-2303796.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-          'https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        ]));
+      title: title,
+      category: category,
+      price: price,
+      artistName: artistName,
+      description: description,
+      imageFiles: imageFiles,
+      sold: sold,
+    ));
   }
 }
