@@ -31,3 +31,5 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
         imageUrls,
       ];
 }
+
+class ImageHostEvent extends

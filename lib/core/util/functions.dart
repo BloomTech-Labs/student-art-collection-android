@@ -43,12 +43,12 @@ String formatDate(DateTime dateTime) {
   return DateFormat('MM-dd-yyyy').format(dateTime);
 }
 
-String pickerValueToDollarPrice(String value) {
+String pickerValueToPureValue(String value) {
   final newValue = value.replaceAll(RegExp('[\\[\\]]'), '');
   return newValue;
 }
 
-int pickerValueToInt(String value) {
+int pricePickerValueToInt(String value) {
   final newValue = value.replaceAll(RegExp('[\\p{P}\$]'), '');
   return int.parse(newValue);
 }

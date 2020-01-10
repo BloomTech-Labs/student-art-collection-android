@@ -44,6 +44,7 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   final dateTextController = TextEditingController();
   final priceTextController = TextEditingController();
+  final categoryTextController = TextEditingController();
 
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -59,7 +60,7 @@ class _UploadWidgetState extends State<UploadWidget> {
       });
   }
 
-  _showPicker(BuildContext context) {
+  _showPricePicker(BuildContext context) {
     Picker picker = new Picker(
         adapter: PickerDataAdapter<String>(
           pickerdata: _getPrices(),
@@ -70,9 +71,32 @@ class _UploadWidgetState extends State<UploadWidget> {
         onConfirm: (Picker picker, List value) {
           setState(() {
             priceTextController.text =
-                pickerValueToDollarPrice(picker.adapter.text);
-            price =
-                pickerValueToInt(pickerValueToDollarPrice(picker.adapter.text));
+                pickerValueToPureValue(picker.adapter.text);
+            price = pricePickerValueToInt(
+                pickerValueToPureValue(picker.adapter.text));
+          });
+        });
+    picker.showModal(context);
+  }
+
+  _showCategoryPicker(BuildContext context) {
+    Picker picker = new Picker(
+        adapter: PickerDataAdapter<String>(
+          pickerdata: _getCategories(),
+        ),
+        changeToFirst: false,
+        textAlign: TextAlign.left,
+        columnPadding: const EdgeInsets.all(8.0),
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            final temp = _getCategories().indexOf(
+                  pickerValueToPureValue(picker.adapter.text),
+                ) +
+                1;
+            category = temp;
+            categoryTextController.text = pickerValueToPureValue(
+              picker.adapter.text,
+            );
           });
         });
     picker.showModal(context);
@@ -90,6 +114,16 @@ class _UploadWidgetState extends State<UploadWidget> {
       '\$40',
       '\$45',
       '\$50',
+    ];
+  }
+
+  List<String> _getCategories() {
+    return [
+      'Photography',
+      'Drawing',
+      'Painting',
+      'Sculpture',
+      'Other',
     ];
   }
 
@@ -120,7 +154,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                       onChanged: (value) {
                         title = value;
                       },
-                      decoration: getAuthInputDecoration('Enter artwork title'),
+                      decoration: getAuthInputDecoration('Enter Artwork Title'),
                     ),
                     SizedBox(height: 10),
                     TextField(
@@ -128,8 +162,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                       onChanged: (value) {
                         artistName = value;
                       },
-                      decoration:
-                          getAuthInputDecoration('Enter student\'s name'),
+                      decoration: getAuthInputDecoration('Enter Student Name'),
                     ),
                     SizedBox(height: 10),
                     Stack(
@@ -138,7 +171,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                         TextField(
                           enabled: false,
                           decoration:
-                              getAuthInputDecoration('Select created date'),
+                              getAuthInputDecoration('Select Date Created'),
                           controller: dateTextController,
                         ),
                         Positioned(
@@ -166,7 +199,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                         TextField(
                           enabled: false,
                           decoration:
-                              getAuthInputDecoration('Select artwork price'),
+                              getAuthInputDecoration('Select Artwork Price'),
                           controller: priceTextController,
                         ),
                         Positioned(
@@ -180,20 +213,55 @@ class _UploadWidgetState extends State<UploadWidget> {
                                 color: accentColor,
                               ),
                               onPressed: () {
-                                _showPicker(context);
+                                _showPricePicker(context);
                               },
                             ),
                           ),
                         ),
                       ],
                     ),
-                    RaisedButton(
-                      onPressed: () {
-                        dispatchUpload();
-                      },
-                      child: Text(
-                        'Test',
-                      ),
+                    SizedBox(height: 10),
+                    Stack(
+                      overflow: Overflow.visible,
+                      children: <Widget>[
+                        TextField(
+                          enabled: false,
+                          decoration:
+                              getAuthInputDecoration('Select Artwork Category'),
+                          controller: categoryTextController,
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.category,
+                                color: accentColor,
+                              ),
+                              onPressed: () {
+                                _showCategoryPicker(context);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        RaisedButton(
+                          onPressed: () {
+                            dispatchUpload();
+                          },
+                          color: accentColor,
+                          textColor: Colors.white,
+                          child: Text(
+                            'Submit',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
