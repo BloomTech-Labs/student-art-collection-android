@@ -1,7 +1,7 @@
 {
-  "art_id" : 1,
-  "price": 50.0,
+  "subject" : "test",
+  "fromUser": "test",
   "message": "test",
-  "email": "test@gmail.com",
-  "buyer_name": "test"
+  "sendto": "test@gmail.com",
+  "name": "test"
 }

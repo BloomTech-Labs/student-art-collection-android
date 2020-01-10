@@ -54,10 +54,10 @@ void main() {
       title: "title");
 
   final tContactForm = ContactForm(
-    artId: tID,
-    email: 'test@gmail.com',
-    buyerName: 'test',
-    price: 50,
+    name: 'test',
+    from: 'test',
+    sendTo: 'test@gmail.com',
+    subject: 'test',
     message: 'test'
   );
 

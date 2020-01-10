@@ -4,35 +4,36 @@ import 'package:student_art_collection/features/buy_art/domain/entity/contact_fo
 
 class ContactFormModel extends ContactForm {
   ContactFormModel({
-    @required int artId,
-    @required double price,
+    @required String sendTo,
+    @required String name,
+    @required String subject,
     @required String message,
-    @required String buyerName,
-    @required String email,
+    @required String from,
   }) : super(
-            artId: artId,
-            price: price,
-            message: message,
-            buyerName: buyerName,
-            email: email);
+    sendTo: sendTo,
+    name: name,
+    subject: subject,
+    message : message,
+    from: from
+  );
 
   Map<String, dynamic> toJson(){
     return {
-      CONTACT_FORM_ART_ID: artId,
-      CONTACT_FORM_ART_PRICE: price,
+      CONTACT_FORM_SEND_TO: sendTo,
+      CONTACT_FORM_NAME: name,
       CONTACT_FORM_MESSAGE: message,
-      CONTACT_FORM_EMAIL: email,
-      CONTACT_FORM_BUYER_NAME: buyerName,
+      CONTACT_FORM_FROM: from,
+      CONTACT_FORM_SUBJECT: subject,
     };
   }
 
   factory ContactFormModel.fromJson(Map<String, dynamic> json) {
     return ContactFormModel(
-      artId: json[CONTACT_FORM_ART_ID],
-      price: json[CONTACT_FORM_ART_PRICE],
+      sendTo: json[CONTACT_FORM_SEND_TO],
+      name: json[CONTACT_FORM_NAME],
       message: json[CONTACT_FORM_MESSAGE],
-      email: json[CONTACT_FORM_EMAIL],
-      buyerName: json[CONTACT_FORM_BUYER_NAME],
+      from: json[CONTACT_FORM_FROM],
+      subject: json[CONTACT_FORM_SUBJECT],
     );
   }
 }
