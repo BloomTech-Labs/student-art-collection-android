@@ -7,7 +7,7 @@ import 'package:student_art_collection/core/presentation/widget/build_loading.da
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
-import 'package:student_art_collection/features/buy_art/presentation/widget/carousel_image_viewer.dart';
+import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 
 import '../../../../service_locator.dart';
 
