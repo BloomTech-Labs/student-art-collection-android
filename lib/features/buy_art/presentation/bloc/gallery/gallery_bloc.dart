@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/features/buy_art/data/repository/buyer_artwork_repository_impl.dart';
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 
 part 'gallery_event.dart';

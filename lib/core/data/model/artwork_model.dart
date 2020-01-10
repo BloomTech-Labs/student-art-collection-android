@@ -70,7 +70,7 @@ class ArtworkModel extends Artwork {
       ARTWORK_SOLD: sold,
       ARTWORK_ID: artId,
       ARTWORK_DESCRIPTION: description,
-      // ARTWORK_DATE_POSTED: datePosted,
+      //ARTWORK_DATE_POSTED: datePosted,
       ARTWORK_SCHOOL_ID: schoolId,
       ARTWORK_IMAGES: [imageString],
     };
