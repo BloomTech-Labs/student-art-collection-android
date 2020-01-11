@@ -61,4 +61,26 @@ class InputConverter {
       imagesToUpload: imagesToUpload,
     ));
   }
+
+  Either<ArtworkInputFailure, ArtworkToUpload> updateInfoToArtwork(
+    Artwork artwork,
+    int category,
+    int price,
+    bool sold,
+    String title,
+    String artistName,
+    String description,
+    List<String> imagesToUpload,
+  ) {
+    return Right(ArtworkToUpload(
+      artworkToCompare: artwork,
+      category: category,
+      price: price,
+      sold: sold,
+      title: title,
+      artistName: artistName,
+      description: description,
+      imagesToUpload: imagesToUpload,
+    ));
+  }
 }

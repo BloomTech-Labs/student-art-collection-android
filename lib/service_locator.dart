@@ -19,6 +19,7 @@ import 'package:student_art_collection/features/list_art/domain/usecase/login_sc
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school_on_return.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/logout_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/update_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
@@ -26,7 +27,6 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/galle
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 
 import 'core/util/secret_loader.dart';
-import 'core/util/text_constants.dart';
 import 'features/buy_art/data/data_source/buyer_local_data_source.dart';
 import 'features/buy_art/data/data_source/buyer_remote_data_source.dart';
 import 'features/buy_art/domain/repository/buyer_artwork_repository.dart';
@@ -40,7 +40,6 @@ import 'dart:convert';
 final sl = GetIt.instance;
 
 Future init() async {
-
   /** Feature: Buy Art */
 
   // Bloc
@@ -54,9 +53,7 @@ Future init() async {
   // Repository
   sl.registerLazySingleton<BuyerArtworkRepository>(() =>
       BuyerArtworkRepositoryImpl(
-          remoteDataSource: sl(),
-          networkInfo:      sl(),
-          localDataSource:  sl()));
+          remoteDataSource: sl(), networkInfo: sl(), localDataSource: sl()));
 
   // Data Sources
   sl.registerLazySingleton<BuyerRemoteDataSource>(
@@ -71,23 +68,24 @@ Future init() async {
 
   // Bloc
   sl.registerFactory(() => SchoolAuthBloc(
-        converter:           sl(),
-        loginSchool:         sl(),
-        registerNewSchool:   sl(),
+        converter: sl(),
+        loginSchool: sl(),
+        registerNewSchool: sl(),
         loginSchoolOnReturn: sl(),
-        logoutSchool:        sl(),
-        sessionManager:      sl(),
+        logoutSchool: sl(),
+        sessionManager: sl(),
       ));
   sl.registerFactory(() => SchoolGalleryBloc(
-        sessionManager:  sl(),
+        sessionManager: sl(),
         getAllSchoolArt: sl(),
       ));
 
   sl.registerFactory(() => ArtworkUploadBloc(
         sessionManager: sl(),
-        uploadArtwork:  sl(),
-        converter:      sl(),
-        hostImage:      sl(),
+        uploadArtwork: sl(),
+        converter: sl(),
+        hostImage: sl(),
+        updateArtwork: sl(),
       ));
 
   // Use cases
@@ -99,24 +97,25 @@ Future init() async {
   sl.registerLazySingleton(() => GetAllSchoolArt(sl()));
   sl.registerLazySingleton(() => UploadArtwork(sl()));
   sl.registerLazySingleton(() => HostImage(sl()));
+  sl.registerLazySingleton(() => UpdateArtwork(sl()));
 
   // Repository
   sl.registerLazySingleton<SchoolAuthRepository>(() => FirebaseAuthRepository(
         remoteDataSource: sl(),
-        networkInfo:      sl(),
-        firebaseAuth:     sl(),
+        networkInfo: sl(),
+        firebaseAuth: sl(),
       ));
 
   sl.registerLazySingleton<SchoolArtworkRepository>(
       () => SchoolArtworkRepositoryImpl(
-            networkInfo:      sl(),
+            networkInfo: sl(),
             remoteDataSource: sl(),
           ));
 
   // Data Sources
   sl.registerLazySingleton<SchoolRemoteDataSource>(
       () => GraphQLSchoolRemoteDataSource(
-            client:           sl(),
+            client: sl(),
             cloudinaryClient: sl(),
           ));
 
@@ -125,22 +124,22 @@ Future init() async {
   /** Feature: Core */
 
   // Util
-  sl.registerLazySingleton(()              => InputConverter());
+  sl.registerLazySingleton(() => InputConverter());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
-  sl.registerLazySingleton(()              => SessionManager());
+  sl.registerLazySingleton(() => SessionManager());
 
   // External
-  sl.registerLazySingleton(()                => DataConnectionChecker());
+  sl.registerLazySingleton(() => DataConnectionChecker());
   sl.registerLazySingleton<GraphQLClient>(() => GraphQLClient(
         cache: InMemoryCache(),
-        link:  HttpLink(uri: BASE_URL),
+        link: HttpLink(uri: BASE_URL),
       ));
 
   CloudinarySecret secret =
       await SecretLoader(secretPath: "secrets.json").load();
-  final decodedKey    = latin1.decode(base64.decode(secret.apiKey));
+  final decodedKey = latin1.decode(base64.decode(secret.apiKey));
   final decodedSecret = latin1.decode(base64.decode(secret.apiSecret));
-  final decodedName   = latin1.decode(base64.decode(secret.cloudName));
+  final decodedName = latin1.decode(base64.decode(secret.cloudName));
   sl.registerLazySingleton(
       () => CloudinaryClient(decodedKey, decodedSecret, decodedName));
 }

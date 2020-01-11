@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:student_art_collection/app_localization.dart';
+import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
-import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
@@ -66,7 +65,7 @@ class UploadWidget extends StatefulWidget {
 }
 
 class _UploadWidgetState extends State<UploadWidget> {
-  final Artwork artwork;
+  Artwork artwork;
   String title, artistName, description;
   bool sold;
   int category, price;
@@ -84,6 +83,250 @@ class _UploadWidgetState extends State<UploadWidget> {
   _UploadWidgetState({
     this.artwork,
   });
+
+  List<String> _getPrices() {
+    return [
+      '\$5',
+      '\$10',
+      '\$15',
+      '\$20',
+      '\$25',
+      '\$30',
+      '\$35',
+      '\$40',
+      '\$45',
+      '\$50',
+    ];
+  }
+
+  List<String> _getCategories() {
+    return [
+      'Photography',
+      'Drawing',
+      'Painting',
+      'Sculpture',
+      'Other',
+    ];
+  }
+
+  Future _getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      dispatchImageHost(image);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    imageUrls = List();
+    if (artwork != null) {
+      artwork.images.forEach((image) {
+        imageUrls.add(image.imageUrl);
+      });
+      BlocProvider.of<ArtworkUploadBloc>(context)
+          .add(InitializeEditArtworkPageEvent(artwork: artwork));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
+      listener: (context, state) {
+        if (state is ArtworkUploadSuccess) {
+          setState(() {
+            populateData(state.artwork);
+          });
+          showSnackBar(context, state.message);
+        } else if (state is EditArtworkInitialState) {
+          setState(() {
+            populateData(state.artwork);
+          });
+        } else if (state is ImageHostSuccess) {
+          setState(() {
+            imageUrls.add(state.imageUrl);
+          });
+        } else if (state is ArtworkUploadLoading) {
+        } else if (state is ArtworkUploadError) {
+          showSnackBar(context, state.message);
+        }
+      },
+      child: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  width: double.infinity,
+                  child: OutlineButton(
+                    child: CarouselImageViewer(
+                      isEditable: true,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      imageList: imageUrls,
+                      artwork: null,
+                    ),
+                    onPressed: () {
+                      _getImage();
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
+                  ),
+                ),
+                Flexible(
+                  flex: 6,
+                  fit: FlexFit.loose,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: 10),
+                      TextField(
+                        controller: titleTextController,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          title = value;
+                        },
+                        decoration:
+                            getAuthInputDecoration('Enter Artwork Title'),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        controller: studentTextController,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          artistName = value;
+                        },
+                        decoration:
+                            getAuthInputDecoration('Enter Student Name'),
+                      ),
+                      SizedBox(height: 10),
+                      Stack(
+                        overflow: Overflow.visible,
+                        children: <Widget>[
+                          TextField(
+                            enabled: false,
+                            decoration:
+                                getAuthInputDecoration('Select Date Created'),
+                            controller: dateTextController,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.date_range,
+                                  color: accentColor,
+                                ),
+                                onPressed: () {
+                                  _selectDate(context);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Stack(
+                        overflow: Overflow.visible,
+                        children: <Widget>[
+                          TextField(
+                            enabled: false,
+                            decoration:
+                                getAuthInputDecoration('Select Artwork Price'),
+                            controller: priceTextController,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.attach_money,
+                                  color: accentColor,
+                                ),
+                                onPressed: () {
+                                  _showPricePicker(context);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Stack(
+                        overflow: Overflow.visible,
+                        children: <Widget>[
+                          TextField(
+                            enabled: false,
+                            decoration: getAuthInputDecoration(
+                                'Select Artwork Category'),
+                            controller: categoryTextController,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.category,
+                                  color: accentColor,
+                                ),
+                                onPressed: () {
+                                  _showCategoryPicker(context);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(
+                            builder: (context, state) {
+                              if (state is ArtworkUploadLoading) {
+                                return RaisedButton(
+                                  onPressed: () {
+                                    showSnackBar(context,
+                                        'Please wait until images are uploaded');
+                                  },
+                                  color: accentColor,
+                                  textColor: Colors.white,
+                                  child: Text(
+                                    'Submit',
+                                  ),
+                                );
+                              } else {
+                                return RaisedButton(
+                                  onPressed: () {
+                                    dispatchUploadOrUpdate();
+                                  },
+                                  color: accentColor,
+                                  textColor: Colors.white,
+                                  child: Text(
+                                    'Submit',
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -141,282 +384,48 @@ class _UploadWidgetState extends State<UploadWidget> {
     picker.showModal(context);
   }
 
-  List<String> _getPrices() {
-    return [
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_1),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_2),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_3),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_4),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_5),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_6),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_7),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_8),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_9),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_10)
-    ];
-  }
-
-  List<String> _getCategories() {
-    return [
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_1),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_2),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_3),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_4),
-      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_5),
-    ];
-  }
-
-  Future _getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      dispatchImageHost(image);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    imageUrls = List();
-    if (artwork != null) {
-      artwork.images.forEach((image) {
-        imageUrls.add(image.imageUrl);
-      });
-      BlocProvider.of<ArtworkUploadBloc>(context)
-          .add(InitializeEditArtworkPageEvent(artwork: artwork));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
-      listener: (context, state) {
-        if (state is ArtworkUploadSuccess) {
-          setState(() {
-            nullifyState();
-          });
-        } else if (state is EditArtworkInitialState) {
-          setState(() {
-            populateData(state.artwork);
-          });
-        } else if (state is ImageHostSuccess) {
-          setState(() {
-            imageUrls.add(state.imageUrl);
-          });
-        } else if (state is ArtworkUploadLoading) {
-          final snackBar = SnackBar(content: Text(state.message));
-          Scaffold.of(context).showSnackBar(snackBar);
-        } else if (state is ArtworkUploadError) {
-          final snackBar = SnackBar(content: Text(state.message));
-          Scaffold.of(context).showSnackBar(snackBar);
-        } else {
-          nullifyState();
-        }
-      },
-      child: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: double.infinity,
-                  child: OutlineButton(
-                    child: CarouselImageViewer(
-                      isEditable: true,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      imageList: imageUrls,
-                      artwork: null,
-                    ),
-                    onPressed: () {
-                      _getImage();
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
-                  ),
-                ),
-                Flexible(
-                  flex: 6,
-                  fit: FlexFit.loose,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: 10),
-                      TextField(
-                        controller: titleTextController,
-                        keyboardType: TextInputType.text,
-                        onChanged: (value) {
-                          title = value;
-                        },
-                        decoration: getAuthInputDecoration(
-                            AppLocalizations.of(context).translate(
-                                TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
-                      ),
-                      SizedBox(height: 10),
-                      TextField(
-                        controller: studentTextController,
-                        keyboardType: TextInputType.text,
-                        onChanged: (value) {
-                          artistName = value;
-                        },
-                        decoration: getAuthInputDecoration(
-                            AppLocalizations.of(context).translate(
-                                TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
-                      ),
-                      SizedBox(height: 10),
-                      Stack(
-                        overflow: Overflow.visible,
-                        children: <Widget>[
-                          TextField(
-                            enabled: false,
-                            decoration: getAuthInputDecoration(
-                                AppLocalizations.of(context).translate(
-                                    TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
-                            controller: dateTextController,
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.date_range,
-                                  color: accentColor,
-                                ),
-                                onPressed: () {
-                                  _selectDate(context);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Stack(
-                        overflow: Overflow.visible,
-                        children: <Widget>[
-                          TextField(
-                            enabled: false,
-                            decoration: getAuthInputDecoration(
-                                AppLocalizations.of(context).translate(
-                                    TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
-                            controller: priceTextController,
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.attach_money,
-                                  color: accentColor,
-                                ),
-                                onPressed: () {
-                                  _showPricePicker(context);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Stack(
-                        overflow: Overflow.visible,
-                        children: <Widget>[
-                          TextField(
-                            enabled: false,
-                            decoration: getAuthInputDecoration(
-                                AppLocalizations.of(context).translate(
-                                    TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
-                            controller: categoryTextController,
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.category,
-                                  color: accentColor,
-                                ),
-                                onPressed: () {
-                                  _showCategoryPicker(context);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          RaisedButton(
-                            onPressed: () {
-                              dispatchUpload();
-                            },
-                            color: accentColor,
-                            textColor: Colors.white,
-                            child: Text(
-                              AppLocalizations.of(context).translate(
-                                  TEXT_ARTWORK_UPLOAD_UPLOAD_BUTTON_LABEL),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void nullifyState() {
-    title = null;
-    titleTextController.text = "";
-    description = null;
-    descriptionTextController.text = "";
-    artistName = null;
-    studentTextController.text = "";
-    dateTextController.text = "";
-    sold = null;
-    category = null;
-    categoryTextController.text = "";
-    price = null;
-    priceTextController.text = "";
-    imageUrls.clear();
-  }
-
   void populateData(Artwork artwork) {
+    artwork = artwork;
     title = artwork.title;
     titleTextController.text = artwork.title;
     description = artwork.description;
     descriptionTextController.text = artwork.description;
     artistName = artwork.artistName;
     studentTextController.text = artwork.artistName;
-    dateTextController.text = "";
+    dateTextController.text = formatDate(artwork.datePosted);
     sold = artwork.sold;
     category = artwork.category.categoryId;
-    categoryTextController.text = "Photography";
+    categoryTextController.text = artwork.category.categoryName;
     price = artwork.price.toInt();
     priceTextController.text = artwork.price.toInt().toString();
   }
 
-  void dispatchUpload() {
-    BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
-        title: title,
-        category: category,
-        price: price,
-        artistName: artistName,
-        description: description,
-        sold: sold,
-        imageUrls: imageUrls));
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  void dispatchUploadOrUpdate() {
+    if (artwork == null) {
+      BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
+          title: title,
+          category: category,
+          price: price,
+          artistName: artistName,
+          description: description,
+          sold: sold,
+          imageUrls: imageUrls));
+    } else {
+      BlocProvider.of<ArtworkUploadBloc>(context).add(UpdateArtworkEvent(
+          artwork: artwork,
+          title: title,
+          category: category,
+          price: price,
+          artistName: artistName,
+          description: description,
+          sold: sold,
+          imageUrls: imageUrls));
+    }
   }
 
   void dispatchImageHost(File file) {

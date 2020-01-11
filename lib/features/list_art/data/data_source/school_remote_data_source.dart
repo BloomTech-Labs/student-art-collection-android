@@ -29,6 +29,8 @@ abstract class SchoolRemoteDataSource {
 
   Future<Artwork> uploadArtwork(ArtworkToUpload artwork);
 
+  Future<Artwork> updateArtwork(ArtworkToUpload artwork);
+
   Future<ReturnedImageUrl> hostImage(File file);
 }
 
@@ -125,5 +127,11 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   Future<ReturnedImageUrl> hostImage(File file) async {
     final response = await cloudinaryClient.uploadImage(file.path);
     return ReturnedImageUrl(imageUrl: response.url);
+  }
+
+  @override
+  Future<Artwork> updateArtwork(ArtworkToUpload artwork) {
+    sleep(Duration(seconds: 5));
+    throw ServerException();
   }
 }
