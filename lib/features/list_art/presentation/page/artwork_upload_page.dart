@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
@@ -159,7 +161,9 @@ class _UploadWidgetState extends State<UploadWidget> {
   Future _getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
-      imageFiles.add(image);
+      if (image != null) {
+        imageFiles.add(image);
+      }
     });
   }
 
@@ -190,9 +194,11 @@ class _UploadWidgetState extends State<UploadWidget> {
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
                   child: OutlineButton(
-                    child: Icon(
-                      Icons.image,
-                      color: accentColor,
+                    child: CarouselImageViewer(
+                      isEditable: true,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      imageList: imageFiles,
+                      artwork: null,
                     ),
                     onPressed: () {
                       _getImage();

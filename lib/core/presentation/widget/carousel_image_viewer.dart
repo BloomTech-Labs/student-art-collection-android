@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
@@ -10,16 +12,24 @@ const double carouselCardCornerRadius = 10;
 class CarouselImageViewer extends StatefulWidget {
   final aw.Artwork artwork;
   final height;
+  final bool isEditable;
+  final List<File> imageList;
 
   const CarouselImageViewer(
-      {Key key, @required this.artwork, @required this.height})
+      {Key key,
+      @required this.artwork,
+      @required this.height,
+      this.isEditable,
+      this.imageList})
       : super(key: key);
 
   @override
   _CarouselImageViewerState createState() => _CarouselImageViewerState(
-      imageList: imageListToUrlList(artwork.images),
+      imageList:
+          artwork != null ? imageListToUrlList(artwork.images) : imageList,
       height: height,
-      artistName: artwork.artistName);
+      isEditable: isEditable,
+      artistName: artwork != null ? artwork.artistName : "");
 }
 
 class _CarouselImageViewerState extends State<CarouselImageViewer> {
@@ -30,7 +40,10 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
   int _current = 0;
 
   _CarouselImageViewerState(
-      {this.artistName, @required this.imageList, @required this.height, this.isEditable});
+      {this.artistName,
+      @required this.imageList,
+      @required this.height,
+      @required this.isEditable});
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -42,11 +55,6 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(isEditable == null){
-      isEditable = false;
-    }
-
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -63,20 +71,25 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
               });
             },
             items: imageList.map((imageType) {
-             int index = imageList.indexOf(imageType);
+              int index = imageList.indexOf(imageType);
               return Builder(
                 builder: (BuildContext context) {
                   return Stack(
                     children: <Widget>[
                       imageBorderWidget(context: context),
                       BuildLoading(),
-                      imageType is String?
-                      imageUrlWidget(context: context, imageUrl: imageType) :
-                      imageFileWidget(context: context, imageFile: imageType),
-                      isEditable == false? artistNameWidget(): Container(),
-                      isEditable == true? closeButton(onPressed: (){setState(() {
-                        imageList.removeAt(index);
-                      });}) : Container()
+                      imageType is String
+                          ? imageUrlWidget(
+                              context: context, imageUrl: imageType)
+                          : imageFileWidget(
+                              context: context, imageFile: imageType),
+                      !isEditable
+                          ? artistNameWidget()
+                          : closeButton(onPressed: () {
+                              setState(() {
+                                imageList.removeAt(index);
+                              });
+                            })
                     ],
                   );
                 },
@@ -106,39 +119,39 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
   }
 
   Widget imageBorderWidget({@required BuildContext context}) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(carouselCardCornerRadius),
-              color: Colors.white10,
-              border: Border.all(color: Colors.grey)),
-        );
-
-
-  }
-
-  Widget imageFileWidget({@required BuildContext context, @required var imageFile}){
-    return  Container(
+    return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(carouselCardCornerRadius),
-        image: DecorationImage(
+          borderRadius: BorderRadius.circular(carouselCardCornerRadius),
+          color: Colors.white10,
+          border: Border.all(color: Colors.grey)),
+    );
+  }
+
+  Widget imageFileWidget(
+      {@required BuildContext context, @required var imageFile}) {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(carouselCardCornerRadius),
+          image: DecorationImage(
             image: FileImage(imageFile),
-      ),
-    ));
+            fit: BoxFit.fill,
+          ),
+        ));
   }
 
-  Widget imageUrlWidget({@required BuildContext context, @required String imageUrl}){
-
-    return  Container(
+  Widget imageUrlWidget(
+      {@required BuildContext context, @required String imageUrl}) {
+    return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(carouselCardCornerRadius),
-        image: DecorationImage(
-            image: NetworkImage(imageUrl), fit: BoxFit.cover),
+        image:
+            DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
       ),
     );
   }
@@ -178,7 +191,10 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
             ]),
         child: GestureDetector(
             onTap: onPressed,
-            child: Icon(Icons.close, color: Colors.white,)),
+            child: Icon(
+              Icons.close,
+              color: Colors.white,
+            )),
       ),
     );
   }
