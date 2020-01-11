@@ -13,7 +13,7 @@ class CarouselImageViewer extends StatefulWidget {
   final aw.Artwork artwork;
   final height;
   final bool isEditable;
-  final List<File> imageList;
+  final List<String> imageList;
 
   const CarouselImageViewer(
       {Key key,

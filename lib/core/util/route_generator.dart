@@ -34,7 +34,18 @@ class RouteGenerator {
       case SchoolGalleryPage.ID:
         return MaterialPageRoute(builder: (_) => SchoolGalleryPage());
       case ArtworkUploadPage.ID:
-        return MaterialPageRoute(builder: (_) => ArtworkUploadPage());
+        {
+          if (args is Artwork) {
+            return MaterialPageRoute(
+                builder: (_) => ArtworkUploadPage(
+                      artwork: args,
+                    ));
+          }
+          return MaterialPageRoute(
+              builder: (_) => ArtworkUploadPage(
+                    artwork: args,
+                  ));
+        }
       default:
         return _errorRoute();
     }

@@ -47,5 +47,29 @@ class ArtworkUploadSuccess extends ArtworkUploadState {
   });
 
   @override
-  List<Object> get props => null;
+  List<Object> get props => [artwork];
+}
+
+class ImageHostSuccess extends ArtworkUploadState {
+  final String imageUrl;
+
+  ImageHostSuccess({
+    @required this.imageUrl,
+  });
+
+  @override
+  List<Object> get props => [imageUrl];
+}
+
+class EditArtworkInitialState extends ArtworkUploadState {
+  final Artwork artwork;
+
+  EditArtworkInitialState({
+    @required this.artwork,
+  });
+
+  @override
+  List<Object> get props => [
+        artwork,
+      ];
 }
