@@ -14,6 +14,7 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocProvider<GalleryBloc>(
       create: (context) => sl<GalleryBloc>(),
       child: Scaffold(
@@ -74,6 +75,7 @@ class GalleryPage extends StatelessWidget {
   }
 
   void getArtworkList(BuildContext context) {
+    // ignore: close_sinks
     final galleryBloc = BlocProvider.of<GalleryBloc>(context);
     galleryBloc.add(GetArtworkList());
   }

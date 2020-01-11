@@ -8,12 +8,14 @@ class ContactForm extends Equatable {
   final String subject;
   final String name;
 
-  ContactForm({this.sendTo, this.message, this.from, this.subject, this.name});
-
-
+  ContactForm(
+      {@required this.sendTo,
+      @required this.message,
+      @required this.from,
+      @required this.subject,
+      @required this.name});
 
   @override
-  // TODO: implement props
-  List<Object> get props => [
-  ];
+  List<Object> get props =>
+      [sendTo, name, message, from, subject];
 }
