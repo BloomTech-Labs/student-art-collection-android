@@ -46,7 +46,7 @@ class ArtworkDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget buildFormLoading({@required double screenHeight}){
+  Widget buildFormLoading({@required double screenHeight}) {
     return Column(
       children: <Widget>[
         topBannerWidget(screenHeight: screenHeight),
@@ -103,6 +103,7 @@ class ArtworkDetailsPage extends StatelessWidget {
         CarouselImageViewer(
           artwork: artwork,
           height: carouselHeight,
+          isEditable: false,
         ),
         Positioned(
           bottom: 5,
@@ -205,5 +206,4 @@ class ArtworkDetailsPage extends StatelessWidget {
   Widget contactFormConfirmationWidget({@required double screenHeight}) {
     return Container();
   }
-
 }
