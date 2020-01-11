@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
@@ -12,7 +13,6 @@ import 'package:student_art_collection/features/list_art/presentation/page/schoo
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
-import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
 class SchoolLoginPage extends StatelessWidget {
@@ -123,7 +123,7 @@ class _LoginFormState extends State<LoginForm> {
                 RaisedButton(
                     color: accentColor,
                     child: Text(
-                        AppLocalizations.of(context).translate(TEXT_LOGIN_LOGIN_BUTTON),
+                      AppLocalizations.of(context).translate(TEXT_LOGIN_LOGIN_BUTTON),
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
