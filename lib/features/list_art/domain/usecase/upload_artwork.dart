@@ -21,12 +21,13 @@ class UploadArtwork implements UseCase<Artwork, ArtworkToUpload> {
 }
 
 class ArtworkToUpload extends Equatable {
-  final int schoolId, category, price;
+  final int schoolId, category, price, artId;
   final bool sold;
   final String title, artistName, description;
   final List<String> imagesToUpload;
 
   ArtworkToUpload({
+    this.artId,
     @required this.schoolId,
     this.category,
     @required this.price,
@@ -39,6 +40,7 @@ class ArtworkToUpload extends Equatable {
 
   @override
   List<Object> get props => [
+        artId,
         schoolId,
         category,
         price,

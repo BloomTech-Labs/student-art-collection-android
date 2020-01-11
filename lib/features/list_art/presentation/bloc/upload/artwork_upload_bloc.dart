@@ -81,6 +81,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
       (artwork) {
         return ArtworkUploadSuccess(
           artwork: artwork,
+          message: 'Art was successfully uploaded!',
         );
       },
     );

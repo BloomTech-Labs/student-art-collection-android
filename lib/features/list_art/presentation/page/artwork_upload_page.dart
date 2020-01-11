@@ -65,7 +65,7 @@ class UploadWidget extends StatefulWidget {
 }
 
 class _UploadWidgetState extends State<UploadWidget> {
-  final Artwork artwork;
+  Artwork artwork;
   String title, artistName, description;
   bool sold;
   int category, price;
@@ -83,62 +83,6 @@ class _UploadWidgetState extends State<UploadWidget> {
   _UploadWidgetState({
     this.artwork,
   });
-
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        dateTextController.text = formatDate(selectedDate);
-      });
-  }
-
-  _showPricePicker(BuildContext context) {
-    Picker picker = new Picker(
-        adapter: PickerDataAdapter<String>(
-          pickerdata: _getPrices(),
-        ),
-        changeToFirst: false,
-        textAlign: TextAlign.left,
-        columnPadding: const EdgeInsets.all(8.0),
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            priceTextController.text =
-                pickerValueToPureValue(picker.adapter.text);
-            price = pricePickerValueToInt(
-                pickerValueToPureValue(picker.adapter.text));
-          });
-        });
-    picker.showModal(context);
-  }
-
-  _showCategoryPicker(BuildContext context) {
-    Picker picker = new Picker(
-        adapter: PickerDataAdapter<String>(
-          pickerdata: _getCategories(),
-        ),
-        changeToFirst: false,
-        textAlign: TextAlign.left,
-        columnPadding: const EdgeInsets.all(8.0),
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            final temp = _getCategories().indexOf(
-                  pickerValueToPureValue(picker.adapter.text),
-                ) +
-                1;
-            category = temp;
-            categoryTextController.text = pickerValueToPureValue(
-              picker.adapter.text,
-            );
-          });
-        });
-    picker.showModal(context);
-  }
 
   List<String> _getPrices() {
     return [
@@ -191,8 +135,9 @@ class _UploadWidgetState extends State<UploadWidget> {
       listener: (context, state) {
         if (state is ArtworkUploadSuccess) {
           setState(() {
-            nullifyState();
+            populateData(state.artwork);
           });
+          showSnackBar(context, state.message);
         } else if (state is EditArtworkInitialState) {
           setState(() {
             populateData(state.artwork);
@@ -202,13 +147,8 @@ class _UploadWidgetState extends State<UploadWidget> {
             imageUrls.add(state.imageUrl);
           });
         } else if (state is ArtworkUploadLoading) {
-          final snackBar = SnackBar(content: Text(state.message));
-          Scaffold.of(context).showSnackBar(snackBar);
         } else if (state is ArtworkUploadError) {
-          final snackBar = SnackBar(content: Text(state.message));
-          Scaffold.of(context).showSnackBar(snackBar);
-        } else {
-          nullifyState();
+          showSnackBar(context, state.message);
         }
       },
       child: SingleChildScrollView(
@@ -347,15 +287,33 @@ class _UploadWidgetState extends State<UploadWidget> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          RaisedButton(
-                            onPressed: () {
-                              dispatchUpload();
+                          BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(
+                            builder: (context, state) {
+                              if (state is ArtworkUploadLoading) {
+                                return RaisedButton(
+                                  onPressed: () {
+                                    showSnackBar(context,
+                                        'Please wait until images are uploaded');
+                                  },
+                                  color: accentColor,
+                                  textColor: Colors.white,
+                                  child: Text(
+                                    'Submit',
+                                  ),
+                                );
+                              } else {
+                                return RaisedButton(
+                                  onPressed: () {
+                                    dispatchUpload();
+                                  },
+                                  color: accentColor,
+                                  textColor: Colors.white,
+                                  child: Text(
+                                    'Submit',
+                                  ),
+                                );
+                              }
                             },
-                            color: accentColor,
-                            textColor: Colors.white,
-                            child: Text(
-                              'Submit',
-                            ),
                           ),
                         ],
                       ),
@@ -370,35 +328,81 @@ class _UploadWidgetState extends State<UploadWidget> {
     );
   }
 
-  void nullifyState() {
-    title = null;
-    titleTextController.text = "";
-    description = null;
-    descriptionTextController.text = "";
-    artistName = null;
-    studentTextController.text = "";
-    dateTextController.text = "";
-    sold = null;
-    category = null;
-    categoryTextController.text = "";
-    price = null;
-    priceTextController.text = "";
-    imageUrls.clear();
+  _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        dateTextController.text = formatDate(selectedDate);
+      });
+  }
+
+  _showPricePicker(BuildContext context) {
+    Picker picker = new Picker(
+        adapter: PickerDataAdapter<String>(
+          pickerdata: _getPrices(),
+        ),
+        changeToFirst: false,
+        textAlign: TextAlign.left,
+        columnPadding: const EdgeInsets.all(8.0),
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            priceTextController.text =
+                pickerValueToPureValue(picker.adapter.text);
+            price = pricePickerValueToInt(
+                pickerValueToPureValue(picker.adapter.text));
+          });
+        });
+    picker.showModal(context);
+  }
+
+  _showCategoryPicker(BuildContext context) {
+    Picker picker = new Picker(
+        adapter: PickerDataAdapter<String>(
+          pickerdata: _getCategories(),
+        ),
+        changeToFirst: false,
+        textAlign: TextAlign.left,
+        columnPadding: const EdgeInsets.all(8.0),
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            final temp = _getCategories().indexOf(
+                  pickerValueToPureValue(picker.adapter.text),
+                ) +
+                1;
+            category = temp;
+            categoryTextController.text = pickerValueToPureValue(
+              picker.adapter.text,
+            );
+          });
+        });
+    picker.showModal(context);
   }
 
   void populateData(Artwork artwork) {
+    artwork = artwork;
     title = artwork.title;
     titleTextController.text = artwork.title;
     description = artwork.description;
     descriptionTextController.text = artwork.description;
     artistName = artwork.artistName;
     studentTextController.text = artwork.artistName;
-    dateTextController.text = "";
+    dateTextController.text = formatDate(artwork.datePosted);
     sold = artwork.sold;
     category = artwork.category.categoryId;
-    categoryTextController.text = "Photography";
+    categoryTextController.text = artwork.category.categoryName;
     price = artwork.price.toInt();
     priceTextController.text = artwork.price.toInt().toString();
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 
   void dispatchUpload() {
