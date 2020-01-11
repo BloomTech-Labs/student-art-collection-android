@@ -145,6 +145,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
         CarouselImageViewer(
           artwork: artwork,
           height: carouselHeight,
+          isEditable: false,
         ),
         Positioned(
           bottom: 5,

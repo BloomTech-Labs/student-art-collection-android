@@ -48,7 +48,7 @@ class InputConverter {
     String title,
     String artistName,
     String description,
-    List<File> imagesToUpload,
+    List<String> imagesToUpload,
   ) {
     return Right(ArtworkToUpload(
       schoolId: schoolId,

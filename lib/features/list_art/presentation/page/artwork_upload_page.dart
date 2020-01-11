@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
@@ -19,6 +21,9 @@ import '../../../../service_locator.dart';
 
 class ArtworkUploadPage extends StatelessWidget {
   static const String ID = 'school_artwork_detail';
+  final Artwork artwork;
+
+  ArtworkUploadPage({this.artwork});
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +43,8 @@ class ArtworkUploadPage extends StatelessWidget {
             ),
           ),
         ),
-        body: BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
-          listener: (context, state) {
-            if (state is ArtworkUploadLoading) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
-            } else if (state is ArtworkUploadError) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
-            }
-          },
-          child: UploadWidget(),
+        body: UploadWidget(
+          artwork: artwork,
         ),
       ),
     );
@@ -56,15 +52,24 @@ class ArtworkUploadPage extends StatelessWidget {
 }
 
 class UploadWidget extends StatefulWidget {
+  final Artwork artwork;
+
+  UploadWidget({
+    this.artwork,
+  });
+
   @override
-  _UploadWidgetState createState() => _UploadWidgetState();
+  _UploadWidgetState createState() => _UploadWidgetState(
+        artwork: artwork,
+      );
 }
 
 class _UploadWidgetState extends State<UploadWidget> {
+  final Artwork artwork;
   String title, artistName, description;
   bool sold;
   int category, price;
-  List<File> imageFiles;
+  List<String> imageUrls;
 
   DateTime selectedDate = DateTime.now();
 
@@ -74,6 +79,10 @@ class _UploadWidgetState extends State<UploadWidget> {
   final dateTextController = TextEditingController();
   final priceTextController = TextEditingController();
   final categoryTextController = TextEditingController();
+
+  _UploadWidgetState({
+    this.artwork,
+  });
 
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -158,15 +167,22 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   Future _getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      imageFiles.add(image);
-    });
+    if (image != null) {
+      dispatchImageHost(image);
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    imageFiles = List();
+    imageUrls = List();
+    if (artwork != null) {
+      artwork.images.forEach((image) {
+        imageUrls.add(image.imageUrl);
+      });
+      BlocProvider.of<ArtworkUploadBloc>(context)
+          .add(InitializeEditArtworkPageEvent(artwork: artwork));
+    }
   }
 
   @override
@@ -177,6 +193,22 @@ class _UploadWidgetState extends State<UploadWidget> {
           setState(() {
             nullifyState();
           });
+        } else if (state is EditArtworkInitialState) {
+          setState(() {
+            populateData(state.artwork);
+          });
+        } else if (state is ImageHostSuccess) {
+          setState(() {
+            imageUrls.add(state.imageUrl);
+          });
+        } else if (state is ArtworkUploadLoading) {
+          final snackBar = SnackBar(content: Text(state.message));
+          Scaffold.of(context).showSnackBar(snackBar);
+        } else if (state is ArtworkUploadError) {
+          final snackBar = SnackBar(content: Text(state.message));
+          Scaffold.of(context).showSnackBar(snackBar);
+        } else {
+          nullifyState();
         }
       },
       child: SingleChildScrollView(
@@ -190,9 +222,11 @@ class _UploadWidgetState extends State<UploadWidget> {
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
                   child: OutlineButton(
-                    child: Icon(
-                      Icons.image,
-                      color: accentColor,
+                    child: CarouselImageViewer(
+                      isEditable: true,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      imageList: imageUrls,
+                      artwork: null,
                     ),
                     onPressed: () {
                       _getImage();
@@ -349,18 +383,37 @@ class _UploadWidgetState extends State<UploadWidget> {
     categoryTextController.text = "";
     price = null;
     priceTextController.text = "";
-    imageFiles.clear();
+    imageUrls.clear();
   }
 
-  dispatchUpload() {
+  void populateData(Artwork artwork) {
+    title = artwork.title;
+    titleTextController.text = artwork.title;
+    description = artwork.description;
+    descriptionTextController.text = artwork.description;
+    artistName = artwork.artistName;
+    studentTextController.text = artwork.artistName;
+    dateTextController.text = "";
+    sold = artwork.sold;
+    category = artwork.category.categoryId;
+    categoryTextController.text = "Photography";
+    price = artwork.price.toInt();
+    priceTextController.text = artwork.price.toInt().toString();
+  }
+
+  void dispatchUpload() {
     BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
-      title: title,
-      category: category,
-      price: price,
-      artistName: artistName,
-      description: description,
-      imageFiles: imageFiles,
-      sold: sold,
-    ));
+        title: title,
+        category: category,
+        price: price,
+        artistName: artistName,
+        description: description,
+        sold: sold,
+        imageUrls: imageUrls));
+  }
+
+  void dispatchImageHost(File file) {
+    BlocProvider.of<ArtworkUploadBloc>(context)
+        .add(HostImageEvent(imageFileToHost: file));
   }
 }
