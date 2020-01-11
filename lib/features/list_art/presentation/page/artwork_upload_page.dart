@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
@@ -142,26 +143,26 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   List<String> _getPrices() {
     return [
-      '\$5',
-      '\$10',
-      '\$15',
-      '\$20',
-      '\$25',
-      '\$30',
-      '\$35',
-      '\$40',
-      '\$45',
-      '\$50',
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_1),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_2),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_3),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_4),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_5),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_6),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_7),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_8),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_9),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_PRICE_10)
     ];
   }
 
   List<String> _getCategories() {
     return [
-      'Photography',
-      'Drawing',
-      'Painting',
-      'Sculpture',
-      'Other',
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_1),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_2),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_3),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_4),
+      AppLocalizations.of(context).translate(TEXT_ARTWORK_UPLOAD_CATEGORY_5),
     ];
   }
 
@@ -247,8 +248,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         onChanged: (value) {
                           title = value;
                         },
-                        decoration:
-                            getAuthInputDecoration('Enter Artwork Title'),
+                        decoration: getAuthInputDecoration(
+                            AppLocalizations.of(context).translate(
+                                TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
                       ),
                       SizedBox(height: 10),
                       TextField(
@@ -257,8 +259,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         onChanged: (value) {
                           artistName = value;
                         },
-                        decoration:
-                            getAuthInputDecoration('Enter Student Name'),
+                        decoration: getAuthInputDecoration(
+                            AppLocalizations.of(context).translate(
+                                TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
                       ),
                       SizedBox(height: 10),
                       Stack(
@@ -266,8 +269,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         children: <Widget>[
                           TextField(
                             enabled: false,
-                            decoration:
-                                getAuthInputDecoration('Select Date Created'),
+                            decoration: getAuthInputDecoration(
+                                AppLocalizations.of(context).translate(
+                                    TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
                             controller: dateTextController,
                           ),
                           Positioned(
@@ -294,8 +298,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         children: <Widget>[
                           TextField(
                             enabled: false,
-                            decoration:
-                                getAuthInputDecoration('Select Artwork Price'),
+                            decoration: getAuthInputDecoration(
+                                AppLocalizations.of(context).translate(
+                                    TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
                             controller: priceTextController,
                           ),
                           Positioned(
@@ -323,7 +328,8 @@ class _UploadWidgetState extends State<UploadWidget> {
                           TextField(
                             enabled: false,
                             decoration: getAuthInputDecoration(
-                                'Select Artwork Category'),
+                                AppLocalizations.of(context).translate(
+                                    TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
                             controller: categoryTextController,
                           ),
                           Positioned(
@@ -354,7 +360,8 @@ class _UploadWidgetState extends State<UploadWidget> {
                             color: accentColor,
                             textColor: Colors.white,
                             child: Text(
-                              'Submit',
+                              AppLocalizations.of(context).translate(
+                                  TEXT_ARTWORK_UPLOAD_UPLOAD_BUTTON_LABEL),
                             ),
                           ),
                         ],

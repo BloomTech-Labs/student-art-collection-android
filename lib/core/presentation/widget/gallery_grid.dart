@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/util/functions.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+
+import '../../../app_localization.dart';
 
 //determines the size ratios for image cards
 const int staggerCount = 20;
@@ -104,7 +107,7 @@ class GridTile extends StatelessWidget {
     double cornerRadius =
         setCornerRadius == null ? cardCornerRadius : setCornerRadius;
 
-    String title = artwork.title != '' ? artwork.title : 'Untitled';
+    String title = artwork.title != '' ? artwork.title : AppLocalizations.of(context).translate(TEXT_GALLERY_GRID_WIDGET_DEFAULT_ARTWORK_TITLE);
 
     title = title.length > 13 ? title.substring(0, 13) + '...' : title;
 

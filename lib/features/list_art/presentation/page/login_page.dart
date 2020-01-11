@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
@@ -11,6 +12,7 @@ import 'package:student_art_collection/features/list_art/presentation/page/schoo
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
+import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
 class SchoolLoginPage extends StatelessWidget {
@@ -23,7 +25,7 @@ class SchoolLoginPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Login',
+    AppLocalizations.of(context).translate(TEXT_LOGIN_APP_BAR_TITLE),
           ),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
@@ -83,7 +85,7 @@ class _LoginFormState extends State<LoginForm> {
                   email = value;
                 },
                 decoration:
-                    getAuthInputDecoration('Enter school email address'),
+                    getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL)),
               ),
             ),
             Center(child: SizedBox(height: 10)),
@@ -93,7 +95,7 @@ class _LoginFormState extends State<LoginForm> {
                 onChanged: (value) {
                   password = value;
                 },
-                decoration: getAuthInputDecoration('Enter your password'),
+                decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_LOGIN_PASSWORD_LABEL)),
               ),
             ),
             Row(
@@ -114,14 +116,14 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ),
                     Text(
-                      'Remember Me',
+                      AppLocalizations.of(context).translate(TEXT_LOGIN_REMEMBER_ME_BOX),
                     )
                   ],
                 ),
                 RaisedButton(
                     color: accentColor,
                     child: Text(
-                      'Login',
+                        AppLocalizations.of(context).translate(TEXT_LOGIN_LOGIN_BUTTON),
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
@@ -136,7 +138,7 @@ class _LoginFormState extends State<LoginForm> {
               children: <Widget>[
                 InkWell(
                   child: Text(
-                    'Don\'t have an account? Register here!',
+                    AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_LABEL),
                   ),
                   onTap: () {
                     Navigator.pushNamed(context, SchoolRegistrationPage.ID);

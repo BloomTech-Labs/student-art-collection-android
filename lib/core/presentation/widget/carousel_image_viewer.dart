@@ -1,11 +1,12 @@
-import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/util/functions.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+
+import '../../../app_localization.dart';
 
 const double carouselCardCornerRadius = 10;
 
@@ -160,7 +161,7 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
     return Positioned(
       child: Container(
         child: Text(
-          artistName == "" ? "Anonymous" : artistName,
+          artistName == "" ? AppLocalizations.of(context).translate(TEXT_CAROUSEL_WIDGET_DEFAULT_STUDENT_NAME) : artistName,
           style: TextStyle(color: Colors.white),
         ),
         decoration: BoxDecoration(
