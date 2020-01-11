@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
@@ -18,35 +19,26 @@ class SchoolLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider<SchoolAuthBloc>(
       create: (context) => sl<SchoolAuthBloc>(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Login',
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 1.0),
-            child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
-              builder: (context, state) {
-                if (state is SchoolAuthLoading) {
-                  return AppBarLoading();
+        backgroundColor: primaryColor,
+        body: Padding(
+          padding: EdgeInsets.all(0),
+          child: SingleChildScrollView(
+            child: BlocListener<SchoolAuthBloc, SchoolAuthState>(
+              listener: (context, state) {
+                if (state is Authorized) {
+                  Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
+                } else if (state is SchoolAuthError) {
+                  final snackBar = SnackBar(content: Text(state.message));
+                  Scaffold.of(context).showSnackBar(snackBar);
                 }
-                return EmptyContainer();
               },
+              child: LoginForm(screenHeight: screenHeight,),
             ),
           ),
-        ),
-        body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
-          listener: (context, state) {
-            if (state is Authorized) {
-              Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
-            } else if (state is SchoolAuthError) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
-            }
-          },
-          child: LoginForm(),
         ),
       ),
     );
@@ -54,13 +46,19 @@ class SchoolLoginPage extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
+  final screenHeight;
+
+  const LoginForm({Key key, @required this.screenHeight}) : super(key: key);
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _LoginFormState createState() => _LoginFormState(screenHeight: screenHeight);
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final screenHeight;
   String email, password;
   bool shouldRemember = false;
+
+  _LoginFormState({@required this.screenHeight});
 
   void _onCheckboxChange() {
     setState(() {
@@ -70,73 +68,137 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Center(
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) {
-                  email = value;
-                },
-                decoration:
-                    getAuthInputDecoration('Enter school email address'),
-              ),
-            ),
-            Center(child: SizedBox(height: 10)),
-            Center(
-              child: TextField(
-                keyboardType: TextInputType.visiblePassword,
-                onChanged: (value) {
-                  password = value;
-                },
-                decoration: getAuthInputDecoration('Enter your password'),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(right: 8),
-                      child: CustomCheckbox(
-                        value: shouldRemember,
-                        activeColor: accentColor,
-                        materialTapTargetSize: null,
-                        onChanged: (value) {
-                          _onCheckboxChange();
-                        },
-                        useTapTarget: false,
-                      ),
-                    ),
-                    Text(
-                      'Remember Me',
-                    )
-                  ],
+                Container(
+                  height: screenHeight*.29,
+                  padding: EdgeInsets.only(left: 12),
+                  alignment: Alignment.centerLeft,
+                  child: Text('Welcome\nback!', style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                  ),),
                 ),
-                RaisedButton(
-                    color: accentColor,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      dispatchLogin();
-                    }),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: <Widget>[
+                Container(
+                  height: screenHeight*.25,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(left: 5, bottom: 5),
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          'Email',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: TextField(
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: (value) {
+                              email = value;
+                            },
+                            decoration: InputDecoration.collapsed(hintText: ""),
+                          ),
+                        ),
+                      ),
+                      Center(child: SizedBox(height: 20)),
+                      Container(
+                        alignment: Alignment.bottomLeft,
+                        padding: EdgeInsets.only(left: 5, bottom: 5),
+                        child: Text(
+                          'Password',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: TextField(
+                            keyboardType: TextInputType.visiblePassword,
+                            onChanged: (value) {
+                              password = value;
+                            },
+                            decoration: InputDecoration.collapsed(hintText: ""),
+                          ),
+                        ),
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.only(top: 16),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              color: Colors.white,
+                              margin: EdgeInsets.only(right: 8),
+                              child: CustomCheckbox(
+                                value: shouldRemember,
+                                activeColor: accentColor,
+                                materialTapTargetSize: null,
+                                onChanged: (value) {
+                                  _onCheckboxChange();
+                                },
+                                useTapTarget: false,
+                              ),
+                            ),
+                            Text(
+                              'Remember Me?',
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration:BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Icon(Icons.arrow_forward, color: Colors.white, size: 40,),
+                  ),),
+
+                Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: Divider(color: Colors.white,thickness: 1.5,)
+                      ),
+
+                      Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text("OR", style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20
+                          ),)),
+
+                      Expanded(
+                          child: Divider(color: Colors.white,thickness: 1.5,)
+                      ),
+                    ]
+                ),
                 InkWell(
                   child: Text(
-                    'Don\'t have an account? Register here!',
+                    'Not a member yet? \n    Sign Up Here!',
                   ),
                   onTap: () {
                     Navigator.pushNamed(context, SchoolRegistrationPage.ID);
@@ -144,7 +206,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
