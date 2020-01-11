@@ -118,6 +118,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
       final QueryResult imageResult = await client.mutate(imageOptions);
       savedArtwork.images.add(ImageModel.fromJson(imageResult.data['action']));
     }
+    var i = 0;
     return savedArtwork;
   }
 

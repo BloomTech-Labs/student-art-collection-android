@@ -43,19 +43,8 @@ class ArtworkUploadPage extends StatelessWidget {
             ),
           ),
         ),
-        body: BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
-          listener: (context, state) {
-            if (state is ArtworkUploadLoading) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
-            } else if (state is ArtworkUploadError) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
-            }
-          },
-          child: UploadWidget(
-            artwork: artwork,
-          ),
+        body: UploadWidget(
+          artwork: artwork,
         ),
       ),
     );
@@ -178,11 +167,9 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   Future _getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      if (image != null) {
-        dispatchImageHost(image);
-      }
-    });
+    if (image != null) {
+      dispatchImageHost(image);
+    }
   }
 
   @override
@@ -211,6 +198,12 @@ class _UploadWidgetState extends State<UploadWidget> {
           setState(() {
             imageUrls.add(state.imageUrl);
           });
+        } else if (state is ArtworkUploadLoading) {
+          final snackBar = SnackBar(content: Text(state.message));
+          Scaffold.of(context).showSnackBar(snackBar);
+        } else if (state is ArtworkUploadError) {
+          final snackBar = SnackBar(content: Text(state.message));
+          Scaffold.of(context).showSnackBar(snackBar);
         } else {
           nullifyState();
         }
@@ -407,13 +400,13 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   void dispatchUpload() {
     BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
-      title: title,
-      category: category,
-      price: price,
-      artistName: artistName,
-      description: description,
-      sold: sold,
-    ));
+        title: title,
+        category: category,
+        price: price,
+        artistName: artistName,
+        description: description,
+        sold: sold,
+        imageUrls: imageUrls));
   }
 
   void dispatchImageHost(File file) {

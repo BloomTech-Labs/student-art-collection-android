@@ -44,7 +44,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
           event.title,
           event.artistName,
           event.description,
-          event.imageFiles,
+          event.imageUrls,
         );
         yield* artworkToUpload.fold(
           (failure) async* {

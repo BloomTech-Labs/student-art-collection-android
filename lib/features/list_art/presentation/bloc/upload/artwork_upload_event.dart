@@ -11,7 +11,7 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
   final int category, price;
   final bool sold;
   final String title, artistName, description;
-  final List<String> imageFiles;
+  final List<String> imageUrls;
 
   UploadNewArtworkEvent({
     this.category,
@@ -20,7 +20,7 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
     this.title,
     this.artistName,
     this.description,
-    this.imageFiles,
+    this.imageUrls,
   });
 
   @override
@@ -31,7 +31,7 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
         title,
         artistName,
         description,
-        imageFiles,
+        imageUrls,
       ];
 }
 
