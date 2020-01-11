@@ -36,13 +36,14 @@ class UploadNewArtworkEvent extends ArtworkUploadEvent {
 }
 
 class UpdateArtworkEvent extends ArtworkUploadEvent {
-  final int category, price, artId;
+  final Artwork artwork;
+  final int category, price;
   final bool sold;
   final String title, artistName, description;
   final List<String> imageUrls;
 
   UpdateArtworkEvent({
-    this.artId,
+    this.artwork,
     this.category,
     this.price,
     this.sold,
@@ -54,7 +55,6 @@ class UpdateArtworkEvent extends ArtworkUploadEvent {
 
   @override
   List<Object> get props => [
-        artId,
         category,
         price,
         sold,

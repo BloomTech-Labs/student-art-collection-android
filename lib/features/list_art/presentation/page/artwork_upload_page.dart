@@ -304,7 +304,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                               } else {
                                 return RaisedButton(
                                   onPressed: () {
-                                    dispatchUpload();
+                                    dispatchUploadOrUpdate();
                                   },
                                   color: accentColor,
                                   textColor: Colors.white,
@@ -405,15 +405,27 @@ class _UploadWidgetState extends State<UploadWidget> {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  void dispatchUpload() {
-    BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
-        title: title,
-        category: category,
-        price: price,
-        artistName: artistName,
-        description: description,
-        sold: sold,
-        imageUrls: imageUrls));
+  void dispatchUploadOrUpdate() {
+    if (artwork == null) {
+      BlocProvider.of<ArtworkUploadBloc>(context).add(UploadNewArtworkEvent(
+          title: title,
+          category: category,
+          price: price,
+          artistName: artistName,
+          description: description,
+          sold: sold,
+          imageUrls: imageUrls));
+    } else {
+      BlocProvider.of<ArtworkUploadBloc>(context).add(UpdateArtworkEvent(
+          artwork: artwork,
+          title: title,
+          category: category,
+          price: price,
+          artistName: artistName,
+          description: description,
+          sold: sold,
+          imageUrls: imageUrls));
+    }
   }
 
   void dispatchImageHost(File file) {
