@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
 import 'package:student_art_collection/core/util/route_generator.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'app_localization.dart';
 import 'service_locator.dart' as locator;
 
 void main() async {
@@ -37,6 +39,25 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: StarterScreen.ID,
       onGenerateRoute: RouteGenerator.generateRoute,
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('es', 'MX'),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        // Check if the current device locale is supported
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale.languageCode &&
+              supportedLocale.countryCode == locale.countryCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
     );
   }
 }

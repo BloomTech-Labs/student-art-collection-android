@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
+import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 import 'artwork_details_page.dart';
 
@@ -14,13 +16,14 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocProvider<GalleryBloc>(
       create: (context) => sl<GalleryBloc>(),
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Student Art Gallery'),
+          title: Text(AppLocalizations.of(context).translate(TEXT_GALLERY_APP_BAR_TITLE)),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<GalleryBloc, GalleryState>(
@@ -45,16 +48,9 @@ class GalleryPage extends StatelessWidget {
               if (state is GalleryLoadingState) {
                 return BuildLoading();
               } else if (state is GalleryLoadedState) {
-                return GalleryGrid(
-                  artworkList: state.artworkList,
-                  isStaggered: true,
-                  onTap: (artwork) {
-                    Navigator.pushNamed(context, ArtworkDetailsPage.ID,
-                        arguments: artwork);
-                  },
-                );
+                return buildLoaded(artworkList: state.artworkList, context: context);
               } else if (state is GalleryErrorState) {
-                return buildError();
+                return buildError(context: context);
               } else
                 return buildInitial(context);
             },
@@ -66,14 +62,26 @@ class GalleryPage extends StatelessWidget {
 
   Widget buildInitial(BuildContext context) {
     getArtworkList(context);
-    return Center(child: Text("initial"));
+    return Center();
   }
 
-  Widget buildError() {
-    return Center(child: Text("error"));
+  Widget buildError({@required BuildContext context}) {
+    return Center(child: Text(AppLocalizations.of(context).translate(TEXT_GALLERY_ERROR_STATE_MESSAGE)));
+  }
+
+  Widget buildLoaded({@required BuildContext context, @required artworkList}){
+    return GalleryGrid(
+      artworkList: artworkList,
+      isStaggered: true,
+      onTap: (artwork) {
+        Navigator.pushNamed(context, ArtworkDetailsPage.ID,
+            arguments: artwork);
+      },
+    );
   }
 
   void getArtworkList(BuildContext context) {
+    // ignore: close_sinks
     final galleryBloc = BlocProvider.of<GalleryBloc>(context);
     galleryBloc.add(GetArtworkList());
   }
