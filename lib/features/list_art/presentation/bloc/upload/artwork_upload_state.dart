@@ -41,13 +41,18 @@ class ArtworkUploadError extends ArtworkUploadState {
 
 class ArtworkUploadSuccess extends ArtworkUploadState {
   final Artwork artwork;
+  final String message;
 
   ArtworkUploadSuccess({
     @required this.artwork,
+    @required this.message,
   });
 
   @override
-  List<Object> get props => [artwork];
+  List<Object> get props => [
+        artwork,
+        message,
+      ];
 }
 
 class ImageHostSuccess extends ArtworkUploadState {

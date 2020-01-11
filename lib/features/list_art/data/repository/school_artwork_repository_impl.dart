@@ -54,8 +54,20 @@ class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
     }
   }
 
-  Future<bool> _isNetworkAvailable() {
-    return networkInfo.isConnected;
+  @override
+  Future<Either<Failure, Artwork>> updateArtwork(
+      ArtworkToUpload artworkToUpdate) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final uploadedArtwork =
+            await remoteDataSource.updateArtwork(artworkToUpdate);
+        return Right(uploadedArtwork);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
@@ -70,5 +82,9 @@ class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
     } else {
       return Left(NetworkFailure());
     }
+  }
+
+  Future<bool> _isNetworkAvailable() {
+    return networkInfo.isConnected;
   }
 }
