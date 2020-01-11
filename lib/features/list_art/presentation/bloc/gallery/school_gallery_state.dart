@@ -6,29 +6,29 @@ abstract class SchoolGalleryState extends Equatable {
   const SchoolGalleryState();
 }
 
-class Empty extends SchoolGalleryState {
+class SchoolGalleryEmpty extends SchoolGalleryState {
   @override
   List<Object> get props => [];
 }
 
-class Loading extends SchoolGalleryState {
+class SchoolGalleryLoading extends SchoolGalleryState {
   @override
   List<Object> get props => null;
 }
 
-class Error extends SchoolGalleryState {
+class SchoolGalleryError extends SchoolGalleryState {
   final String message;
 
-  Error({this.message});
+  SchoolGalleryError({this.message});
 
   @override
   List<Object> get props => [message];
 }
 
-class Loaded extends SchoolGalleryState {
+class SchoolGalleryLoaded extends SchoolGalleryState {
   final List<Artwork> artworks;
 
-  Loaded({this.artworks});
+  SchoolGalleryLoaded({this.artworks});
 
   @override
   List<Object> get props => [artworks];

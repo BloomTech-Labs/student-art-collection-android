@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
+import 'package:student_art_collection/core/data/model/school_info_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
@@ -12,9 +13,9 @@ class ArtworkModel extends Artwork {
     @required double price,
     String artistName,
     bool sold,
-    @required int schoolId,
+    SchoolInfoModel schoolInfo,
     String description,
-    DateTime dateTime,
+    DateTime datePosted,
     @required List<ImageModel> images,
   }) : super(
             title: title,
@@ -24,8 +25,8 @@ class ArtworkModel extends Artwork {
             sold: sold,
             artId: artId,
             description: description,
-            datePosted: dateTime,
-            schoolId: schoolId,
+            datePosted: datePosted,
+            schoolInfo: schoolInfo,
             images: images);
 
   factory ArtworkModel.fromJson(Map<String, dynamic> json) {
@@ -40,18 +41,17 @@ class ArtworkModel extends Artwork {
     for (Map<String, dynamic> jsonImage in jsonImageList) {
       imageList.add(ImageModel.fromJson(jsonImage));
     }
-
     return ArtworkModel(
         title: json[ARTWORK_TITLE],
         category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),
-        price: json[ARTWORK_PRICE],
+        price: json[ARTWORK_PRICE].toDouble(),
         artistName: json[ARTWORK_ARTIST_NAME],
         sold: json[ARTWORK_SOLD],
-        artId: json[ARTWORK_ID],
+        artId: int.parse(json[ARTWORK_ID]),
         description: json[ARTWORK_DESCRIPTION],
-        //ToDo : setup datetime to json conversions
-        //datePosted: json[ARTWORK_DATE_POSTED],
-        schoolId: json[ARTWORK_SCHOOL_ID],
+        datePosted: DateTime.fromMillisecondsSinceEpoch(
+            int.parse(json[ARTWORK_DATE_POSTED])),
+        schoolInfo: SchoolInfoModel.fromJson(json[ARTWORK_SCHOOL_INFO]),
         images: imageList);
   }
 
@@ -68,10 +68,10 @@ class ArtworkModel extends Artwork {
       ARTWORK_PRICE: price,
       ARTWORK_ARTIST_NAME: artistName,
       ARTWORK_SOLD: sold,
-      ARTWORK_ID: artId,
+      ARTWORK_ID: artId.toString(),
       ARTWORK_DESCRIPTION: description,
-      // ARTWORK_DATE_POSTED: datePosted,
-      ARTWORK_SCHOOL_ID: schoolId,
+      ARTWORK_DATE_POSTED: datePosted.millisecondsSinceEpoch.toString(),
+      ARTWORK_SCHOOL_ID: schoolInfo.schoolId,
       ARTWORK_IMAGES: [imageString],
     };
   }

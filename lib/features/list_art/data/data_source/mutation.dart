@@ -25,3 +25,62 @@ const String ADD_SCHOOL_MUTATION = r'''
       }
     }
 ''';
+
+const String ADD_ARTWORK_MUTATION = r'''
+  mutation AddArtworkToSchool(
+    $school_id: ID!,
+    $category: ID!,
+    $price: Int,
+    $sold: Boolean,
+    $title: String,
+    $artist_name: String,
+    $description: String) {
+      action: addArt(
+        school_id: $school_id,
+        category: $category,
+        price: $price,
+        sold: $sold,
+        title: $title,
+        artist_name: $artist_name,
+        description: $description,
+      ) {
+        id,
+        category {
+          id,
+          category
+        },
+        school{
+          school_name,
+           id,
+          school_id,
+          email
+        }
+        price,
+        sold,
+        title,
+        artist_name,
+        description,
+        date_posted,
+        images {
+          id,
+          art_id,
+          image_url
+        }
+      }
+    }
+''';
+
+const String ADD_IMAGE_TO_ARTWORK_MUTATION = r'''
+  mutation AddImageToArtwork(
+    $art_id: Int,
+    $image_url: String) {
+      action: addImage(
+        art_id: $art_id, 
+        image_url: $image_url
+      ) {
+        id,
+        art_id,
+        image_url
+      }
+    }
+''';

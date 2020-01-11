@@ -11,7 +11,7 @@ class Unauthorized extends SchoolAuthState {
   List<Object> get props => [];
 }
 
-class Loading extends SchoolAuthState {
+class SchoolAuthLoading extends SchoolAuthState {
   @override
   List<Object> get props => null;
 }
@@ -25,10 +25,10 @@ class Authorized extends SchoolAuthState {
   List<Object> get props => [school];
 }
 
-class Error extends SchoolAuthState {
+class SchoolAuthError extends SchoolAuthState {
   final String message;
 
-  Error({@required this.message});
+  SchoolAuthError({@required this.message});
 
   @override
   List<Object> get props => [message];

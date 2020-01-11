@@ -1,18 +1,24 @@
+import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:cloudinary_client/cloudinary_client.dart';
+import 'package:cloudinary_client/models/CloudinaryResponse.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
+import 'package:student_art_collection/core/data/model/image_model.dart';
 import 'package:student_art_collection/core/data/model/school_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/mutation.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/query.dart';
 import 'package:student_art_collection/features/list_art/data/mock_data.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 
 abstract class SchoolRemoteDataSource {
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister);
@@ -20,12 +26,20 @@ abstract class SchoolRemoteDataSource {
   Future<School> loginSchool(String uid);
 
   Future<List<Artwork>> getArtworksForSchool(int schoolId);
+
+  Future<Artwork> uploadArtwork(ArtworkToUpload artwork);
+
+  Future<ReturnedImageUrl> hostImage(File file);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   final GraphQLClient client;
+  final CloudinaryClient cloudinaryClient;
 
-  GraphQLSchoolRemoteDataSource({this.client});
+  GraphQLSchoolRemoteDataSource({
+    this.client,
+    this.cloudinaryClient,
+  });
 
   @override
   Future<School> loginSchool(String uid) async {
@@ -69,18 +83,47 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
     final QueryOptions options = QueryOptions(
         documentNode: gql(GET_ARTWORK_FOR_SCHOOL),
         variables: <String, dynamic>{
-          'school_id': 1,
+          'school_id': schoolId,
         });
     final QueryResult result = await client.query(options);
-    return convertResultToArtworks(result);
+    return convertResultToArtworkList(result, 'artBySchool');
   }
 
-  List<Artwork> convertResultToArtworks(QueryResult result) {
-    List<Artwork> artworks = List();
-    final List<dynamic> tempList = result.data['artBySchool'];
-    for (int i = 0; i < tempList.length; i++) {
-      artworks.add(ArtworkModel.fromJson(tempList[i]));
+  @override
+  Future<Artwork> uploadArtwork(ArtworkToUpload artworkToUpload) async {
+    final MutationOptions options = MutationOptions(
+        documentNode: gql(ADD_ARTWORK_MUTATION),
+        variables: <String, dynamic>{
+          'school_id': artworkToUpload.schoolId,
+          'category': artworkToUpload.category,
+          'price': artworkToUpload.price,
+          'sold': artworkToUpload.sold,
+          'title': artworkToUpload.title,
+          'artist_name': artworkToUpload.artistName,
+          'description': artworkToUpload.description,
+        });
+    final QueryResult result = await client.mutate(options);
+    final Artwork savedArtwork = convertResultToArtwork(result, 'action');
+    for (String imageUrl in artworkToUpload.imagesToUpload) {
+      final imageToUpload = ImageToUpload(
+        artId: savedArtwork.artId,
+        imageUrl: imageUrl,
+      );
+      final MutationOptions imageOptions = MutationOptions(
+          documentNode: gql(ADD_IMAGE_TO_ARTWORK_MUTATION),
+          variables: <String, dynamic>{
+            'art_id': savedArtwork.artId,
+            'image_url': imageToUpload.imageUrl
+          });
+      final QueryResult imageResult = await client.mutate(imageOptions);
+      savedArtwork.images.add(ImageModel.fromJson(imageResult.data['action']));
     }
-    var j = 0;
+    return savedArtwork;
+  }
+
+  @override
+  Future<ReturnedImageUrl> hostImage(File file) async {
+    final response = await cloudinaryClient.uploadImage(file.path);
+    return ReturnedImageUrl(imageUrl: response.url);
   }
 }

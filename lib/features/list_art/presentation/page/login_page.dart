@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
@@ -28,7 +29,7 @@ class SchoolLoginPage extends StatelessWidget {
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
               builder: (context, state) {
-                if (state is Loading) {
+                if (state is SchoolAuthLoading) {
                   return AppBarLoading();
                 }
                 return EmptyContainer();
@@ -40,7 +41,7 @@ class SchoolLoginPage extends StatelessWidget {
           listener: (context, state) {
             if (state is Authorized) {
               Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
-            } else if (state is Error) {
+            } else if (state is SchoolAuthError) {
               final snackBar = SnackBar(content: Text(state.message));
               Scaffold.of(context).showSnackBar(snackBar);
             }
@@ -104,6 +105,7 @@ class _LoginFormState extends State<LoginForm> {
                       margin: EdgeInsets.only(right: 8),
                       child: CustomCheckbox(
                         value: shouldRemember,
+                        activeColor: accentColor,
                         materialTapTargetSize: null,
                         onChanged: (value) {
                           _onCheckboxChange();
@@ -117,8 +119,10 @@ class _LoginFormState extends State<LoginForm> {
                   ],
                 ),
                 RaisedButton(
+                    color: accentColor,
                     child: Text(
                       'Login',
+                      style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
                       dispatchLogin();

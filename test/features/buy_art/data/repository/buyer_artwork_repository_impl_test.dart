@@ -4,21 +4,23 @@ import 'package:mockito/mockito.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/category_model.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
+import 'package:student_art_collection/core/data/model/school_info_model.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
-import 'package:student_art_collection/features/buy_art/data/data_source/artwork_local_data_source.dart';
-import 'package:student_art_collection/features/buy_art/data/data_source/artwork_remote_data_source.dart';
-import 'package:student_art_collection/features/buy_art/data/repository/artwork_repository_impl.dart';
+import 'package:student_art_collection/features/buy_art/data/data_source/buyer_local_data_source.dart';
+import 'package:student_art_collection/features/buy_art/data/data_source/buyer_remote_data_source.dart';
+import 'package:student_art_collection/features/buy_art/data/repository/buyer_artwork_repository_impl.dart';
+import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 
-class MockRemoteDataSource extends Mock implements ArtworkRemoteDataSource {}
+class MockRemoteDataSource extends Mock implements BuyerRemoteDataSource {}
 
-class MockLocalDataSource extends Mock implements ArtworkLocalDataSource {}
+class MockLocalDataSource extends Mock implements BuyerLocalDataSource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
-  ArtworkRepositoryImpl repository;
+  BuyerArtworkRepositoryImpl repository;
   MockRemoteDataSource mockRemoteDataSource;
   MockLocalDataSource mockLocalDataSource;
   MockNetworkInfo mockNetworkInfo;
@@ -33,117 +35,41 @@ void main() {
     categoryName: 'test',
   );
 
+  final tSchoolInfo = SchoolInfoModel(
+    id: 1,
+    schoolId: "1",
+    email: 'test@gmail.com',
+    schoolName: 'test'
+  );
+
   final tArtworkModel = ArtworkModel(
       artId: tID,
       artistName: "name",
       category: tCategory,
       images: tImageList,
       price: 25.50,
-      schoolId: 1,
+      schoolInfo: tSchoolInfo,
       sold: false,
       description: "description",
       title: "title");
+
+  final tContactForm = ContactForm(
+    name: 'test',
+    from: 'test',
+    sendTo: 'test@gmail.com',
+    subject: 'test',
+    message: 'test'
+  );
 
   setUp(() {
     mockNetworkInfo = MockNetworkInfo();
     mockLocalDataSource = MockLocalDataSource();
     mockRemoteDataSource = MockRemoteDataSource();
-    repository = ArtworkRepositoryImpl(
+    repository = BuyerArtworkRepositoryImpl(
       remoteDataSource: mockRemoteDataSource,
       localDataSource: mockLocalDataSource,
       networkInfo: mockNetworkInfo,
     );
-  });
-
-  group('getArtworkById', () {
-    test('should check if the device is online', () async {
-      //arrange
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      //act
-      repository.getArtworkById(tID);
-      //assert
-      verify(mockNetworkInfo.isConnected);
-    });
-
-    group('device is online', () {
-      setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      });
-
-      test(
-          'should return remote data when the call to remote data source is successful',
-          () async {
-        //arrange
-        when(mockRemoteDataSource.getArtworkById(any))
-            .thenAnswer((_) async => tArtworkModel);
-        //act
-        final result = await repository.getArtworkById(tID);
-        //assert
-        verify(mockRemoteDataSource.getArtworkById(tID));
-        expect(result, equals(Right(tArtworkModel)));
-      });
-
-      test(
-          'should cache the data locally when the call to remote data source is succesful',
-          () async {
-        //arrange
-        when(mockRemoteDataSource.getArtworkById(any))
-            .thenAnswer((_) async => tArtworkModel);
-        //act
-        await repository.getArtworkById(tID);
-        //assert
-        verify(mockRemoteDataSource.getArtworkById(tID));
-        verify(mockLocalDataSource.cacheArtwork(tArtworkModel));
-      });
-
-      test(
-          'should return server failure when the call to remote data source is unsuccesful',
-          () async {
-        //arrange
-        when(mockRemoteDataSource.getArtworkById(any))
-            .thenThrow(ServerException());
-        //act
-        final result = await repository.getArtworkById(tID);
-        //assert
-        verify(mockRemoteDataSource.getArtworkById(tID));
-        verifyZeroInteractions(mockLocalDataSource);
-        expect(result, equals(Left(ServerFailure())));
-      });
-    });
-
-    group('device is offline', () {
-      setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      });
-
-      test(
-          'should return requested locally cached data when cached data is present',
-          () async {
-        //arrange
-        when(mockLocalDataSource.getArtworkById(tID))
-            .thenAnswer((_) async => tArtworkModel);
-        //act
-        final result = await repository.getArtworkById(tID);
-        //assert
-        verifyZeroInteractions(mockRemoteDataSource);
-        verify(mockLocalDataSource.getArtworkById(tID));
-        expect(result, equals(Right(tArtworkModel)));
-      });
-
-      test(
-          'should return CacheFailure when device is offline and no cached data is present',
-          () async {
-        //arrange
-        when(mockLocalDataSource.getArtworkById(tID))
-            .thenThrow(CacheException());
-        //act
-        final result = await repository.getArtworkById(tID);
-        //assert
-        verifyZeroInteractions(mockRemoteDataSource);
-        verify(mockLocalDataSource.getArtworkById(tID));
-        expect(result, equals(Left(CacheFailure())));
-      });
-    });
   });
 
   group('getAllArtwork', () {
@@ -227,4 +153,60 @@ void main() {
       });
     });
   });
+
+  group('contactFormSubmit', () {
+
+    group('device is online', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+
+      test(
+          'should return remote data when the call to remote data source is successful',
+              () async {
+            //arrange
+            when(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm))
+                .thenAnswer((_) async => tContactForm);
+            //act
+            final result = await repository.contactFormConfirmation(contactForm: tContactForm);
+            //assert
+            verify(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm));
+            expect(result, equals(Right(tContactForm)));
+          });
+
+
+      test(
+          'should return server failure when the call to remote data source is unsuccesful',
+              () async {
+            //arrange
+            when(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm)).thenThrow(ServerException());
+            //act
+            final result = await repository.contactFormConfirmation(contactForm: tContactForm);
+            //assert
+            verify(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm));
+            verifyZeroInteractions(mockLocalDataSource);
+            expect(result, equals(Left(ServerFailure())));
+          });
+    });
+
+    group('device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
+
+      test(
+          'should return ServerFailure when device is offline',
+              () async {
+            //arrange
+            when(mockRemoteDataSource.contactFormConfirmation(contactForm: tContactForm)).thenThrow(ServerFailure());
+            //act
+            final result = await repository.contactFormConfirmation(contactForm:tContactForm );
+            //assert
+            expect(result, equals(Left(ServerFailure())));
+          });
+    });
+  });
+
+
+
 }

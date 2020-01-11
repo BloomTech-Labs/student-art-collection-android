@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
-import 'package:student_art_collection/features/buy_art/presentation/page/gallery_screen.dart';
-import 'package:student_art_collection/features/list_art/presentation/page/login_page.dart';
-import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
-import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
-
-import 'core/presentation/page/login_screen.dart';
+import 'package:student_art_collection/core/util/route_generator.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'service_locator.dart' as locator;
 
 void main() async {
@@ -29,13 +24,19 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        SchoolLoginPage.ID: (context) => SchoolLoginPage(),
-        GalleryScreen.ID: (context) => GalleryScreen(),
-        SchoolRegistrationPage.ID: (context) => SchoolRegistrationPage(),
-        StarterScreen.ID: (context) => StarterScreen(),
-        SchoolGalleryPage.ID: (context) => SchoolGalleryPage(),
-      },
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          textTheme: TextTheme(
+            title: TextStyle(color: Colors.black, fontSize: 20),
+          ),
+          iconTheme: IconThemeData(color: Colors.black),
+          color: primaryColor,
+        ),
+        primaryColor: primaryColor,
+        accentColor: accentColor,
+      ),
+      initialRoute: StarterScreen.ID,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

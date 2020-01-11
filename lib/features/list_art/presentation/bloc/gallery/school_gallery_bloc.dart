@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:student_art_collection/core/domain/entity/school.dart';
+import 'package:dartz/dartz.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/get_all_school_art.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
@@ -18,7 +20,7 @@ class SchoolGalleryBloc extends Bloc<SchoolGalleryEvent, SchoolGalleryState> {
   });
 
   @override
-  SchoolGalleryState get initialState => Empty();
+  SchoolGalleryState get initialState => SchoolGalleryEmpty();
 
   @override
   Stream<SchoolGalleryState> mapEventToState(
@@ -33,7 +35,25 @@ class SchoolGalleryBloc extends Bloc<SchoolGalleryEvent, SchoolGalleryState> {
             schoolId: school.id,
           ),
         );
+        yield* _eitherArtworksOrError(artworkResult);
       }
     }
+  }
+
+  Stream<SchoolGalleryState> _eitherArtworksOrError(
+      Either<Failure, List<Artwork>> failureOrArtworks) async* {
+    yield failureOrArtworks.fold(
+      (failure) {
+        if (failure is NetworkFailure) {
+          return SchoolGalleryError(
+              message: 'Check your network connection and try again.');
+        }
+        return SchoolGalleryError(
+            message: 'Something went wrong getting your artworks');
+      },
+      (artworks) {
+        return SchoolGalleryLoaded(artworks: artworks);
+      },
+    );
   }
 }

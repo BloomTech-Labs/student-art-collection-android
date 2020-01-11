@@ -43,3 +43,14 @@ class UserInputFailure extends Failure {
   @override
   List<Object> get props => [message];
 }
+
+class ArtworkInputFailure extends Failure {
+  final String message;
+
+  ArtworkInputFailure({this.message});
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}

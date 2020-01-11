@@ -8,13 +8,13 @@ class ImageModel extends Image {
 
   factory ImageModel.fromJson(Map<String, dynamic> json) {
     return ImageModel(
-      imageId: json[IMAGE_ID],
+      imageId: int.parse(json[IMAGE_ID]),
       artId: json[IMAGE_ART_ID],
       imageUrl: json[IMAGE_URL],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {IMAGE_ID: imageId, IMAGE_ART_ID: artId, IMAGE_URL: imageUrl};
+    return {IMAGE_ID: imageId.toString(), IMAGE_ART_ID: artId, IMAGE_URL: imageUrl};
   }
 }
