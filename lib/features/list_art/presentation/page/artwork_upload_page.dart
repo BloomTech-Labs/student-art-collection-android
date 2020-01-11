@@ -177,6 +177,9 @@ class _UploadWidgetState extends State<UploadWidget> {
     super.initState();
     imageUrls = List();
     if (artwork != null) {
+      artwork.images.forEach((image) {
+        imageUrls.add(image.imageUrl);
+      });
       BlocProvider.of<ArtworkUploadBloc>(context)
           .add(InitializeEditArtworkPageEvent(artwork: artwork));
     }
@@ -223,7 +226,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                       isEditable: true,
                       height: MediaQuery.of(context).size.height * 0.3,
                       imageList: imageUrls,
-                      artwork: artwork,
+                      artwork: null,
                     ),
                     onPressed: () {
                       _getImage();
