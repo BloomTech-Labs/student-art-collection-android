@@ -5,7 +5,8 @@ import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/features/list_art/domain/repository/school_auth_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 
-class MockSchoolAuthRepository extends Mock implements SchoolAuthRepository {}
+import '../../mock/mock_classes.dart';
+import '../../mock/mock_objects.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -16,26 +17,6 @@ void main() {
     mockSchoolAuthRepository = MockSchoolAuthRepository();
     usecase = RegisterNewSchool(mockSchoolAuthRepository);
   });
-
-  final tSchoolToRegister = SchoolToRegister(
-      email: 'test@test.com',
-      password: 'password',
-      schoolName: 'test',
-      address: 'test',
-      city: 'test',
-      state: 'test',
-      zipcode: 'test');
-
-  final tRegisteredSchool = School(
-      id: 1,
-      schoolId: 'test',
-      email: 'test@test.com',
-      password: 'password',
-      schoolName: 'test',
-      address: 'test',
-      city: 'test',
-      state: 'test',
-      zipcode: 'test');
 
   test(
       'should get registered school from repository when school to register is sent',

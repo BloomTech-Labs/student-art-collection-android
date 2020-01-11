@@ -16,3 +16,30 @@ class CacheFailure extends Failure {
   @override
   List<Object> get props => null;
 }
+
+class FirebaseFailure extends Failure {
+  final String message;
+
+  FirebaseFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class NetworkFailure<T> extends Failure {
+  final T cacheData;
+
+  NetworkFailure([this.cacheData]);
+
+  @override
+  List<Object> get props => [cacheData];
+}
+
+class UserInputFailure extends Failure {
+  final String message;
+
+  UserInputFailure({this.message});
+
+  @override
+  List<Object> get props => [message];
+}

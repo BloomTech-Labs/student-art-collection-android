@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/gallery_screen.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/login_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
 
-void main() {
+import 'core/presentation/page/login_screen.dart';
+import 'service_locator.dart' as locator;
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await locator.init();
   runApp(MyApp());
 }
 
@@ -21,7 +30,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        SchoolLoginPage.ID: (context) => SchoolLoginPage(),
+        GalleryScreen.ID: (context) => GalleryScreen(),
+        SchoolRegistrationPage.ID: (context) => SchoolRegistrationPage(),
         StarterScreen.ID: (context) => StarterScreen(),
+        SchoolGalleryPage.ID: (context) => SchoolGalleryPage(),
       },
     );
   }
