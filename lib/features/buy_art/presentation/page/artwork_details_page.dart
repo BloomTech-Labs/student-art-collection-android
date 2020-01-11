@@ -31,9 +31,18 @@ class ArtworkDetailsPage extends StatelessWidget {
           centerTitle: true,
           title: Text(title),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: buildLoaded(screenHeight: screenHeight),
+        body: BlocListener(
+          listener: (context, state){
+            //listener logic
+          },
+          child: BlocBuilder<ArtworkDetailsBloc, ArtworkDetailsState>(
+            builder: (context, state){
+              return  SafeArea(
+                child: SingleChildScrollView(
+                  child: buildLoaded(screenHeight: screenHeight),
+                ),
+              );
+            },
           ),
         ),
       ),
