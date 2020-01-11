@@ -16,7 +16,7 @@ class StarterScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: primaryColor,
           title: Text(
-            AppLocalizations.of(context).translate(AppLocalizations.of(context).translate(TEXT_STARTER_APP_NAME))
+            (AppLocalizations.of(context).translate(TEXT_STARTER_APP_NAME))
             //TEXT_STARTER_APP_NAME,
           ),
         ),
