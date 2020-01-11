@@ -18,6 +18,7 @@ import 'package:student_art_collection/features/list_art/data/mock_data.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 
 abstract class SchoolRemoteDataSource {
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister);
@@ -27,6 +28,8 @@ abstract class SchoolRemoteDataSource {
   Future<List<Artwork>> getArtworksForSchool(int schoolId);
 
   Future<Artwork> uploadArtwork(ArtworkToUpload artwork);
+
+  Future<ReturnedImageUrl> hostImage(File file);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
@@ -88,15 +91,6 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
 
   @override
   Future<Artwork> uploadArtwork(ArtworkToUpload artworkToUpload) async {
-    final imagePaths = List<String>();
-    for (File file in artworkToUpload.imagesToUpload) {
-      imagePaths.add(file.path);
-    }
-    final response = await cloudinaryClient.uploadImages(imagePaths);
-    final imageUrls = List<String>();
-    response.forEach((CloudinaryResponse cReponse) {
-      imageUrls.add(cReponse.url);
-    });
     final MutationOptions options = MutationOptions(
         documentNode: gql(ADD_ARTWORK_MUTATION),
         variables: <String, dynamic>{
@@ -110,7 +104,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
         });
     final QueryResult result = await client.mutate(options);
     final Artwork savedArtwork = convertResultToArtwork(result, 'action');
-    for (String imageUrl in imageUrls) {
+    for (String imageUrl in artworkToUpload.imagesToUpload) {
       final imageToUpload = ImageToUpload(
         artId: savedArtwork.artId,
         imageUrl: imageUrl,
@@ -125,5 +119,11 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
       savedArtwork.images.add(ImageModel.fromJson(imageResult.data['action']));
     }
     return savedArtwork;
+  }
+
+  @override
+  Future<ReturnedImageUrl> hostImage(File file) async {
+    final response = await cloudinaryClient.uploadImage(file.path);
+    return ReturnedImageUrl(imageUrl: response.url);
   }
 }

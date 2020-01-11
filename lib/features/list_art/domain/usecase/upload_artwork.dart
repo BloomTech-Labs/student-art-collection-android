@@ -24,7 +24,7 @@ class ArtworkToUpload extends Equatable {
   final int schoolId, category, price;
   final bool sold;
   final String title, artistName, description;
-  final List<File> imagesToUpload;
+  final List<String> imagesToUpload;
 
   ArtworkToUpload({
     @required this.schoolId,

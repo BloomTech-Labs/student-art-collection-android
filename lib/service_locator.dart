@@ -20,6 +20,7 @@ import 'package:student_art_collection/features/list_art/domain/usecase/login_sc
 import 'package:student_art_collection/features/list_art/domain/usecase/logout_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
@@ -82,6 +83,7 @@ Future init() async {
         sessionManager: sl(),
         uploadArtwork: sl(),
         converter: sl(),
+        hostImage: sl(),
       ));
 
   // Use cases
@@ -92,6 +94,7 @@ Future init() async {
 
   sl.registerLazySingleton(() => GetAllSchoolArt(sl()));
   sl.registerLazySingleton(() => UploadArtwork(sl()));
+  sl.registerLazySingleton(() => HostImage(sl()));
 
   // Repository
   sl.registerLazySingleton<SchoolAuthRepository>(() => FirebaseAuthRepository(

@@ -6,6 +6,7 @@ import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 
 import 'artwork_upload_event.dart';
@@ -14,6 +15,7 @@ import 'package:meta/meta.dart';
 
 class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
   final UploadArtwork uploadArtwork;
+  final HostImage hostImage;
   final InputConverter converter;
   final SessionManager sessionManager;
 
@@ -21,6 +23,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
     @required this.sessionManager,
     @required this.converter,
     @required this.uploadArtwork,
+    @required this.hostImage,
   });
 
   @override
@@ -55,6 +58,16 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
             yield* _eitherUploadedOrErrorState(artworkUploadResult);
           },
         );
+      } else if (event is InitializeEditArtworkPageEvent) {
+        yield EditArtworkInitialState(
+          artwork: event.artwork,
+        );
+      } else if (event is HostImageEvent) {
+        yield ArtworkUploadLoading(
+          message: 'Uploading Image',
+        );
+        final imageHostResult = await hostImage(event.imageFileToHost);
+        yield* _eitherHostedOrErrorState(imageHostResult);
       }
     }
   }
@@ -69,6 +82,19 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
         return ArtworkUploadSuccess(
           artwork: artwork,
         );
+      },
+    );
+  }
+
+  Stream<ArtworkUploadState> _eitherHostedOrErrorState(
+      Either<Failure, ReturnedImageUrl> failureOrImageUrl) async* {
+    yield failureOrImageUrl.fold(
+      (failure) {
+        return ArtworkUploadError(
+            message: 'There was a problem uploading your image');
+      },
+      (imageUrl) {
+        return ImageHostSuccess(imageUrl: imageUrl.imageUrl);
       },
     );
   }
