@@ -393,7 +393,7 @@ class _UploadWidgetState extends State<UploadWidget> {
   }
 
   void populateData(Artwork artwork) {
-    artwork = artwork;
+    this.artwork = artwork;
     title = artwork.title;
     titleTextController.text = artwork.title;
     description = artwork.description;
@@ -406,6 +406,10 @@ class _UploadWidgetState extends State<UploadWidget> {
     categoryTextController.text = artwork.category.categoryName;
     price = artwork.price.toInt();
     priceTextController.text = artwork.price.toInt().toString();
+    imageUrls.clear();
+    artwork.images.forEach((image) {
+      imageUrls.add(image.imageUrl);
+    });
   }
 
   void showSnackBar(BuildContext context, String message) {

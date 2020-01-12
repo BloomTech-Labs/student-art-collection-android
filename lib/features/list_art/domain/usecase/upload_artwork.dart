@@ -26,6 +26,7 @@ class ArtworkToUpload extends Equatable {
   final bool sold;
   final String title, artistName, description;
   final List<String> imagesToUpload;
+  final List<Image> imagesToDelete;
 
   ArtworkToUpload({
     this.artworkToCompare,
@@ -37,6 +38,7 @@ class ArtworkToUpload extends Equatable {
     this.artistName,
     this.description,
     this.imagesToUpload,
+    this.imagesToDelete,
   });
 
   @override

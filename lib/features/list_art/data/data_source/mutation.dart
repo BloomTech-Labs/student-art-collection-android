@@ -126,3 +126,14 @@ const String ADD_IMAGE_TO_ARTWORK_MUTATION = r'''
       }
     }
 ''';
+
+const String DELETE_IMAGE_FROM_ARTWORK = r'''
+  mutation DeleteImage(
+    $id: ID!) {
+      action: deleteImage(
+        id: $id
+      ) {
+        id
+      }
+    }
+''';
