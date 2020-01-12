@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/list_art/presentation/artwork_to_return.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_state.dart';
@@ -15,12 +17,14 @@ import '../../../../service_locator.dart';
 
 class SchoolGalleryPage extends StatelessWidget {
   static const String ID = "schoolgallery";
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SchoolGalleryBloc>(
       create: (context) => sl<SchoolGalleryBloc>(),
       child: Scaffold(
+        key: _scaffoldkey,
         appBar: AppBar(
           title: Text(
             AppLocalizations.of(context)
@@ -49,8 +53,12 @@ class SchoolGalleryPage extends StatelessWidget {
             Icons.add,
           ),
           backgroundColor: accentColor,
-          onPressed: () {
-            Navigator.pushNamed(context, ArtworkUploadPage.ID);
+          onPressed: () async {
+            final result =
+                await Navigator.pushNamed(context, ArtworkUploadPage.ID);
+            if (result is ArtworkToReturn) {
+              showSnackBar(context, result.message);
+            }
           },
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -62,20 +70,36 @@ class SchoolGalleryPage extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              title: Text(AppLocalizations.of(context).translate(TEXT_SCHOOL_GALLERY_HOME_TAG)),
+              title: Text(AppLocalizations.of(context)
+                  .translate(TEXT_SCHOOL_GALLERY_HOME_TAG)),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              title: Text(AppLocalizations.of(context).translate(TEXT_SCHOOL_GALLERY_SEARCH_TAG)),
+              title: Text(AppLocalizations.of(context)
+                  .translate(TEXT_SCHOOL_GALLERY_SEARCH_TAG)),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.message),
-              title: Text(AppLocalizations.of(context).translate(TEXT_SCHOOL_GALLERY_MESSAGES_TAG)),
+              title: Text(AppLocalizations.of(context)
+                  .translate(TEXT_SCHOOL_GALLERY_MESSAGES_TAG)),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+        content: Text(displayLocalizedString(
+      context,
+      message,
+    )));
+    _scaffoldkey.currentState.showSnackBar(snackBar);
+  }
+
+  String displayLocalizedString(BuildContext context, String label) {
+    return AppLocalizations.of(context).translate(label);
   }
 }
 
@@ -88,6 +112,7 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
   @override
   void initState() {
     super.initState();
+    _dispatchGetSchoolArtEvent();
   }
 
   @override
@@ -98,9 +123,13 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
           return GalleryGrid(
             artworkList: state.artworks,
             isStaggered: false,
-            onTap: (artwork) {
-              Navigator.pushNamed(context, ArtworkUploadPage.ID,
+            onTap: (artwork, index) async {
+              final result = await Navigator.pushNamed(
+                  context, ArtworkUploadPage.ID,
                   arguments: artwork);
+              if (result is ArtworkToReturn) {
+                showSnackBar(context, result.message);
+              }
             },
           );
         } else if (state is SchoolGalleryEmpty) {
@@ -115,5 +144,18 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
     BlocProvider.of<SchoolGalleryBloc>(context).add(
       GetAllSchoolArtworkEvent(),
     );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+        content: Text(displayLocalizedString(
+      context,
+      message,
+    )));
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  String displayLocalizedString(BuildContext context, String label) {
+    return AppLocalizations.of(context).translate(label);
   }
 }

@@ -55,6 +55,22 @@ class ArtworkUploadSuccess extends ArtworkUploadState {
       ];
 }
 
+class ArtworkUpdateSuccess extends ArtworkUploadState {
+  final Artwork artwork;
+  final String message;
+
+  ArtworkUpdateSuccess({
+    @required this.artwork,
+    @required this.message,
+  });
+
+  @override
+  List<Object> get props => [
+        artwork,
+        message,
+      ];
+}
+
 class ArtworkDeleteSuccess extends ArtworkUploadState {
   final int artId;
 

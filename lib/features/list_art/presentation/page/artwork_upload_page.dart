@@ -13,6 +13,7 @@ import 'package:student_art_collection/core/presentation/widget/empty_container.
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/list_art/presentation/artwork_to_return.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_state.dart';
@@ -138,10 +139,20 @@ class _UploadWidgetState extends State<UploadWidget> {
     return BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
       listener: (context, state) {
         if (state is ArtworkUploadSuccess) {
-          setState(() {
-            populateData(state.artwork);
-          });
-          showSnackBar(context, state.message);
+          var i = 0;
+          popAndReturn(
+            context,
+            'upload',
+            state.artwork,
+            state.message,
+          );
+        } else if (state is ArtworkUpdateSuccess) {
+          popAndReturn(
+            context,
+            'update',
+            state.artwork,
+            state.message,
+          );
         } else if (state is EditArtworkInitialState) {
           setState(() {
             populateData(state.artwork);
@@ -154,14 +165,12 @@ class _UploadWidgetState extends State<UploadWidget> {
         } else if (state is ArtworkUploadError) {
           showSnackBar(context, state.message);
         } else if (state is ArtworkDeleteSuccess) {
-          if (state.artId == artwork.artId) {
-            showSnackBar(context, TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL);
-          }
-          if (Navigator.canPop(context)) {
-            Navigator.pop(context);
-          } else {
-            SystemNavigator.pop();
-          }
+          popAndReturn(
+            context,
+            'upload',
+            null,
+            TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL,
+          );
         }
       },
       child: SingleChildScrollView(
@@ -484,5 +493,25 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   String displayLocalizedString(String label) {
     return AppLocalizations.of(context).translate(label);
+  }
+
+  void popAndReturn(
+    BuildContext context,
+    String tag,
+    Artwork artwork,
+    String message,
+  ) {
+    if (Navigator.canPop(context)) {
+      var i = 0;
+      Navigator.pop(
+          context,
+          ArtworkToReturn(
+            artwork: artwork,
+            message: message,
+            tag: tag,
+          ));
+    } else {
+      SystemNavigator.pop();
+    }
   }
 }

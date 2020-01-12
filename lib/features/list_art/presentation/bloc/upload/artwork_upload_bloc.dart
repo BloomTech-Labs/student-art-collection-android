@@ -88,7 +88,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
               message: TEXT_ARTWORK_UPLOAD_UPDATING_MESSAGE_LABEL,
             );
             final artworkUpdateResult = await updateArtwork(artwork);
-            yield* _eitherUploadedOrErrorState(
+            yield* _eitherUpdatedOrErrorState(
               artworkUpdateResult,
               TEXT_ARTWORK_UPDATE_SUCCESS_LABEL,
             );
@@ -114,6 +114,21 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
   }
 
   Stream<ArtworkUploadState> _eitherUploadedOrErrorState(
+      Either<Failure, Artwork> failureOrArtwork, String message) async* {
+    yield failureOrArtwork.fold(
+      (failure) {
+        return ArtworkUploadError(message: TEXT_GENERIC_ERROR_MESSAGE_LABEL);
+      },
+      (artwork) {
+        return ArtworkUploadSuccess(
+          artwork: artwork,
+          message: message,
+        );
+      },
+    );
+  }
+
+  Stream<ArtworkUploadState> _eitherUpdatedOrErrorState(
       Either<Failure, Artwork> failureOrArtwork, String message) async* {
     yield failureOrArtwork.fold(
       (failure) {
