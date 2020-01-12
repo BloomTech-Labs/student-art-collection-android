@@ -5,7 +5,7 @@ import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_localization.dart';
 import 'service_locator.dart' as locator;
-
+//test
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await locator.init();
