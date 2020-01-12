@@ -5,6 +5,7 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/delete_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/update_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
@@ -19,6 +20,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
   final UpdateArtwork updateArtwork;
   final UploadArtwork uploadArtwork;
   final HostImage hostImage;
+  final DeleteArtwork deleteArtwork;
   final InputConverter converter;
   final SessionManager sessionManager;
 
@@ -28,6 +30,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
     @required this.converter,
     @required this.uploadArtwork,
     @required this.hostImage,
+    @required this.deleteArtwork,
   });
 
   @override
@@ -101,6 +104,11 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
         );
         final imageHostResult = await hostImage(event.imageFileToHost);
         yield* _eitherHostedOrErrorState(imageHostResult);
+      } else if (event is DeleteArtworkEvent) {
+        yield ArtworkUploadLoading();
+        final deleteResult =
+            await deleteArtwork(ArtworkToDeleteId(artId: event.artId));
+        yield* _eitherDeletedOrErrorState(deleteResult);
       }
     }
   }
@@ -116,6 +124,19 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
           artwork: artwork,
           message: message,
         );
+      },
+    );
+  }
+
+  Stream<ArtworkUploadState> _eitherDeletedOrErrorState(
+      Either<Failure, ArtworkToDeleteId> failureOrId) async* {
+    yield failureOrId.fold(
+      (failure) {
+        return ArtworkUploadError(
+            message: TEXT_ARTWORK_DELETE_ERROR_MESSAGE_LABEL);
+      },
+      (id) {
+        return ArtworkDeleteSuccess(artId: id.artId);
       },
     );
   }

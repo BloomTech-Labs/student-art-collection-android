@@ -137,3 +137,14 @@ const String DELETE_IMAGE_FROM_ARTWORK = r'''
       }
     }
 ''';
+
+const String DELETE_ARTWORK = r'''
+  mutation DeleteArtwork(
+  $id: ID!) {
+    action: deleteArt(
+      id: $id             
+    ) {
+      id
+    }
+  }
+''';

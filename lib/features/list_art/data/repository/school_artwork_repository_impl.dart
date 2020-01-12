@@ -9,6 +9,7 @@ import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/school_remote_data_source.dart';
 import 'package:student_art_collection/features/list_art/domain/repository/school_artwork_repository.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/delete_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/get_all_school_art.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
@@ -86,5 +87,20 @@ class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
 
   Future<bool> _isNetworkAvailable() {
     return networkInfo.isConnected;
+  }
+
+  @override
+  Future<Either<Failure, ArtworkToDeleteId>> deleteArtwork(
+      ArtworkToDeleteId id) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final deletedId = await remoteDataSource.deleteArtwork(id.artId);
+        return Right(deletedId);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 }

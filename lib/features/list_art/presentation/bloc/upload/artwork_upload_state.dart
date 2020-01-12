@@ -55,6 +55,17 @@ class ArtworkUploadSuccess extends ArtworkUploadState {
       ];
 }
 
+class ArtworkDeleteSuccess extends ArtworkUploadState {
+  final int artId;
+
+  ArtworkDeleteSuccess({
+    this.artId,
+  });
+
+  @override
+  List<Object> get props => null;
+}
+
 class ImageHostSuccess extends ArtworkUploadState {
   final String imageUrl;
 

@@ -43,6 +43,8 @@
   "artwork_update_success_label": "Art was successfully updated!",
   "generic_error_message_label": "Something went wrong",
   "generic_image_host_error_message_label": "There was a problem uploading your image",
+  "artwork_uploading_wait_message_label": "Please wait until uploading is complete",
+  "artwork_delete_error_message_label": "There was a problem deleting the artwork",
 
   "registration_app_bar_title": "Register",
   "registration_app_bar_error_state_message": "Error",
