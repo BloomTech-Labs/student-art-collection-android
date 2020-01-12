@@ -10,6 +10,7 @@ import 'package:student_art_collection/features/list_art/domain/usecase/upload_a
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 
+import '../../list_art_text_constants.dart';
 import 'artwork_upload_event.dart';
 import 'artwork_upload_state.dart';
 import 'package:meta/meta.dart';
@@ -55,10 +56,13 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
           },
           (artwork) async* {
             yield ArtworkUploadLoading(
-              message: 'Uploading artwork, please do not close the App.',
+              message: TEXT_ARTWORK_UPLOAD_UPLOADING_MESSAGE_LABEL,
             );
             final artworkUploadResult = await uploadArtwork(artwork);
-            yield* _eitherUploadedOrErrorState(artworkUploadResult);
+            yield* _eitherUploadedOrErrorState(
+              artworkUploadResult,
+              TEXT_ARTWORK_UPLOAD_SUCCESS_LABEL,
+            );
           },
         );
       } else if (event is UpdateArtworkEvent) {
@@ -78,10 +82,13 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
           },
           (artwork) async* {
             yield ArtworkUploadLoading(
-              message: 'Updating artwork, please do not close the App.',
+              message: TEXT_ARTWORK_UPLOAD_UPDATING_MESSAGE_LABEL,
             );
             final artworkUpdateResult = await updateArtwork(artwork);
-            yield* _eitherUploadedOrErrorState(artworkUpdateResult);
+            yield* _eitherUploadedOrErrorState(
+              artworkUpdateResult,
+              TEXT_ARTWORK_UPDATE_SUCCESS_LABEL,
+            );
           },
         );
       } else if (event is InitializeEditArtworkPageEvent) {
@@ -90,7 +97,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
         );
       } else if (event is HostImageEvent) {
         yield ArtworkUploadLoading(
-          message: 'Uploading Image',
+          message: TEXT_IMAGE_UPLOADING_MESSAGE_LABEL,
         );
         final imageHostResult = await hostImage(event.imageFileToHost);
         yield* _eitherHostedOrErrorState(imageHostResult);
@@ -99,15 +106,15 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
   }
 
   Stream<ArtworkUploadState> _eitherUploadedOrErrorState(
-      Either<Failure, Artwork> failureOrArtwork) async* {
+      Either<Failure, Artwork> failureOrArtwork, String message) async* {
     yield failureOrArtwork.fold(
       (failure) {
-        return ArtworkUploadError(message: 'Something went wrong');
+        return ArtworkUploadError(message: TEXT_GENERIC_ERROR_MESSAGE_LABEL);
       },
       (artwork) {
         return ArtworkUploadSuccess(
           artwork: artwork,
-          message: 'Art was successfully uploaded!',
+          message: message,
         );
       },
     );
@@ -118,7 +125,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
     yield failureOrImageUrl.fold(
       (failure) {
         return ArtworkUploadError(
-            message: 'There was a problem uploading your image');
+            message: TEXT_GENERIC_IMAGE_HOST_ERROR_MESSAGE_LABEL);
       },
       (imageUrl) {
         return ImageHostSuccess(imageUrl: imageUrl.imageUrl);

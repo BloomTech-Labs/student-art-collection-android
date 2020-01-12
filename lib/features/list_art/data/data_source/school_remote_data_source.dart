@@ -130,8 +130,22 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   }
 
   @override
-  Future<Artwork> updateArtwork(ArtworkToUpload artwork) {
-    sleep(Duration(seconds: 5));
-    throw ServerException();
+  Future<Artwork> updateArtwork(ArtworkToUpload artworkToUpdate) async {
+    final MutationOptions options = MutationOptions(
+        documentNode: gql(UPDATE_ARTWORK_MUTATION),
+        variables: <String, dynamic>{
+          'id': artworkToUpdate.artworkToCompare.artId,
+          'price': artworkToUpdate.price,
+          'sold': artworkToUpdate.sold,
+          'title': artworkToUpdate.title,
+          'artist_name': artworkToUpdate.artistName,
+          'description': artworkToUpdate.description,
+        });
+    final QueryResult result = await client.mutate(options);
+    if (result.hasException) {
+      throw ServerException();
+    }
+    final Artwork updatedArtwork = convertResultToArtwork(result, 'action');
+    return updatedArtwork;
   }
 }

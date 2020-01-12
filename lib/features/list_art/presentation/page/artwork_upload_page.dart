@@ -10,6 +10,7 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
@@ -17,6 +18,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/uploa
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
+import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
 class ArtworkUploadPage extends StatelessWidget {
@@ -86,26 +88,26 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   List<String> _getPrices() {
     return [
-      '\$5',
-      '\$10',
-      '\$15',
-      '\$20',
-      '\$25',
-      '\$30',
-      '\$35',
-      '\$40',
-      '\$45',
-      '\$50',
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_1),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_2),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_3),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_4),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_5),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_6),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_7),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_8),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_9),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_10),
     ];
   }
 
   List<String> _getCategories() {
     return [
-      'Photography',
-      'Drawing',
-      'Painting',
-      'Sculpture',
-      'Other',
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_1),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_2),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_3),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_4),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_5),
     ];
   }
 
@@ -187,8 +189,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         onChanged: (value) {
                           title = value;
                         },
-                        decoration:
-                            getAuthInputDecoration('Enter Artwork Title'),
+                        decoration: getAuthInputDecoration(
+                            displayLocalizedString(
+                                TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
                       ),
                       SizedBox(height: 10),
                       TextField(
@@ -197,8 +200,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         onChanged: (value) {
                           artistName = value;
                         },
-                        decoration:
-                            getAuthInputDecoration('Enter Student Name'),
+                        decoration: getAuthInputDecoration(
+                            displayLocalizedString(
+                                TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
                       ),
                       SizedBox(height: 10),
                       Stack(
@@ -206,8 +210,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         children: <Widget>[
                           TextField(
                             enabled: false,
-                            decoration:
-                                getAuthInputDecoration('Select Date Created'),
+                            decoration: getAuthInputDecoration(
+                                displayLocalizedString(
+                                    TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
                             controller: dateTextController,
                           ),
                           Positioned(
@@ -234,8 +239,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         children: <Widget>[
                           TextField(
                             enabled: false,
-                            decoration:
-                                getAuthInputDecoration('Select Artwork Price'),
+                            decoration: getAuthInputDecoration(
+                                displayLocalizedString(
+                                    TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
                             controller: priceTextController,
                           ),
                           Positioned(
@@ -263,7 +269,8 @@ class _UploadWidgetState extends State<UploadWidget> {
                           TextField(
                             enabled: false,
                             decoration: getAuthInputDecoration(
-                                'Select Artwork Category'),
+                                displayLocalizedString(
+                                    TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
                             controller: categoryTextController,
                           ),
                           Positioned(
@@ -309,7 +316,8 @@ class _UploadWidgetState extends State<UploadWidget> {
                                   color: accentColor,
                                   textColor: Colors.white,
                                   child: Text(
-                                    'Submit',
+                                    displayLocalizedString(
+                                        TEXT_ARTWORK_UPLOAD_UPLOAD_BUTTON_LABEL),
                                   ),
                                 );
                               }
@@ -401,7 +409,7 @@ class _UploadWidgetState extends State<UploadWidget> {
   }
 
   void showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(content: Text(message));
+    final snackBar = SnackBar(content: Text(displayLocalizedString(message)));
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
@@ -431,5 +439,9 @@ class _UploadWidgetState extends State<UploadWidget> {
   void dispatchImageHost(File file) {
     BlocProvider.of<ArtworkUploadBloc>(context)
         .add(HostImageEvent(imageFileToHost: file));
+  }
+
+  String displayLocalizedString(String label) {
+    return AppLocalizations.of(context).translate(label);
   }
 }
