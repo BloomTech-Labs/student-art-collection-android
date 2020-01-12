@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
+import 'package:student_art_collection/core/presentation/page/login_page.dart';
 import 'package:student_art_collection/core/util/route_generator.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         primaryColor: primaryColor,
         accentColor: accentColor,
       ),
-      initialRoute: StarterScreen.ID,
+      initialRoute: LoginPage.ID,
       onGenerateRoute: RouteGenerator.generateRoute,
       supportedLocales: [
         Locale('en', 'US'),

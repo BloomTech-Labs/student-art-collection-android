@@ -257,7 +257,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
               onPressed: () {
                 artworkDetailsBloc.add(SubmitContactForm(ContactForm(
                     //TODO: replace sendto with artwork.schoolInfo.email after testing
-                    sendTo: emailController.text,
+                    sendTo: artwork.schoolInfo.email,
                     from: emailController.text,
                     message: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_REPLY_TO) + emailController.text + "\n\n" + messageController.text,
                     subject: nameController.text + AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) + artwork.title + " #: " + artwork.artId.toString(),

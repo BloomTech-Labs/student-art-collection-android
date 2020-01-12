@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/core/presentation/page/starter_screen.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/artwork_details_page.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/artwork_upload_page.dart';
-import 'package:student_art_collection/features/list_art/presentation/page/login_page.dart';
+import 'package:student_art_collection/core/presentation/page/login_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
 
@@ -13,8 +12,8 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case SchoolLoginPage.ID:
-        return MaterialPageRoute(builder: (_) => SchoolLoginPage());
+      case LoginPage.ID:
+        return MaterialPageRoute(builder: (_) => LoginPage());
       case GalleryPage.ID:
         return MaterialPageRoute(builder: (_) => GalleryPage());
       case ArtworkDetailsPage.ID:
@@ -29,8 +28,6 @@ class RouteGenerator {
         }
       case SchoolRegistrationPage.ID:
         return MaterialPageRoute(builder: (_) => SchoolRegistrationPage());
-      case StarterScreen.ID:
-        return MaterialPageRoute(builder: (_) => StarterScreen());
       case SchoolGalleryPage.ID:
         return MaterialPageRoute(builder: (_) => SchoolGalleryPage());
       case ArtworkUploadPage.ID:

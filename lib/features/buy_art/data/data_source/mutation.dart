@@ -1,5 +1,5 @@
 const String SUBMIT_CONTACT_FORM_MUTATION = r'''
-  mutation submitContactForm(
+  mutation SubmitContactForm(
     $sendto: String,
     $subject: String,
     $fromUser: String,
