@@ -9,6 +9,9 @@ import 'package:student_art_collection/features/list_art/domain/usecase/upload_i
 
 abstract class SchoolArtworkRepository {
   Future<Either<Failure, List<Artwork>>> getArtworkForSchool(SchoolId schoolId);
-  Future<Either<Failure, Artwork>> uploadArtwork(ArtworkToUpload artwork);
+  Future<Either<Failure, Artwork>> uploadArtwork(
+      ArtworkToUpload artworkToUpload);
   Future<Either<Failure, ReturnedImageUrl>> hostImage(File file);
+  Future<Either<Failure, Artwork>> updateArtwork(
+      ArtworkToUpload artworkToUpdate);
 }

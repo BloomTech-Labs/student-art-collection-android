@@ -1,0 +1,84 @@
+{
+  "starter_app_name": "ArtCo",
+  "starter_login_button": "Login as School Admin",
+  "starter_guest_button": "Continue as Guest",
+
+
+  "login_app_bar_title": "Login",
+  "login_email_address_label": "Enter School Email Address",
+  "login_remember_me_box": "Remember Me",
+  "login_password_label": "Enter your password",
+  "login_login_button": "Login",
+  "login_register_here_label": "Don\"t have an account? Register here!",
+
+
+  "artwork_upload_price_1": "$5",
+  "artwork_upload_price_2": "$10",
+  "artwork_upload_price_3": "$15",
+  "artwork_upload_price_4": "$20",
+  "artwork_upload_price_5": "$25",
+  "artwork_upload_price_6": "$30",
+  "artwork_upload_price_7": "$35",
+  "artwork_upload_price_8": "$40",
+  "artwork_upload_price_9": "$45",
+  "artwork_upload_price_10": "$50",
+
+  "artwork_upload_category_1": "Photography",
+  "artwork_upload_category_2": "Drawing",
+  "artwork_upload_category_3": "Painting",
+  "artwork_upload_category_4": "Sculpture",
+  "artwork_upload_category_5": "Other",
+
+  "artwork_upload_artwork_title_label": "Enter Artwork Title",
+  "artwork_upload_student_name_label": "Enter Student Name",
+  "artwork_upload_date_selection_label": "Select Date Created",
+  "artwork_upload_price_selection_label": "Select Artwork Price",
+  "artwork_upload_category_selection_label": "Select Artwork Category",
+  "artwork_upload_upload_button_label": "Submit",
+
+
+  "registration_app_bar_title": "Register",
+  "registration_app_bar_error_state_message": "Error",
+  "registration_email_label": "Enter Your Email",
+  "registration_password_label": "Enter Your Password",
+  "registration_password_confirmation_label": "Enter Your Password again",
+  "registration_street_address_label": "Enter Your School\"s Street Address",
+  "registration_school_name_label": "Enter Your School\"s Name",
+  "registration_city_label": "Enter Your School\"s City",
+  "registration_state_label": "Enter Your School\"s State",
+  "registration_zipcode_label": "Enter Your School\"s Zipcode",
+
+
+  "school_gallery_app_bar_title": "School Art Gallery",
+  "school_gallery_home_tag": "Home",
+  "school_gallery_search_tag": "Search",
+  "school_gallery_messages_tag": "Messages",
+
+
+  "gallery_app_bar_title": "Gallery",
+  "gallery_error_state_message": "Error",
+
+
+  "artwork_details_top_banner_message": "Want to purchase this piece? Fill out the form below",
+  "artwork_details_untitled_label": "Untitled",
+  "artwork_details_suggested_donation": "Suggested donation: \n $",
+  "artwork_details_name_label": "Name",
+  "artwork_details_email_label": "Email",
+  "artwork_details_message_label": "Message",
+  "artwork_details_reply_to": "Reply to: ",
+  "artwork_details_inquires_about": " Inquires about: ",
+  "artwork_details_submit_button_label": "Submit",
+  "artwork_details_form_submitted_message": "Form Submitted",
+
+
+  "carousel_widget_default_student_name": "Anonymous",
+  "gallery_grid_widget_default_artwork_title": "Untitled"
+}
+
+
+
+
+
+
+
+

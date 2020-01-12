@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
@@ -9,6 +10,7 @@ import 'package:student_art_collection/features/list_art/presentation/page/schoo
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
+import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
 class SchoolRegistrationPage extends StatelessWidget {
@@ -21,7 +23,7 @@ class SchoolRegistrationPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(
-          title: Text('Register'),
+          title: Text(AppLocalizations.of(context).translate(TEXT_REGISTRATION_APP_BAR_TITLE)),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
@@ -42,7 +44,7 @@ class SchoolRegistrationPage extends StatelessWidget {
                 final snackBar = SnackBar(content: Text(state.message));
                 Scaffold.of(context).showSnackBar(snackBar);
               } else if (state is Unauthorized) {
-                print('Error');
+                print(AppLocalizations.of(context).translate(TEXT_REGISTRATION_APP_BAR_ERROR_STATE_MESSAGE));
               }
             },
             child: RegistrationForm()),
@@ -78,7 +80,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 email = value;
               },
-              decoration: getAuthInputDecoration('Enter your email'),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_EMAIL_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -86,7 +88,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 password = value;
               },
-              decoration: getAuthInputDecoration('Enter your password'),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_PASSWORD_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -94,7 +96,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 verifyPassword = value;
               },
-              decoration: getAuthInputDecoration('Enter your password again'),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_PASSWORD_CONFIRMATION_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -103,7 +105,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 address = value;
               },
               decoration:
-                  getAuthInputDecoration('Enter your school\'s street address'),
+                  getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_STREET_ADDRESS_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -111,7 +113,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 schoolName = value;
               },
-              decoration: getAuthInputDecoration('Enter your school\'s name'),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_SCHOOL_NAME_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -119,7 +121,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 city = value;
               },
-              decoration: getAuthInputDecoration('Enter your school\'s city'),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_CITY_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -127,7 +129,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 state = value;
               },
-              decoration: getAuthInputDecoration('Enter your school\'s state'),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_STATE_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -136,7 +138,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 zipcode = value;
               },
               decoration:
-                  getAuthInputDecoration('Enter your school\'s zipcode'),
+                  getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_ZIPCODE_LABEL)),
             ),
             SizedBox(height: 10),
             RaisedButton(
