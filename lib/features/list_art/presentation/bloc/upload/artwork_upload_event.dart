@@ -65,6 +65,17 @@ class UpdateArtworkEvent extends ArtworkUploadEvent {
       ];
 }
 
+class DeleteArtworkEvent extends ArtworkUploadEvent {
+  final int artId;
+
+  DeleteArtworkEvent({
+    this.artId,
+  });
+
+  @override
+  List<Object> get props => null;
+}
+
 class InitializeEditArtworkPageEvent extends ArtworkUploadEvent {
   final Artwork artwork;
 

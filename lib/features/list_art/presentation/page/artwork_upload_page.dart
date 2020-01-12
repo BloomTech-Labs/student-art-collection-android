@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,9 +13,11 @@ import 'package:student_art_collection/core/presentation/widget/empty_container.
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/list_art/presentation/artwork_to_return.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/list_art_text_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
@@ -136,10 +139,20 @@ class _UploadWidgetState extends State<UploadWidget> {
     return BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
       listener: (context, state) {
         if (state is ArtworkUploadSuccess) {
-          setState(() {
-            populateData(state.artwork);
-          });
-          showSnackBar(context, state.message);
+          var i = 0;
+          popAndReturn(
+            context,
+            'upload',
+            state.artwork,
+            state.message,
+          );
+        } else if (state is ArtworkUpdateSuccess) {
+          popAndReturn(
+            context,
+            'update',
+            state.artwork,
+            state.message,
+          );
         } else if (state is EditArtworkInitialState) {
           setState(() {
             populateData(state.artwork);
@@ -151,6 +164,13 @@ class _UploadWidgetState extends State<UploadWidget> {
         } else if (state is ArtworkUploadLoading) {
         } else if (state is ArtworkUploadError) {
           showSnackBar(context, state.message);
+        } else if (state is ArtworkDeleteSuccess) {
+          popAndReturn(
+            context,
+            'upload',
+            null,
+            TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL,
+          );
         }
       },
       child: SingleChildScrollView(
@@ -163,18 +183,37 @@ class _UploadWidgetState extends State<UploadWidget> {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
-                  child: OutlineButton(
-                    child: CarouselImageViewer(
-                      isEditable: true,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      imageList: imageUrls,
-                      artwork: null,
-                    ),
-                    onPressed: () {
-                      _getImage();
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
+                  child: Stack(
+                    children: <Widget>[
+                      OutlineButton(
+                        child: CarouselImageViewer(
+                          isEditable: true,
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          imageList: imageUrls,
+                          artwork: null,
+                        ),
+                        onPressed: () {
+                          _getImage();
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      Positioned(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: accentColor,
+                          ),
+                          iconSize: 40,
+                          onPressed: () {
+                            _getImage();
+                          },
+                        ),
+                        bottom: 0,
+                        left: 0,
+                      )
+                    ],
                   ),
                 ),
                 Flexible(
@@ -292,35 +331,35 @@ class _UploadWidgetState extends State<UploadWidget> {
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: FloatingActionButton(
+                                heroTag: 'delete_button',
+                                onPressed: () {
+                                  dispatchDelete();
+                                },
+                                backgroundColor: accentColor,
+                                child: Icon(Icons.delete)),
+                          ),
                           BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(
                             builder: (context, state) {
-                              if (state is ArtworkUploadLoading) {
-                                return RaisedButton(
-                                  onPressed: () {
-                                    showSnackBar(context,
-                                        'Please wait until images are uploaded');
-                                  },
-                                  color: accentColor,
-                                  textColor: Colors.white,
-                                  child: Text(
-                                    'Submit',
-                                  ),
-                                );
-                              } else {
-                                return RaisedButton(
-                                  onPressed: () {
-                                    dispatchUploadOrUpdate();
-                                  },
-                                  color: accentColor,
-                                  textColor: Colors.white,
-                                  child: Text(
-                                    displayLocalizedString(
-                                        TEXT_ARTWORK_UPLOAD_UPLOAD_BUTTON_LABEL),
-                                  ),
-                                );
-                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: FloatingActionButton(
+                                    heroTag: 'save_button',
+                                    onPressed: () {
+                                      if (state is ArtworkUploadLoading) {
+                                        showSnackBar(context,
+                                            TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL);
+                                      } else {
+                                        dispatchUploadOrUpdate();
+                                      }
+                                    },
+                                    backgroundColor: accentColor,
+                                    child: Icon(Icons.check)),
+                              );
                             },
                           ),
                         ],
@@ -445,7 +484,34 @@ class _UploadWidgetState extends State<UploadWidget> {
         .add(HostImageEvent(imageFileToHost: file));
   }
 
+  void dispatchDelete() {
+    if (artwork != null) {
+      BlocProvider.of<ArtworkUploadBloc>(context)
+          .add(DeleteArtworkEvent(artId: artwork.artId));
+    }
+  }
+
   String displayLocalizedString(String label) {
     return AppLocalizations.of(context).translate(label);
+  }
+
+  void popAndReturn(
+    BuildContext context,
+    String tag,
+    Artwork artwork,
+    String message,
+  ) {
+    if (Navigator.canPop(context)) {
+      var i = 0;
+      Navigator.pop(
+          context,
+          ArtworkToReturn(
+            artwork: artwork,
+            message: message,
+            tag: tag,
+          ));
+    } else {
+      SystemNavigator.pop();
+    }
   }
 }

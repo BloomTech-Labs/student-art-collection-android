@@ -27,7 +27,7 @@ class GalleryGrid extends StatelessWidget {
   final EdgeInsets padding;
   final int mainAxisSpacing;
   final int crossAxisSpacing;
-  final Function(aw.Artwork) onTap;
+  final Function(aw.Artwork, int index) onTap;
   final bool heroOnURL;
 
   const GalleryGrid(
@@ -37,7 +37,8 @@ class GalleryGrid extends StatelessWidget {
       this.padding,
       this.mainAxisSpacing,
       this.crossAxisSpacing,
-      this.onTap, this.heroOnURL})
+      this.onTap,
+      this.heroOnURL})
       : super(key: key);
 
   @override
@@ -58,7 +59,7 @@ class GalleryGrid extends StatelessWidget {
         itemCount: validatedArtworkList.length,
         itemBuilder: (BuildContext context, int index) => GridTile(
           artwork: validatedArtworkList[index],
-          onTap: onTap,
+          onTap: (artwork) => onTap(artwork, index),
           heroOnURL: heroOnURL,
         ),
         staggeredTileBuilder: (int index) {
@@ -107,7 +108,10 @@ class GridTile extends StatelessWidget {
     double cornerRadius =
         setCornerRadius == null ? cardCornerRadius : setCornerRadius;
 
-    String title = artwork.title != '' ? artwork.title : AppLocalizations.of(context).translate(TEXT_GALLERY_GRID_WIDGET_DEFAULT_ARTWORK_TITLE);
+    String title = artwork.title != ''
+        ? artwork.title
+        : AppLocalizations.of(context)
+            .translate(TEXT_GALLERY_GRID_WIDGET_DEFAULT_ARTWORK_TITLE);
 
     title = title.length > 13 ? title.substring(0, 13) + '...' : title;
 
