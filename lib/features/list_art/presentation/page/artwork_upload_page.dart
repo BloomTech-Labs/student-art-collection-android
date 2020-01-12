@@ -154,6 +154,9 @@ class _UploadWidgetState extends State<UploadWidget> {
         } else if (state is ArtworkUploadError) {
           showSnackBar(context, state.message);
         } else if (state is ArtworkDeleteSuccess) {
+          if (state.artId == artwork.artId) {
+            showSnackBar(context, TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL);
+          }
           if (Navigator.canPop(context)) {
             Navigator.pop(context);
           } else {
@@ -171,18 +174,37 @@ class _UploadWidgetState extends State<UploadWidget> {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
-                  child: OutlineButton(
-                    child: CarouselImageViewer(
-                      isEditable: true,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      imageList: imageUrls,
-                      artwork: null,
-                    ),
-                    onPressed: () {
-                      _getImage();
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
+                  child: Stack(
+                    children: <Widget>[
+                      OutlineButton(
+                        child: CarouselImageViewer(
+                          isEditable: true,
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          imageList: imageUrls,
+                          artwork: null,
+                        ),
+                        onPressed: () {
+                          _getImage();
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      Positioned(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: accentColor,
+                          ),
+                          iconSize: 40,
+                          onPressed: () {
+                            _getImage();
+                          },
+                        ),
+                        bottom: 0,
+                        left: 0,
+                      )
+                    ],
                   ),
                 ),
                 Flexible(

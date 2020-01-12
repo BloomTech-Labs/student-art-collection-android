@@ -12,3 +12,5 @@ const TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL =
     'artwork_uploading_wait_message_label';
 const TEXT_ARTWORK_DELETE_ERROR_MESSAGE_LABEL =
     'artwork_delete_error_message_label';
+const TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL =
+    'artwork_delete_success_message_label';
