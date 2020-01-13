@@ -7,7 +7,6 @@ const String ADD_SCHOOL_MUTATION = r'''
     $email: String!,
     $address: String!,
     $city: String!,
-    $state: String!,
     $zipcode: String!) {
       action: addSchool(
         school_id: $schoolId,
@@ -15,9 +14,9 @@ const String ADD_SCHOOL_MUTATION = r'''
         email: $email,
         address: $address,
         city: $city,
-        state: $state,
         zipcode: $zipcode
        ) {
+        id,
         school_id,
         school_name,
         email, 

@@ -38,8 +38,10 @@ class LoginPage extends StatelessWidget {
             if (state is Authorized) {
               Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
             } else if (state is SchoolAuthError) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
+              if (state.message != null) {
+                final snackBar = SnackBar(content: Text(state.message));
+                Scaffold.of(context).showSnackBar(snackBar);
+              }
             }
           },
           child: LayoutBuilder(builder:
@@ -312,13 +314,15 @@ class _LoginFormState extends State<LoginForm> {
       right: 16,
       bottom: position,
       child: Container(
-        child: RaisedButton(
-          padding: EdgeInsets.all(8),
-          onPressed: onTap,
-          elevation: 10,
-          color: accentColor,
-          shape: CircleBorder(),
-          child: icon,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FloatingActionButton(
+            backgroundColor: accentColor,
+            onPressed: onTap,
+            elevation: 10,
+            shape: CircleBorder(),
+            child: icon,
+          ),
         ),
       ),
     );

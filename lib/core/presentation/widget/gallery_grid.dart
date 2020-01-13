@@ -28,22 +28,28 @@ class GalleryGrid extends StatelessWidget {
   final int mainAxisSpacing;
   final int crossAxisSpacing;
   final Function(aw.Artwork, int index) onTap;
-  final bool heroOnURL;
+  final bool heroOnURL, showEmptyArtworks;
 
-  const GalleryGrid(
-      {Key key,
-      @required this.artworkList,
-      @required this.isStaggered,
-      this.padding,
-      this.mainAxisSpacing,
-      this.crossAxisSpacing,
-      this.onTap,
-      this.heroOnURL})
-      : super(key: key);
+  const GalleryGrid({
+    Key key,
+    @required this.artworkList,
+    @required this.isStaggered,
+    this.padding,
+    this.mainAxisSpacing,
+    this.crossAxisSpacing,
+    this.onTap,
+    this.heroOnURL,
+    this.showEmptyArtworks = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<aw.Artwork> validatedArtworkList = artworkValidation(artworkList);
+    List<aw.Artwork> validatedArtworkList;
+    if (showEmptyArtworks) {
+      validatedArtworkList = artworkList;
+    } else {
+      validatedArtworkList = artworkValidation(artworkList);
+    }
     List<int> sizeList = [];
     for (int i = 0; i < validatedArtworkList.length; i++) {
       sizeList.add(randomInRange(
@@ -131,11 +137,15 @@ class GridTile extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color:
-                            borderColor == null ? gridBorderColor : borderColor),
+                        color: borderColor == null
+                            ? gridBorderColor
+                            : borderColor),
                     borderRadius: BorderRadius.circular(cornerRadius),
                     image: DecorationImage(
-                      image: NetworkImage(artwork.images[0].imageUrl),
+                      image: artwork.images.length > 0
+                          ? NetworkImage(artwork.images[0].imageUrl)
+                          : NetworkImage(
+                              'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
                       fit: BoxFit.cover,
                     ),
                   ),

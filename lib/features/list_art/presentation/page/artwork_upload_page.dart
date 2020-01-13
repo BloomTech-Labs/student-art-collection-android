@@ -166,7 +166,7 @@ class _UploadWidgetState extends State<UploadWidget> {
         } else if (state is ArtworkDeleteSuccess) {
           popAndReturn(
             context,
-            'upload',
+            'delete',
             null,
             TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL,
           );

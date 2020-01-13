@@ -9,9 +9,14 @@ import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 import 'artwork_details_page.dart';
 
-class GalleryPage extends StatelessWidget {
+class GalleryPage extends StatefulWidget {
   static const ID = "/gallery";
 
+  @override
+  _GalleryPageState createState() => _GalleryPageState();
+}
+
+class _GalleryPageState extends State<GalleryPage> {
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -84,7 +89,7 @@ class GalleryPage extends StatelessWidget {
     final snackBar = SnackBar(
       content: Text(
         displayLocalizedString(
-          context,
+          _scaffoldkey.currentContext,
           message,
         ),
         textAlign: TextAlign.center,
