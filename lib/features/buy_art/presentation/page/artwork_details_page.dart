@@ -8,6 +8,7 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
@@ -273,10 +274,9 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
             width: 90,
             height: 40,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(cardCornerRadius)),
-            child: FlatButton(
+            child: MaterialButton(
+              elevation: 5,
+              color: accentColor,
               onPressed: () {
                 artworkDetailsBloc.add(SubmitContactForm(ContactForm(
                     sendTo: artwork.schoolInfo.email,
@@ -295,7 +295,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                     name: nameController.text)));
               },
               child: Text(displayLocalizedString(
-                  context, TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL)),
+                  context, TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL), style: TextStyle(color: Colors.white),),
             ),
           ),
         )

@@ -13,6 +13,7 @@ const TEXT_LOGIN_DIVIDER_TEXT         = 'login_divider_text';
 const TEXT_LOGIN_REGISTER_HERE_PREFIX = 'login_register_here_prefix'; //'Not a member yet? \n    Sign Up '
 const TEXT_LOGIN_REGISTER_HERE_MAIN   = 'login_register_here_main'; //'here!"
 const TEXT_LOGIN_REGISTER_HERE_SUFFIX = 'login_register_here_suffix'; //'\n     Schools Only'
+const TEXT_LOGIN_LOGIN_BUTTON         = 'login_login_button';
 
 //Artwork Upload Page
 const TEXT_ARTWORK_UPLOAD_PRICE_1 = 'artwork_upload_price_1';
@@ -50,6 +51,7 @@ const TEXT_REGISTRATION_SCHOOL_NAME_LABEL           = 'registration_school_name_
 const TEXT_REGISTRATION_CITY_LABEL                  = 'registration_city_label';
 const TEXT_REGISTRATION_STATE_LABEL                 = 'registration_state_label';
 const TEXT_REGISTRATION_ZIPCODE_LABEL               = 'registration_zipcode_label';
+const TEXT_REGISTRATION_BUTTON_LABEL                = 'registration_button_label';
 
 //School Gallery Page
 const TEXT_SCHOOL_GALLERY_APP_BAR_TITLE = 'school_gallery_app_bar_title';

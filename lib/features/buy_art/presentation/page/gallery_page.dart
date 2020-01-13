@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
-import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
@@ -103,4 +102,5 @@ class _GalleryPageState extends State<GalleryPage> {
     final galleryBloc = BlocProvider.of<GalleryBloc>(context);
     galleryBloc.add(GetArtworkList());
   }
+
 }
