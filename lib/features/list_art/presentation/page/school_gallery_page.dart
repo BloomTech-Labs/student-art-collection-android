@@ -16,9 +16,16 @@ import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
-class SchoolGalleryPage extends StatelessWidget {
+class SchoolGalleryPage extends StatefulWidget {
   static const String ID = "schoolgallery";
+
+  @override
+  _SchoolGalleryPageState createState() => _SchoolGalleryPageState();
+}
+
+class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  List<Artwork> artworks;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +54,38 @@ class SchoolGalleryPage extends StatelessWidget {
           listener: (context, state) {
             if (state is SchoolGalleryLoaded) {}
           },
-          child: ArtworkGallery(),
+          child: BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
+            builder: (context, state) {
+              if (state is SchoolGalleryLoaded) {
+                artworks = state.artworks;
+                return GalleryGrid(
+                  showEmptyArtworks: true,
+                  artworkList: artworks,
+                  isStaggered: false,
+                  onTap: (artwork, index) async {
+                    final result = await Navigator.pushNamed(
+                        context, ArtworkUploadPage.ID,
+                        arguments: artwork);
+                    if (result is ArtworkToReturn) {
+                      showSnackBar(context, result.message);
+                      if (result.tag == 'update') {
+                        setState(() {
+                          artworks[index] = result.artwork;
+                        });
+                      } else if (result.tag == 'delete') {
+                        setState(() {
+                          artworks.removeAt(index);
+                        });
+                      }
+                    }
+                  },
+                );
+              } else if (state is SchoolGalleryEmpty) {
+                _dispatchGetSchoolArtEvent(context);
+              }
+              return EmptyContainer();
+            },
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
@@ -61,6 +99,9 @@ class SchoolGalleryPage extends StatelessWidget {
                 await Navigator.pushNamed(context, ArtworkUploadPage.ID);
             if (result is ArtworkToReturn) {
               showSnackBar(context, result.message);
+              setState(() {
+                artworks.add(result.artwork);
+              });
             }
           },
         ),
@@ -84,58 +125,7 @@ class SchoolGalleryPage extends StatelessWidget {
     );
   }
 
-  void showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-        content: Text(displayLocalizedString(
-      context,
-      message,
-    )));
-    _scaffoldkey.currentState.showSnackBar(snackBar);
-  }
-
-  String displayLocalizedString(BuildContext context, String label) {
-    return AppLocalizations.of(context).translate(label);
-  }
-}
-
-class ArtworkGallery extends StatefulWidget {
-  @override
-  _ArtworkGalleryState createState() => _ArtworkGalleryState();
-}
-
-class _ArtworkGalleryState extends State<ArtworkGallery> {
-  @override
-  void initState() {
-    super.initState();
-    _dispatchGetSchoolArtEvent();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
-      builder: (context, state) {
-        if (state is SchoolGalleryLoaded) {
-          return GalleryGrid(
-            artworkList: state.artworks,
-            isStaggered: false,
-            onTap: (artwork, index) async {
-              final result = await Navigator.pushNamed(
-                  context, ArtworkUploadPage.ID,
-                  arguments: artwork);
-              if (result is ArtworkToReturn) {
-                showSnackBar(context, result.message);
-              }
-            },
-          );
-        } else if (state is SchoolGalleryEmpty) {
-          _dispatchGetSchoolArtEvent();
-        }
-        return EmptyContainer();
-      },
-    );
-  }
-
-  void _dispatchGetSchoolArtEvent() {
+  void _dispatchGetSchoolArtEvent(BuildContext context) {
     BlocProvider.of<SchoolGalleryBloc>(context).add(
       GetAllSchoolArtworkEvent(),
     );
@@ -148,7 +138,7 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
           context,
           message,
         )));
-    Scaffold.of(context).showSnackBar(snackBar);
+    _scaffoldkey.currentState.showSnackBar(snackBar);
   }
 
   String displayLocalizedString(BuildContext context, String label) {
