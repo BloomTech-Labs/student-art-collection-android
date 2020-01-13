@@ -43,7 +43,6 @@ class SchoolModel extends School {
       SCHOOL_NAME: schoolName,
       SCHOOL_ADDRESS: address,
       SCHOOL_CITY: city,
-      SCHOOL_STATE: state,
       SCHOOL_ZIPCODE: zipcode
     };
   }
