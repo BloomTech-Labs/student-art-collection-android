@@ -161,7 +161,10 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
     return Positioned(
       child: Container(
         child: Text(
-          artistName == "" ? AppLocalizations.of(context).translate(TEXT_CAROUSEL_WIDGET_DEFAULT_STUDENT_NAME) : artistName,
+          artistName == ""
+              ? AppLocalizations.of(context)
+                  .translate(TEXT_CAROUSEL_WIDGET_DEFAULT_STUDENT_NAME)
+              : artistName,
           style: TextStyle(color: Colors.white),
         ),
         decoration: BoxDecoration(
