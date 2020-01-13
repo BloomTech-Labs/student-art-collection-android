@@ -4,7 +4,6 @@ import 'package:student_art_collection/core/presentation/widget/build_loading.da
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
-import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 import '../../../../app_localization.dart';
@@ -14,11 +13,14 @@ import 'artwork_details_page.dart';
 class GalleryPage extends StatelessWidget {
   static const ID = "/gallery";
 
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GalleryBloc>(
       create: (context) => sl<GalleryBloc>(),
       child: Scaffold(
+        key: _scaffoldkey,
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           centerTitle: true,
@@ -76,10 +78,30 @@ class GalleryPage extends StatelessWidget {
     return GalleryGrid(
       artworkList: artworkList,
       isStaggered: true,
-      onTap: (artwork, index) {
-        Navigator.pushNamed(context, ArtworkDetailsPage.ID, arguments: artwork);
+      onTap: (artwork, index) async {
+        final result = await Navigator.pushNamed(context, ArtworkDetailsPage.ID,
+            arguments: artwork);
+        if (result != null) {
+          showSnackBar(context, result);
+        }
       },
     );
+  }
+
+  String displayLocalizedString(BuildContext context, String label) {
+    return AppLocalizations.of(context).translate(label);
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        displayLocalizedString(
+          context,
+          message,
+        ), textAlign: TextAlign.center,
+      ),
+    );
+    _scaffoldkey.currentState.showSnackBar(snackBar);
   }
 
   void getArtworkList(BuildContext context) {
