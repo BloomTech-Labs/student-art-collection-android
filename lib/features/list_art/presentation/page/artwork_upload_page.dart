@@ -36,6 +36,12 @@ class ArtworkUploadPage extends StatelessWidget {
       create: (context) => sl<ArtworkUploadBloc>(),
       child: Scaffold(
         appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {},
+            )
+          ],
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(

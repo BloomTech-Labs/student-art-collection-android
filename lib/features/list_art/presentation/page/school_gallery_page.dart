@@ -31,7 +31,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
 
   List<Artwork> artworks;
 
-  void _select(Choice choice) {
+  void _select(SchoolGalleryChoice choice) {
     if (choice.title == 'Logout') {
       _dispatchLogoutEvent();
     }
@@ -45,11 +45,11 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
         key: _scaffoldkey,
         appBar: AppBar(
           actions: <Widget>[
-            PopupMenuButton<Choice>(
+            PopupMenuButton<SchoolGalleryChoice>(
               onSelected: _select,
               itemBuilder: (context) {
-                return choices.map((Choice choice) {
-                  return PopupMenuItem<Choice>(
+                return schoolGalleryChoices.map((SchoolGalleryChoice choice) {
+                  return PopupMenuItem<SchoolGalleryChoice>(
                     value: choice,
                     child: Text(choice.title),
                   );
@@ -180,13 +180,14 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   }
 }
 
-class Choice {
-  const Choice({this.title, this.icon});
+class SchoolGalleryChoice {
+  const SchoolGalleryChoice({this.title, this.icon});
 
   final String title;
   final IconData icon;
 }
 
-const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Logout', icon: Icons.local_gas_station),
+const List<SchoolGalleryChoice> schoolGalleryChoices =
+    const <SchoolGalleryChoice>[
+  const SchoolGalleryChoice(title: 'Logout', icon: Icons.local_gas_station),
 ];
