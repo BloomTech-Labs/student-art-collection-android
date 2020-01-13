@@ -216,20 +216,6 @@ void main() {
   });
 
   group('loginSchoolOnReturn', () {
-    test(
-        'should login school on return when user exists and has not logged out',
-        () async {
-      when(mockFirebaseAuth.currentUser())
-          .thenAnswer((_) async => mockFirebaseUser);
-      when(mockRemoteDataSource.loginSchool(any))
-          .thenAnswer(((_) async => tRegisteredSchool));
-
-      final result = await repository.loginSchoolOnReturn();
-
-      verify(mockFirebaseAuth.currentUser());
-      expect(result, Right(tRegisteredSchool));
-    });
-
     test('should return FirebaseFailure when unable to login school on return',
         () async {
       when(mockFirebaseAuth.currentUser()).thenAnswer((_) async => null);
@@ -238,20 +224,6 @@ void main() {
 
       verify(mockFirebaseAuth.currentUser());
       expect(result, Left(FirebaseFailure(LOGIN_ON_RETURN_ERROR)));
-    });
-
-    test(
-        'should return ServerFailure and logout firebase user when server does not return school',
-        () async {
-      when(mockRemoteDataSource.loginSchool(any)).thenThrow(ServerException());
-      when(mockFirebaseAuth.currentUser())
-          .thenAnswer((_) async => mockFirebaseUser);
-      when(mockFirebaseUser.uid).thenReturn('test');
-
-      final result = await repository.loginSchoolOnReturn();
-
-      verify(mockFirebaseAuth.currentUser());
-      expect(result, Left(ServerFailure()));
     });
   });
 }

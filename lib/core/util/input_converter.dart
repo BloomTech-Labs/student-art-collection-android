@@ -14,7 +14,6 @@ class InputConverter {
     password: String,
     shouldRemember: bool,
   }) {
-    var i = 0;
     return Right(Credentials(
       email: email,
       password: password,

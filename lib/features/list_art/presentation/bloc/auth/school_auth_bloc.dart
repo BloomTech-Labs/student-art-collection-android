@@ -86,7 +86,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
     if (event is LoginOnReturnEvent) {
       yield SchoolAuthLoading();
       final loginResult = await loginSchoolOnReturn(NoParams());
-      yield* _eitherAuthorizedOrErrorState(loginResult);
+      yield* _eitherAuthorizedOrErrorReturn(loginResult);
     }
     if (event is LogoutSchool) {
       yield SchoolAuthLoading();
@@ -119,6 +119,30 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
     );
   }
 
+  Stream<SchoolAuthState> _eitherAuthorizedOrErrorReturn(
+      Either<Failure, String> failureOrSchool) async* {
+    yield failureOrSchool.fold(
+      (failure) {
+        if (failure is FirebaseFailure)
+          return SchoolAuthError(message: failure.message);
+        return SchoolAuthError(message: 'Something went wrong');
+      },
+      (uid) {
+        final school = School(
+          id: sl<SharedPreferences>().getInt('id' ?? ''),
+          schoolId: sl<SharedPreferences>().getString('uid' ?? ''),
+          email: sl<SharedPreferences>().getString('schoolEmail' ?? ''),
+          address: sl<SharedPreferences>().getString('address' ?? ''),
+          city: sl<SharedPreferences>().getString('city' ?? ''),
+          state: sl<SharedPreferences>().getString('state' ?? ''),
+          zipcode: sl<SharedPreferences>().getString('zipcode' ?? ''),
+        );
+        sessionManager.currentUser = Authorized(school: school);
+        return sessionManager.currentUser;
+      },
+    );
+  }
+
   void storeUserCredentials(String email, String password) {
     sl<SharedPreferences>().setString('email', email);
     sl<SharedPreferences>().setString('password', password);
@@ -128,8 +152,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
     final currentUser = sessionManager.currentUser;
     if (currentUser is Authorized) {
       sl<SharedPreferences>().setInt('id', currentUser.school.id);
-      sl<SharedPreferences>()
-          .setString('schoolId', currentUser.school.schoolId);
+      sl<SharedPreferences>().setString('uid', currentUser.school.schoolId);
       sl<SharedPreferences>()
           .setString('schoolName', currentUser.school.schoolName);
       sl<SharedPreferences>()

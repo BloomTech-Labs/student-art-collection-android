@@ -84,6 +84,10 @@ class _LoginFormState extends State<LoginForm> {
     ));
   }
 
+  void dispatchLoginOnReturn() {
+    BlocProvider.of<SchoolAuthBloc>(context).add(LoginOnReturnEvent());
+  }
+
   void dispatchRegistration() {
     Navigator.pushNamed(context, SchoolRegistrationPage.ID);
   }

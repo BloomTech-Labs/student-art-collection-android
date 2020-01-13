@@ -82,13 +82,12 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
   }
 
   @override
-  Future<Either<Failure, School>> loginSchoolOnReturn() async {
+  Future<Either<Failure, String>> loginSchoolOnReturn() async {
     try {
       final currentUser = await firebaseAuth.currentUser();
       if (currentUser == null)
         return Left(FirebaseFailure(LOGIN_ON_RETURN_ERROR));
-      final school = await remoteDataSource.loginSchool(currentUser.uid);
-      return Right(school);
+      return Right(currentUser.uid);
     } on PlatformException catch (e) {
       return Left(FirebaseFailure(e.message));
     } on ServerException {
