@@ -28,8 +28,7 @@ class GalleryGrid extends StatelessWidget {
   final int mainAxisSpacing;
   final int crossAxisSpacing;
   final Function(aw.Artwork, int index) onTap;
-  final bool heroOnURL;
-  final bool showEmptyArtworks;
+  final bool heroOnURL, showEmptyArtworks;
 
   const GalleryGrid({
     Key key,
@@ -49,7 +48,7 @@ class GalleryGrid extends StatelessWidget {
     if (showEmptyArtworks) {
       validatedArtworkList = artworkList;
     } else {
-      artworkValidation(artworkList);
+      validatedArtworkList = artworkValidation(artworkList);
     }
     List<int> sizeList = [];
     for (int i = 0; i < validatedArtworkList.length; i++) {
@@ -133,18 +132,22 @@ class GridTile extends StatelessWidget {
         child: Center(
           child: Stack(
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color:
-                          borderColor == null ? gridBorderColor : borderColor),
-                  borderRadius: BorderRadius.circular(cornerRadius),
-                  image: DecorationImage(
-                    image: artwork.images.length > 0
-                        ? NetworkImage(artwork.images[0].imageUrl)
-                        : NetworkImage(
-                            'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
-                    fit: BoxFit.cover,
+              Hero(
+                tag: "tagImage" + artwork.artId.toString(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: borderColor == null
+                            ? gridBorderColor
+                            : borderColor),
+                    borderRadius: BorderRadius.circular(cornerRadius),
+                    image: DecorationImage(
+                      image: artwork.images.length > 0
+                          ? NetworkImage(artwork.images[0].imageUrl)
+                          : NetworkImage(
+                              'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -164,9 +167,12 @@ class GridTile extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(bottom: 10),
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  title,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                child: Hero(
+                  tag: "tagText" + artwork.artId.toString(),
+                  child: Text(
+                    title,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               )
             ],

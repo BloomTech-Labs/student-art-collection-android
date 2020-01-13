@@ -38,8 +38,10 @@ class LoginPage extends StatelessWidget {
             if (state is Authorized) {
               Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
             } else if (state is SchoolAuthError) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
+              if (state.message != null) {
+                final snackBar = SnackBar(content: Text(state.message));
+                Scaffold.of(context).showSnackBar(snackBar);
+              }
             }
           },
           child: LayoutBuilder(builder:
