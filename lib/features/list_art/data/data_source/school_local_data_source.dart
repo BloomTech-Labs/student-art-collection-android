@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:meta/meta.dart';
 import 'package:student_art_collection/core/error/exception.dart';
+import 'package:student_art_collection/core/util/entity_constants.dart';
 
 abstract class SchoolLocalDataSource {
   Future<School> getCurrentlyStoredSchool(String uid);
@@ -20,20 +21,30 @@ class SharedPrefsLocalDataSource implements SchoolLocalDataSource {
 
   @override
   Future<School> getCurrentlyStoredSchool(String uid) async {
-    final schoolUid = sharedPrefs.getString('school' ?? 'error');
+    final schoolUid = sharedPrefs.getString(
+        LOCAL_STORAGE_SCHOOL_UID ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
     if (schoolUid != uid) {
       throw CacheException();
     }
     final completableSchool = Completer<School>();
-    final id = sharedPrefs.getInt('id' ?? 'error');
-    final email = sharedPrefs.getString('schoolEmail' ?? 'error');
-    final address = sharedPrefs.getString('address' ?? 'error');
-    final city = sharedPrefs.getString('city' ?? 'error');
-    final state = sharedPrefs.getString('state' ?? 'error');
-    final zipcode = sharedPrefs.getString('zipcode' ?? 'error');
+    final id = sharedPrefs
+        .getInt(LOCAL_STORAGE_SCHOOL_ID ?? LOCAL_STORAGE_DEFAULT_RESPONSE_INT);
+    final name = sharedPrefs
+        .getString(LOCAL_STORAGE_SCHOOL_NAME ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
+    final email = sharedPrefs.getString(
+        LOCAL_STORAGE_SCHOOL_EMAIL ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
+    final address = sharedPrefs.getString(
+        LOCAL_STORAGE_SCHOOL_ADDRESS ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
+    final city = sharedPrefs.getString(
+        LOCAL_STORAGE_SCHOOL_CITY ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
+    final state = sharedPrefs.getString(
+        LOCAL_STORAGE_SCHOOL_STATE ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
+    final zipcode = sharedPrefs.getString(
+        LOCAL_STORAGE_SCHOOL_ZIPCODE ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
     final school = School(
       id: id,
       schoolId: uid,
+      schoolName: name,
       email: email,
       address: address,
       city: city,
@@ -47,13 +58,14 @@ class SharedPrefsLocalDataSource implements SchoolLocalDataSource {
   @override
   Future<bool> storeSchool(School schoolToStore) {
     final completableSchool = Completer<bool>();
-    sharedPrefs.setInt('id', schoolToStore.id);
-    sharedPrefs.setString('uid', schoolToStore.schoolId);
-    sharedPrefs.setString('schoolName', schoolToStore.schoolName);
-    sharedPrefs.setString('schoolEmail', schoolToStore.email);
-    sharedPrefs.setString('address', schoolToStore.address);
-    sharedPrefs.setString('state', schoolToStore.state);
-    sharedPrefs.setString('zipcode', schoolToStore.zipcode);
+    sharedPrefs.setInt(LOCAL_STORAGE_SCHOOL_ID, schoolToStore.id);
+    sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_UID, schoolToStore.schoolId);
+    sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_NAME, schoolToStore.schoolName);
+    sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_EMAIL, schoolToStore.email);
+    sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_ADDRESS, schoolToStore.address);
+    sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_CITY, schoolToStore.city);
+    sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_STATE, schoolToStore.state);
+    sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_ZIPCODE, schoolToStore.zipcode);
     completableSchool.complete(true);
     return completableSchool.future;
   }
