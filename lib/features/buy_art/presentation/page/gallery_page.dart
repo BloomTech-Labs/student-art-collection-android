@@ -4,6 +4,7 @@ import 'package:student_art_collection/core/presentation/widget/build_loading.da
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 import '../../../../app_localization.dart';
@@ -21,7 +22,6 @@ class GalleryPage extends StatelessWidget {
       create: (context) => sl<GalleryBloc>(),
       child: Scaffold(
         key: _scaffoldkey,
-        backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           centerTitle: true,
           title: Text(AppLocalizations.of(context)
