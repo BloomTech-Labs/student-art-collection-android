@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
-import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
-import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 import 'artwork_details_page.dart';
@@ -24,18 +22,8 @@ class GalleryPage extends StatelessWidget {
         key: _scaffoldkey,
         appBar: AppBar(
           centerTitle: true,
-          title: Text(AppLocalizations.of(context)
-              .translate(TEXT_GALLERY_APP_BAR_TITLE)),
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 1.0),
-            child: BlocBuilder<GalleryBloc, GalleryState>(
-              builder: (context, state) {
-                if (state is GalleryLoadingState) {
-                  return AppBarLoading();
-                } else
-                  return EmptyContainer();
-              },
-            ),
+          title: Text(
+            displayLocalizedString(context, TEXT_GALLERY_APP_BAR_TITLE),
           ),
         ),
         body: BlocListener<GalleryBloc, GalleryState>(
@@ -70,8 +58,8 @@ class GalleryPage extends StatelessWidget {
 
   Widget buildError({@required BuildContext context}) {
     return Center(
-        child: Text(AppLocalizations.of(context)
-            .translate(TEXT_GALLERY_ERROR_STATE_MESSAGE)));
+        child: Text(
+            displayLocalizedString(context, TEXT_GALLERY_ERROR_STATE_MESSAGE)));
   }
 
   Widget buildLoaded({@required BuildContext context, @required artworkList}) {
@@ -98,7 +86,8 @@ class GalleryPage extends StatelessWidget {
         displayLocalizedString(
           context,
           message,
-        ), textAlign: TextAlign.center,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
     _scaffoldkey.currentState.showSnackBar(snackBar);

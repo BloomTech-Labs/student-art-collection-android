@@ -126,15 +126,18 @@ class GridTile extends StatelessWidget {
         child: Center(
           child: Stack(
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color:
-                          borderColor == null ? gridBorderColor : borderColor),
-                  borderRadius: BorderRadius.circular(cornerRadius),
-                  image: DecorationImage(
-                    image: NetworkImage(artwork.images[0].imageUrl),
-                    fit: BoxFit.cover,
+              Hero(
+                tag: "tagImage" + artwork.artId.toString(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color:
+                            borderColor == null ? gridBorderColor : borderColor),
+                    borderRadius: BorderRadius.circular(cornerRadius),
+                    image: DecorationImage(
+                      image: NetworkImage(artwork.images[0].imageUrl),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -154,9 +157,12 @@ class GridTile extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(bottom: 10),
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  title,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                child: Hero(
+                  tag: "tagText" + artwork.artId.toString(),
+                  child: Text(
+                    title,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               )
             ],

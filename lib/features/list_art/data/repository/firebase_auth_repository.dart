@@ -103,6 +103,9 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
     } on ServerException {
       firebaseAuth.signOut();
       return Left(ServerFailure());
+    } on CacheException {
+      firebaseAuth.signOut();
+      return Left(CacheFailure());
     }
   }
 }

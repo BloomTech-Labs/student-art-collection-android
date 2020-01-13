@@ -38,6 +38,7 @@ dependencies:
   device_preview: ^0.2.6
   flutter_image_compress: ^0.6.5
   shared_preferences: ^0.5.6
+  email_validator: ^1.0.4
 
 dev_dependencies:
   intl_translation: ^0.17.9

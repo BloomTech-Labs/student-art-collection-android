@@ -13,6 +13,9 @@ class ServerFailure extends Failure {
 }
 
 class CacheFailure extends Failure {
+  final String message;
+
+  CacheFailure({this.message});
   @override
   List<Object> get props => null;
 }

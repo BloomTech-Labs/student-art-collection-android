@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
+import 'package:student_art_collection/features/list_art/presentation/list_art_text_constants.dart';
 
 part 'artwork_details_event.dart';
 
@@ -22,29 +25,33 @@ class ArtworkDetailsBloc
   Stream<ArtworkDetailsState> mapEventToState(
       ArtworkDetailsEvent event) async* {
     if (event is SubmitContactForm) {
-      yield ArtworkDetailsLoadingState();
+      if (emailValidation(event.contactForm.from) == false) {
+        yield ArtworkDetailsErrorState(message: TEXT_GENERIC_ERROR_MESSAGE_LABEL);
+        yield ArtworkDetailsInitialState();
+      } else {
+        yield ArtworkDetailsLoadingState();
 
-      final confirmation = await artworkRepository.contactFormConfirmation(
-          contactForm: event.contactForm);
+        final confirmation = await artworkRepository.contactFormConfirmation(
+            contactForm: event.contactForm);
 
-      yield* confirmation.fold((failure) async* {
-        //TODO: replace message with const
-        yield ArtworkDetailsErrorState(message: "Error Please Try Again");
-      }, (confirmation) async* {
-        
-        final ContactForm confirmationContactForm = ContactForm(
-            name: confirmation.name,
-            message: confirmation.message,
-            from: confirmation.from,
-            subject: confirmation.subject,
-            sendTo: confirmation.sendTo);
+        yield* confirmation.fold((failure) async* {
+          //TODO: replace message with const
+          yield ArtworkDetailsErrorState(message: TEXT_GENERIC_ERROR_MESSAGE_LABEL);
+        }, (confirmation) async* {
+          final ContactForm confirmationContactForm = ContactForm(
+              name: confirmation.name,
+              message: confirmation.message,
+              from: confirmation.from,
+              subject: confirmation.subject,
+              sendTo: confirmation.sendTo);
 
-        if (confirmationContactForm == event.contactForm) {
-          yield ArtworkDetailsFormSubmittedState();
-        } else {
-          yield ArtworkDetailsErrorState(message: "Error Please Try Again");
-        }
-      });
+          if (confirmationContactForm == event.contactForm) {
+            yield ArtworkDetailsFormSubmittedState();
+          } else {
+            yield ArtworkDetailsErrorState(message: TEXT_GENERIC_ERROR_MESSAGE_LABEL);
+          }
+        });
+      }
     }
   }
 }
