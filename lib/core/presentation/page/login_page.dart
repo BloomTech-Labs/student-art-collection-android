@@ -101,61 +101,79 @@ class _LoginFormState extends State<LoginForm> {
       children: <Widget>[
         topBanner(
             position: positionTopBanner,
-            text: AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
+            text:
+                AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
             fontSize: 40),
         textFieldWidget(
             position: positionTopTextField,
-            text: AppLocalizations.of(context).translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
             onChanged: (value) {
               email = value;
             }),
         textFieldWidget(
             position: positionBottomTextField,
-            text: AppLocalizations.of(context).translate(TEXT_LOGIN_PASSWORD_LABEL),
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_PASSWORD_LABEL),
             onChanged: (value) {
               password = value;
             }),
         checkBoxWithLabel(
           position: positionCheckBox,
-          label: AppLocalizations.of(context).translate(TEXT_LOGIN_REMEMBER_ME_BOX),
+          label: AppLocalizations.of(context)
+              .translate(TEXT_LOGIN_REMEMBER_ME_BOX),
           onChanged: (value) {
             _onCheckboxChange();
           },
         ),
         BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
-             builder: (BuildContext context, state) {
-               if(state is SchoolAuthLoading){
-                 return  middleButton(position: positionMiddleButton, onTap: (){}, icon: CircularProgressIndicator(
-                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                 ));
-               }
-              return middleButton(position: positionMiddleButton, onTap: dispatchLogin, icon: Icon(
-                Icons.arrow_forward,
-                color: Colors.white,
-                size: 45,
-              ));
-             },),
-        divider(position: positionDivider, text: AppLocalizations.of(context).translate(TEXT_LOGIN_DIVIDER_TEXT)),
+          builder: (BuildContext context, state) {
+            if (state is SchoolAuthLoading) {
+              return middleButton(
+                  position: positionMiddleButton,
+                  onTap: () {},
+                  icon: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ));
+            }
+            return middleButton(
+                position: positionMiddleButton,
+                onTap: dispatchLogin,
+                icon: Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                  size: 45,
+                ));
+          },
+        ),
+        divider(
+            position: positionDivider,
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_DIVIDER_TEXT)),
         bottomButton(
           position: positionBottomButton,
-          label: AppLocalizations.of(context).translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
+          label: AppLocalizations.of(context)
+              .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
           onTap: () {
             Navigator.pushNamed(context, GalleryPage.ID);
           },
         ),
         footerWidget(
             textSpan: TextSpan(
-                text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
+                text: AppLocalizations.of(context)
+                    .translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
                 style: TextStyle(color: Colors.black),
                 children: <TextSpan>[
                   TextSpan(
-                    text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
+                    text: AppLocalizations.of(context)
+                        .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
                       color: Colors.blue,
                     ),
                   ),
                   TextSpan(
-                      text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
+                      text: AppLocalizations.of(context)
+                          .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
                       style: TextStyle(color: Colors.black))
                 ]),
             onTap: dispatchRegistration)
@@ -254,7 +272,8 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget middleButton({@required double position, Function onTap, Widget icon}) {
+  Widget middleButton(
+      {@required double position, Function onTap, Widget icon}) {
     return Positioned(
       right: 16,
       bottom: position,

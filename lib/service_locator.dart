@@ -5,6 +5,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql/client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
@@ -130,6 +131,8 @@ Future init() async {
   sl.registerLazySingleton(() => InputConverter());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => SessionManager());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => prefs);
 
   // External
   sl.registerLazySingleton(() => DataConnectionChecker());

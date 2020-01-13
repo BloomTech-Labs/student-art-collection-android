@@ -11,6 +11,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/galle
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_state.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/artwork_upload_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
@@ -48,7 +49,9 @@ class SchoolGalleryPage extends StatelessWidget {
           },
           child: ArtworkGallery(),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
+          elevation: 6.0,
           child: Icon(
             Icons.add,
           ),
@@ -61,29 +64,21 @@ class SchoolGalleryPage extends StatelessWidget {
             }
           },
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: primaryColor,
-          selectedFontSize: 14,
-          unselectedFontSize: 14,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text(AppLocalizations.of(context)
-                  .translate(TEXT_SCHOOL_GALLERY_HOME_TAG)),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              title: Text(AppLocalizations.of(context)
-                  .translate(TEXT_SCHOOL_GALLERY_SEARCH_TAG)),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-              title: Text(AppLocalizations.of(context)
-                  .translate(TEXT_SCHOOL_GALLERY_MESSAGES_TAG)),
-            ),
-          ],
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.transparent,
+          child: TitledBottomNavigationBar(
+            currentIndex: 2, // Use this to update the Bar giving a position
+            onTap: (index) {
+              print("Selected Index: $index");
+            },
+            items: [
+              TitledNavigationBarItem(title: 'Home', icon: Icons.home),
+              TitledNavigationBarItem(title: 'Search', icon: Icons.search),
+            ],
+            activeColor: accentColor,
+          ),
+          shape: CircularNotchedRectangle(),
+          notchMargin: 4.0,
         ),
       ),
     );
@@ -148,10 +143,11 @@ class _ArtworkGalleryState extends State<ArtworkGallery> {
 
   void showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text(displayLocalizedString(
-      context,
-      message,
-    )));
+          context,
+          message,
+        )));
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
