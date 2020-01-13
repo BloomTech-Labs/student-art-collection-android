@@ -8,7 +8,7 @@ import 'package:student_art_collection/core/util/theme_constants.dart';
 
 import '../../../app_localization.dart';
 
-const double carouselCardCornerRadius = 10;
+const double carouselCardCornerRadius = 2;
 
 class CarouselImageViewer extends StatefulWidget {
   final aw.Artwork artwork;

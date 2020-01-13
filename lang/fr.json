@@ -13,6 +13,7 @@
   "login_register_here_prefix": "Pas encore membre?\n      S'inscrire ",
   "login_register_here_main": "Ici!",
   "login_register_here_suffix": "\nÉcoles uniquement",
+  "login_login_button": "S'identifier",
 
 
   "artwork_upload_price_1": "$5",
@@ -60,6 +61,7 @@
   "registration_city_label": "Entrez dans la ville de votre école",
   "registration_state_label": "Entrez dans l'état de votre école",
   "registration_zipcode_label": "Entrez le code postal de votre école",
+  "registration_button_label" : "S'inscrire",
 
 
   "school_gallery_app_bar_title": "School Art Gallery",
@@ -72,15 +74,15 @@
   "gallery_error_state_message": "Erreur",
 
 
-  "artwork_details_top_banner_message": "Vous voulez acheter cette pièce? Remplissez le formulaire ci-dessous",
+  "artwork_details_top_banner_message": "Vouloir acheter? Remplissez le formulaire ci-dessous",
   "artwork_details_untitled_label": "Sans titre",
-  "artwork_details_suggested_donation": "Don suggéré:",
+  "artwork_details_suggested_donation": "Don suggéré: \n",
   "artwork_details_name_label": "Nom",
   "artwork_details_email_label": "Email",
   "artwork_details_message_label": "Message",
   "artwork_details_reply_to": "Répondre à: ",
   "artwork_details_inquires_about": "Demandes de renseignements sur:",
-  "artwork_details_submit_button_label": "Soumettre",
+  "artwork_details_submit_button_label": "Envoyer",
   "artwork_details_form_submitted_message": "Formulaire soumis",
 
 

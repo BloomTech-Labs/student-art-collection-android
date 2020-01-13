@@ -144,7 +144,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             RaisedButton(
                 color: accentColor,
                 child: Text(
-                  'Register',
+                  AppLocalizations.of(context).translate(TEXT_REGISTRATION_BUTTON_LABEL),
                   style: TextStyle(
                     color: Colors.white,
                   ),
