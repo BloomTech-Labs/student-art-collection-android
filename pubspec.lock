@@ -579,6 +579,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.11"
+  titled_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: titled_navigation_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.6.0"
   transformer_page_view:
     dependency: transitive
     description:
