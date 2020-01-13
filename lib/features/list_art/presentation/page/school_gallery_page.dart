@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/page/login_page.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
@@ -24,8 +25,17 @@ class SchoolGalleryPage extends StatefulWidget {
 }
 
 class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _scaffoldkey =
+      new GlobalKey<ScaffoldState>(); // The app's "state".
+  BuildContext _blocContext;
+
   List<Artwork> artworks;
+
+  void _select(SchoolGalleryChoice choice) {
+    if (choice.title == 'Logout') {
+      _dispatchLogoutEvent();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +44,19 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
       child: Scaffold(
         key: _scaffoldkey,
         appBar: AppBar(
+          actions: <Widget>[
+            PopupMenuButton<SchoolGalleryChoice>(
+              onSelected: _select,
+              itemBuilder: (context) {
+                return schoolGalleryChoices.map((SchoolGalleryChoice choice) {
+                  return PopupMenuItem<SchoolGalleryChoice>(
+                    value: choice,
+                    child: Text(choice.title),
+                  );
+                }).toList();
+              },
+            )
+          ],
           title: Text(
             AppLocalizations.of(context)
                 .translate(TEXT_SCHOOL_GALLERY_APP_BAR_TITLE),
@@ -42,6 +65,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
               builder: (context, state) {
+                _blocContext = context;
                 if (state is SchoolGalleryLoading) {
                   return AppBarLoading();
                 }
@@ -52,7 +76,11 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
         ),
         body: BlocListener<SchoolGalleryBloc, SchoolGalleryState>(
           listener: (context, state) {
-            if (state is SchoolGalleryLoaded) {}
+            _blocContext = context;
+            if (state is SchoolGalleryLoaded) {
+            } else if (state is Unauthorized) {
+              Navigator.pushReplacementNamed(context, LoginPage.ID);
+            }
           },
           child: BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
             builder: (context, state) {
@@ -131,6 +159,12 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     );
   }
 
+  void _dispatchLogoutEvent() {
+    BlocProvider.of<SchoolGalleryBloc>(_blocContext).add(
+      LogoutEvent(),
+    );
+  }
+
   void showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -145,3 +179,15 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     return AppLocalizations.of(context).translate(label);
   }
 }
+
+class SchoolGalleryChoice {
+  const SchoolGalleryChoice({this.title, this.icon});
+
+  final String title;
+  final IconData icon;
+}
+
+const List<SchoolGalleryChoice> schoolGalleryChoices =
+    const <SchoolGalleryChoice>[
+  const SchoolGalleryChoice(title: 'Logout', icon: Icons.local_gas_station),
+];

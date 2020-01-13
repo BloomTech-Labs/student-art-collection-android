@@ -33,3 +33,5 @@ class SchoolGalleryLoaded extends SchoolGalleryState {
   @override
   List<Object> get props => [artworks];
 }
+
+class Unauthorized extends SchoolGalleryError {}

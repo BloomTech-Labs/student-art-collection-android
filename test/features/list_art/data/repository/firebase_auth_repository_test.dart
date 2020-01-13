@@ -214,7 +214,7 @@ void main() {
       final result = await repository.logoutSchool();
 
       verify(mockFirebaseAuth.signOut());
-      expect(result, Right(true));
+      expect(result, Right(null));
     });
   });
 

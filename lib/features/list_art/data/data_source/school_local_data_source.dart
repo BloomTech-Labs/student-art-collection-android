@@ -13,6 +13,8 @@ abstract class SchoolLocalDataSource {
   Future<bool> storeSchool(School schoolToStore);
 
   Future<bool> storeCredentials(Credentials credentials);
+
+  Future<bool> logoutSchool();
 }
 
 class SharedPrefsLocalDataSource implements SchoolLocalDataSource {
@@ -79,5 +81,10 @@ class SharedPrefsLocalDataSource implements SchoolLocalDataSource {
     sharedPrefs.setString(LOCAL_STORAGE_USER_PASSWORD, credentials.password);
     completable.complete(true);
     return completable.future;
+  }
+
+  @override
+  Future<bool> logoutSchool() async {
+    return await sharedPrefs.clear();
   }
 }

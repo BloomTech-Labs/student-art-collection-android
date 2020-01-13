@@ -81,6 +81,7 @@ Future init() async {
   sl.registerFactory(() => SchoolGalleryBloc(
         sessionManager: sl(),
         getAllSchoolArt: sl(),
+        logoutSchool: sl(),
       ));
 
   sl.registerFactory(() => ArtworkUploadBloc(
