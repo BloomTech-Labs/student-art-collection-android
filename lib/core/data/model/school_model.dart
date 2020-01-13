@@ -32,7 +32,6 @@ class SchoolModel extends School {
         schoolName: json[SCHOOL_NAME],
         address: json[SCHOOL_ADDRESS],
         city: json[SCHOOL_CITY],
-        state: json[SCHOOL_STATE],
         zipcode: json[SCHOOL_ZIPCODE]);
   }
 

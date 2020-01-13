@@ -75,7 +75,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
     if (result.hasException) {
       throw ServerException();
     }
-    return handleAuthResult(result, "action");
+    return handleAuthResult(result, 'action');
   }
 
   Future<School> handleAuthResult(QueryResult result, String key) async {

@@ -16,6 +16,7 @@ const String ADD_SCHOOL_MUTATION = r'''
         city: $city,
         zipcode: $zipcode
        ) {
+        id,
         school_id,
         school_name,
         email, 
