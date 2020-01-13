@@ -105,7 +105,10 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
         if (failure is FirebaseFailure) {
           yield SchoolAuthError(message: failure.message);
           yield Unauthorized();
-        } else {
+        } else if (failure is CacheFailure) {
+          yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
+        }   else {
           yield SchoolAuthError(message: 'Something went wrong');
           yield Unauthorized();
         }
