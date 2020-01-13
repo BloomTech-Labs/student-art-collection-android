@@ -15,6 +15,7 @@ import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/mutation.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/query.dart';
 import 'package:student_art_collection/features/list_art/data/mock_data.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/delete_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
@@ -32,6 +33,8 @@ abstract class SchoolRemoteDataSource {
   Future<Artwork> updateArtwork(ArtworkToUpload artwork);
 
   Future<ReturnedImageUrl> hostImage(File file);
+
+  Future<ArtworkToDeleteId> deleteArtwork(int id);
 }
 
 class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
@@ -106,20 +109,11 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
         });
     final QueryResult result = await client.mutate(options);
     final Artwork savedArtwork = convertResultToArtwork(result, 'action');
-    for (String imageUrl in artworkToUpload.imagesToUpload) {
-      final imageToUpload = ImageToUpload(
-        artId: savedArtwork.artId,
-        imageUrl: imageUrl,
-      );
-      final MutationOptions imageOptions = MutationOptions(
-          documentNode: gql(ADD_IMAGE_TO_ARTWORK_MUTATION),
-          variables: <String, dynamic>{
-            'art_id': savedArtwork.artId,
-            'image_url': imageToUpload.imageUrl
-          });
-      final QueryResult imageResult = await client.mutate(imageOptions);
-      savedArtwork.images.add(ImageModel.fromJson(imageResult.data['action']));
-    }
+    final uploadedImages =
+        await uploadImages(savedArtwork.artId, artworkToUpload.imagesToUpload);
+    uploadedImages.forEach((image) {
+      savedArtwork.images.add(image);
+    });
     return savedArtwork;
   }
 
@@ -130,8 +124,72 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   }
 
   @override
-  Future<Artwork> updateArtwork(ArtworkToUpload artwork) {
-    sleep(Duration(seconds: 5));
-    throw ServerException();
+  Future<Artwork> updateArtwork(ArtworkToUpload artworkToUpdate) async {
+    await deleteImages(artworkToUpdate.imagesToDelete);
+    final MutationOptions options = MutationOptions(
+        documentNode: gql(UPDATE_ARTWORK_MUTATION),
+        variables: <String, dynamic>{
+          'id': artworkToUpdate.artworkToCompare.artId,
+          'price': artworkToUpdate.price,
+          'sold': artworkToUpdate.sold,
+          'title': artworkToUpdate.title,
+          'artist_name': artworkToUpdate.artistName,
+          'description': artworkToUpdate.description,
+        });
+    final QueryResult result = await client.mutate(options);
+    if (result.hasException) throw ServerException();
+    final Artwork updatedArtwork = convertResultToArtwork(result, 'action');
+    final List<Image> uploadedImages = await uploadImages(
+        updatedArtwork.artId, artworkToUpdate.imagesToUpload);
+    uploadedImages.forEach((image) {
+      updatedArtwork.images.add(image);
+    });
+    return updatedArtwork;
+  }
+
+  Future deleteImages(List<Image> imagesToDelete) async {
+    await Future.forEach(imagesToDelete, (image) async {
+      final MutationOptions options = MutationOptions(
+          documentNode: gql(DELETE_IMAGE_FROM_ARTWORK),
+          variables: <String, dynamic>{
+            'id': image.imageId,
+          });
+      final QueryResult result = await client.mutate(options);
+      if (result.hasException) {
+        throw ServerException();
+      }
+    });
+    return null;
+  }
+
+  Future<List<Image>> uploadImages(
+      int artId, List<String> imagesToUpload) async {
+    List<Image> savedImages = List();
+    await Future.forEach(imagesToUpload, (imageUrl) async {
+      final MutationOptions imageOptions = MutationOptions(
+          documentNode: gql(ADD_IMAGE_TO_ARTWORK_MUTATION),
+          variables: <String, dynamic>{'art_id': artId, 'image_url': imageUrl});
+      final QueryResult imageResult = await client.mutate(imageOptions);
+      if (imageResult.hasException) {
+        throw ServerException();
+      }
+      savedImages.add(ImageModel.fromJson(imageResult.data['action']));
+    });
+    return savedImages;
+  }
+
+  @override
+  Future<ArtworkToDeleteId> deleteArtwork(int id) async {
+    final MutationOptions options = MutationOptions(
+        documentNode: gql(DELETE_ARTWORK),
+        variables: <String, dynamic>{
+          'id': id,
+        });
+    final QueryResult deleteResult = await client.mutate(options);
+    if (deleteResult.hasException) {
+      throw ServerException();
+    }
+    final int deletedId = int.parse(deleteResult.data['action']['id']);
+    return ArtworkToDeleteId(artId: deletedId);
   }
 }

@@ -70,6 +70,48 @@ const String ADD_ARTWORK_MUTATION = r'''
     }
 ''';
 
+const String UPDATE_ARTWORK_MUTATION = r'''
+  mutation AddArtworkToSchool(
+    $id: ID!,
+    $price: Int,
+    $sold: Boolean,
+    $title: String,
+    $artist_name: String,
+    $description: String) {
+      action: updateArt(
+        id: $id,
+        price: $price,
+        sold: $sold,
+        title: $title,
+        artist_name: $artist_name,
+        description: $description,
+      ) {
+        id,
+        category {
+          id,
+          category
+        },
+        school{
+          school_name,
+           id,
+          school_id,
+          email
+        }
+        price,
+        sold,
+        title,
+        artist_name,
+        description,
+        date_posted,
+        images {
+          id,
+          art_id,
+          image_url
+        }
+      }
+    }
+''';
+
 const String ADD_IMAGE_TO_ARTWORK_MUTATION = r'''
   mutation AddImageToArtwork(
     $art_id: Int,
@@ -83,4 +125,26 @@ const String ADD_IMAGE_TO_ARTWORK_MUTATION = r'''
         image_url
       }
     }
+''';
+
+const String DELETE_IMAGE_FROM_ARTWORK = r'''
+  mutation DeleteImage(
+    $id: ID!) {
+      action: deleteImage(
+        id: $id
+      ) {
+        id
+      }
+    }
+''';
+
+const String DELETE_ARTWORK = r'''
+  mutation DeleteArtwork(
+  $id: ID!) {
+    action: deleteArt(
+      id: $id             
+    ) {
+      id
+    }
+  }
 ''';

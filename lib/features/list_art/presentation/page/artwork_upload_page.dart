@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,13 +11,17 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/list_art/presentation/artwork_to_return.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_state.dart';
+import 'package:student_art_collection/features/list_art/presentation/list_art_text_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
+import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
 class ArtworkUploadPage extends StatelessWidget {
@@ -86,26 +91,26 @@ class _UploadWidgetState extends State<UploadWidget> {
 
   List<String> _getPrices() {
     return [
-      '\$5',
-      '\$10',
-      '\$15',
-      '\$20',
-      '\$25',
-      '\$30',
-      '\$35',
-      '\$40',
-      '\$45',
-      '\$50',
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_1),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_2),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_3),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_4),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_5),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_6),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_7),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_8),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_9),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_PRICE_10),
     ];
   }
 
   List<String> _getCategories() {
     return [
-      'Photography',
-      'Drawing',
-      'Painting',
-      'Sculpture',
-      'Other',
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_1),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_2),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_3),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_4),
+      displayLocalizedString(TEXT_ARTWORK_UPLOAD_CATEGORY_5),
     ];
   }
 
@@ -134,10 +139,20 @@ class _UploadWidgetState extends State<UploadWidget> {
     return BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
       listener: (context, state) {
         if (state is ArtworkUploadSuccess) {
-          setState(() {
-            populateData(state.artwork);
-          });
-          showSnackBar(context, state.message);
+          var i = 0;
+          popAndReturn(
+            context,
+            'upload',
+            state.artwork,
+            state.message,
+          );
+        } else if (state is ArtworkUpdateSuccess) {
+          popAndReturn(
+            context,
+            'update',
+            state.artwork,
+            state.message,
+          );
         } else if (state is EditArtworkInitialState) {
           setState(() {
             populateData(state.artwork);
@@ -149,6 +164,13 @@ class _UploadWidgetState extends State<UploadWidget> {
         } else if (state is ArtworkUploadLoading) {
         } else if (state is ArtworkUploadError) {
           showSnackBar(context, state.message);
+        } else if (state is ArtworkDeleteSuccess) {
+          popAndReturn(
+            context,
+            'upload',
+            null,
+            TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL,
+          );
         }
       },
       child: SingleChildScrollView(
@@ -161,18 +183,37 @@ class _UploadWidgetState extends State<UploadWidget> {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
-                  child: OutlineButton(
-                    child: CarouselImageViewer(
-                      isEditable: true,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      imageList: imageUrls,
-                      artwork: null,
-                    ),
-                    onPressed: () {
-                      _getImage();
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6)),
+                  child: Stack(
+                    children: <Widget>[
+                      OutlineButton(
+                        child: CarouselImageViewer(
+                          isEditable: true,
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          imageList: imageUrls,
+                          artwork: null,
+                        ),
+                        onPressed: () {
+                          _getImage();
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      Positioned(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: accentColor,
+                          ),
+                          iconSize: 40,
+                          onPressed: () {
+                            _getImage();
+                          },
+                        ),
+                        bottom: 0,
+                        left: 0,
+                      )
+                    ],
                   ),
                 ),
                 Flexible(
@@ -187,8 +228,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         onChanged: (value) {
                           title = value;
                         },
-                        decoration:
-                            getAuthInputDecoration('Enter Artwork Title'),
+                        decoration: getAuthInputDecoration(
+                            displayLocalizedString(
+                                TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
                       ),
                       SizedBox(height: 10),
                       TextField(
@@ -197,8 +239,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         onChanged: (value) {
                           artistName = value;
                         },
-                        decoration:
-                            getAuthInputDecoration('Enter Student Name'),
+                        decoration: getAuthInputDecoration(
+                            displayLocalizedString(
+                                TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
                       ),
                       SizedBox(height: 10),
                       Stack(
@@ -206,8 +249,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         children: <Widget>[
                           TextField(
                             enabled: false,
-                            decoration:
-                                getAuthInputDecoration('Select Date Created'),
+                            decoration: getAuthInputDecoration(
+                                displayLocalizedString(
+                                    TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
                             controller: dateTextController,
                           ),
                           Positioned(
@@ -234,8 +278,9 @@ class _UploadWidgetState extends State<UploadWidget> {
                         children: <Widget>[
                           TextField(
                             enabled: false,
-                            decoration:
-                                getAuthInputDecoration('Select Artwork Price'),
+                            decoration: getAuthInputDecoration(
+                                displayLocalizedString(
+                                    TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
                             controller: priceTextController,
                           ),
                           Positioned(
@@ -263,7 +308,8 @@ class _UploadWidgetState extends State<UploadWidget> {
                           TextField(
                             enabled: false,
                             decoration: getAuthInputDecoration(
-                                'Select Artwork Category'),
+                                displayLocalizedString(
+                                    TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
                             controller: categoryTextController,
                           ),
                           Positioned(
@@ -285,34 +331,35 @@ class _UploadWidgetState extends State<UploadWidget> {
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: FloatingActionButton(
+                                heroTag: 'delete_button',
+                                onPressed: () {
+                                  dispatchDelete();
+                                },
+                                backgroundColor: accentColor,
+                                child: Icon(Icons.delete)),
+                          ),
                           BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(
                             builder: (context, state) {
-                              if (state is ArtworkUploadLoading) {
-                                return RaisedButton(
-                                  onPressed: () {
-                                    showSnackBar(context,
-                                        'Please wait until images are uploaded');
-                                  },
-                                  color: accentColor,
-                                  textColor: Colors.white,
-                                  child: Text(
-                                    'Submit',
-                                  ),
-                                );
-                              } else {
-                                return RaisedButton(
-                                  onPressed: () {
-                                    dispatchUploadOrUpdate();
-                                  },
-                                  color: accentColor,
-                                  textColor: Colors.white,
-                                  child: Text(
-                                    'Submit',
-                                  ),
-                                );
-                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: FloatingActionButton(
+                                    heroTag: 'save_button',
+                                    onPressed: () {
+                                      if (state is ArtworkUploadLoading) {
+                                        showSnackBar(context,
+                                            TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL);
+                                      } else {
+                                        dispatchUploadOrUpdate();
+                                      }
+                                    },
+                                    backgroundColor: accentColor,
+                                    child: Icon(Icons.check)),
+                              );
                             },
                           ),
                         ],
@@ -385,7 +432,7 @@ class _UploadWidgetState extends State<UploadWidget> {
   }
 
   void populateData(Artwork artwork) {
-    artwork = artwork;
+    this.artwork = artwork;
     title = artwork.title;
     titleTextController.text = artwork.title;
     description = artwork.description;
@@ -398,10 +445,14 @@ class _UploadWidgetState extends State<UploadWidget> {
     categoryTextController.text = artwork.category.categoryName;
     price = artwork.price.toInt();
     priceTextController.text = artwork.price.toInt().toString();
+    imageUrls.clear();
+    artwork.images.forEach((image) {
+      imageUrls.add(image.imageUrl);
+    });
   }
 
   void showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(content: Text(message));
+    final snackBar = SnackBar(content: Text(displayLocalizedString(message)));
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
@@ -431,5 +482,36 @@ class _UploadWidgetState extends State<UploadWidget> {
   void dispatchImageHost(File file) {
     BlocProvider.of<ArtworkUploadBloc>(context)
         .add(HostImageEvent(imageFileToHost: file));
+  }
+
+  void dispatchDelete() {
+    if (artwork != null) {
+      BlocProvider.of<ArtworkUploadBloc>(context)
+          .add(DeleteArtworkEvent(artId: artwork.artId));
+    }
+  }
+
+  String displayLocalizedString(String label) {
+    return AppLocalizations.of(context).translate(label);
+  }
+
+  void popAndReturn(
+    BuildContext context,
+    String tag,
+    Artwork artwork,
+    String message,
+  ) {
+    if (Navigator.canPop(context)) {
+      var i = 0;
+      Navigator.pop(
+          context,
+          ArtworkToReturn(
+            artwork: artwork,
+            message: message,
+            tag: tag,
+          ));
+    } else {
+      SystemNavigator.pop();
+    }
   }
 }

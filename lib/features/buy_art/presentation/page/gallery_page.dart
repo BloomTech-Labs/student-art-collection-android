@@ -16,14 +16,14 @@ class GalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocProvider<GalleryBloc>(
       create: (context) => sl<GalleryBloc>(),
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           centerTitle: true,
-          title: Text(AppLocalizations.of(context).translate(TEXT_GALLERY_APP_BAR_TITLE)),
+          title: Text(AppLocalizations.of(context)
+              .translate(TEXT_GALLERY_APP_BAR_TITLE)),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<GalleryBloc, GalleryState>(
@@ -48,7 +48,8 @@ class GalleryPage extends StatelessWidget {
               if (state is GalleryLoadingState) {
                 return BuildLoading();
               } else if (state is GalleryLoadedState) {
-                return buildLoaded(artworkList: state.artworkList, context: context);
+                return buildLoaded(
+                    artworkList: state.artworkList, context: context);
               } else if (state is GalleryErrorState) {
                 return buildError(context: context);
               } else
@@ -66,16 +67,17 @@ class GalleryPage extends StatelessWidget {
   }
 
   Widget buildError({@required BuildContext context}) {
-    return Center(child: Text(AppLocalizations.of(context).translate(TEXT_GALLERY_ERROR_STATE_MESSAGE)));
+    return Center(
+        child: Text(AppLocalizations.of(context)
+            .translate(TEXT_GALLERY_ERROR_STATE_MESSAGE)));
   }
 
-  Widget buildLoaded({@required BuildContext context, @required artworkList}){
+  Widget buildLoaded({@required BuildContext context, @required artworkList}) {
     return GalleryGrid(
       artworkList: artworkList,
       isStaggered: true,
-      onTap: (artwork) {
-        Navigator.pushNamed(context, ArtworkDetailsPage.ID,
-            arguments: artwork);
+      onTap: (artwork, index) {
+        Navigator.pushNamed(context, ArtworkDetailsPage.ID, arguments: artwork);
       },
     );
   }

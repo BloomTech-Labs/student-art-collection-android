@@ -72,6 +72,15 @@ class InputConverter {
     String description,
     List<String> imagesToUpload,
   ) {
+    List<Image> imagesToDelete = List();
+    artwork.images.forEach((image) {
+      if (!imagesToUpload.contains(image.imageUrl)) {
+        imagesToDelete.add(image);
+      }
+      if (imagesToUpload.contains(image.imageUrl)) {
+        imagesToUpload.remove(image.imageUrl);
+      }
+    });
     return Right(ArtworkToUpload(
       artworkToCompare: artwork,
       category: category,
@@ -81,6 +90,7 @@ class InputConverter {
       artistName: artistName,
       description: description,
       imagesToUpload: imagesToUpload,
+      imagesToDelete: imagesToDelete,
     ));
   }
 }

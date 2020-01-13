@@ -36,6 +36,16 @@
   "artwork_upload_category_selection_label": "Select Artwork Category",
   "artwork_upload_upload_button_label": "Submit",
 
+  "artwork_upload_uploading_message_label": "Uploading artwork, please do not close the App.",
+  "artwork_upload_updating_message_label": "Updating artwork, please do not close the App.",
+  "image_uploading_message_label": "Uploading Image",
+  "artwork_upload_success_label": "Art was successfully uploaded!",
+  "artwork_update_success_label": "Art was successfully updated!",
+  "generic_error_message_label": "Something went wrong",
+  "generic_image_host_error_message_label": "There was a problem uploading your image",
+  "artwork_uploading_wait_message_label": "Please wait until uploading is complete",
+  "artwork_delete_error_message_label": "There was a problem deleting the artwork",
+  "artwork_delete_success_message_label": "Artwork was successfully deleted!",
 
   "registration_app_bar_title": "Register",
   "registration_app_bar_error_state_message": "Error",
