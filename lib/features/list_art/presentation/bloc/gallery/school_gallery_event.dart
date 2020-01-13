@@ -21,3 +21,8 @@ class UploadArtwork extends SchoolGalleryEvent {
   @override
   List<Object> get props => null;
 }
+
+class LogoutEvent extends SchoolGalleryEvent {
+  @override
+  List<Object> get props => null;
+}

@@ -84,8 +84,9 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
     }, onError: (error) {
       signOutSuccess = false;
     });
+    final localClear = await localDataSource.logoutSchool();
     return signOutSuccess
-        ? Right(signOutSuccess)
+        ? Right(localClear)
         : Left(FirebaseFailure(LOG_OUT_ERROR));
   }
 
