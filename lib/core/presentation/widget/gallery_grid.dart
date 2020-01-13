@@ -17,9 +17,22 @@ const int maxImageHeight = 20;
 //sets the min image height based off of a ratio of the stagger count
 const int minImageHeight = 10;
 //sets the radius of the image cards
-const double cardCornerRadius = 10.0;
+const double cardCornerRadius = 2.0;
 const double staggeredGridMainAxisSpacing = 16.0;
 const double staggeredGridCrossAxisSpacing = 16.0;
+
+bool showTitleAnimations = false;
+int prevIndex = 0;
+
+void setShowTitleAnimations({@required int newIndex}){
+  int tempIndex = prevIndex;
+  prevIndex = newIndex;
+ if(tempIndex > newIndex){
+   showTitleAnimations = false;
+ }else {
+   showTitleAnimations = true;
+ }
+}
 
 class GalleryGrid extends StatelessWidget {
   final List<aw.Artwork> artworkList;
@@ -28,7 +41,7 @@ class GalleryGrid extends StatelessWidget {
   final int mainAxisSpacing;
   final int crossAxisSpacing;
   final Function(aw.Artwork, int index) onTap;
-  final bool heroOnURL, showEmptyArtworks;
+  final bool showEmptyArtworks;
 
   const GalleryGrid({
     Key key,
@@ -38,7 +51,6 @@ class GalleryGrid extends StatelessWidget {
     this.mainAxisSpacing,
     this.crossAxisSpacing,
     this.onTap,
-    this.heroOnURL,
     this.showEmptyArtworks = false,
   }) : super(key: key);
 
@@ -56,6 +68,7 @@ class GalleryGrid extends StatelessWidget {
           (minImageHeight + maxImageHeight) ~/ 2.5, maxImageHeight));
     }
 
+
     return Padding(
       padding:
           padding == null ? EdgeInsets.only(left: 16.0, right: 16.0) : padding,
@@ -68,9 +81,9 @@ class GalleryGrid extends StatelessWidget {
               ? const EdgeInsets.only(top: 16.0)
               : const EdgeInsets.all(0.0),
           child: GridTile(
+            index: index,
             artwork: validatedArtworkList[index],
             onTap: (artwork) => onTap(artwork, index),
-            heroOnURL: heroOnURL,
           ),
         ),
         staggeredTileBuilder: (int index) {
@@ -102,7 +115,7 @@ class GridTile extends StatelessWidget {
   final aw.Artwork artwork;
   final double setCornerRadius;
   final Color borderColor;
-  final bool heroOnURL;
+  final int index;
   final Function(aw.Artwork artwork) onTap;
 
   const GridTile({
@@ -110,8 +123,7 @@ class GridTile extends StatelessWidget {
     @required this.artwork,
     this.borderColor,
     this.setCornerRadius,
-    this.onTap,
-    this.heroOnURL,
+    this.onTap, this.index,
   }) : super(key: key);
 
   @override
@@ -125,6 +137,11 @@ class GridTile extends StatelessWidget {
             .translate(TEXT_GALLERY_GRID_WIDGET_DEFAULT_ARTWORK_TITLE);
 
     title = title.length > 13 ? title.substring(0, 13) + '...' : title;
+    setShowTitleAnimations(newIndex: index);
+
+    final bool isAnimatedTitle = showTitleAnimations;
+
+
 
     return GestureDetector(
       onTap: onTap == null ? () {} : () => onTap(artwork),
@@ -132,49 +149,46 @@ class GridTile extends StatelessWidget {
         child: Center(
           child: Stack(
             children: <Widget>[
-              Hero(
-                tag: "tagImage" + artwork.artId.toString(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: borderColor == null
-                            ? gridBorderColor
-                            : borderColor),
-                    borderRadius: BorderRadius.circular(cornerRadius),
-                    image: DecorationImage(
-                      image: artwork.images.length > 0
-                          ? NetworkImage(artwork.images[0].imageUrl)
-                          : NetworkImage(
-                              'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
-                      fit: BoxFit.cover,
-                    ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: borderColor == null
+                          ? gridBorderColor
+                          : borderColor),
+                  borderRadius: BorderRadius.circular(cornerRadius),
+                  image: DecorationImage(
+                    image: artwork.images.length > 0
+                        ? NetworkImage(artwork.images[0].imageUrl)
+                        : NetworkImage(
+                            'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              Container(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(.5),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(cornerRadius),
-                      bottomLeft: Radius.circular(cornerRadius),
+              Stack(
+                children: <Widget>[ Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(.5),
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(cornerRadius),
+                        bottomLeft: Radius.circular(cornerRadius),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(bottom: 10),
-                alignment: Alignment.bottomCenter,
-                child: Hero(
-                  tag: "tagText" + artwork.artId.toString(),
-                  child: Text(
-                    title,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      title,
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
-                ),
-              )
+                ]
+              ),
             ],
           ),
         ),

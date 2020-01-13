@@ -118,9 +118,9 @@ class _LoginFormState extends State<LoginForm> {
     double positionTopTextField = screenHeight * (.62);
     double positionBottomTextField = screenHeight * (.50);
     double positionCheckBox = screenHeight * (.45);
-    double positionMiddleButton = screenHeight * (.37);
-    double positionDivider = screenHeight * (.31);
-    double positionBottomButton = screenHeight * (.18);
+    double positionMiddleButton = screenHeight * (.35);
+    double positionDivider = screenHeight * (.27);
+    double positionBottomButton = screenHeight * (.16);
 
     return Stack(
       children: <Widget>[
@@ -153,31 +153,11 @@ class _LoginFormState extends State<LoginForm> {
             _onCheckboxChange();
           },
         ),
-        BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
-          builder: (BuildContext context, state) {
-            if (state is SchoolAuthLoading) {
-              return middleButton(
-                  position: positionMiddleButton,
-                  onTap: () {},
-                  icon: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ));
-            }
-            return middleButton(
-                position: positionMiddleButton,
-                onTap: dispatchLogin,
-                icon: Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                  size: 45,
-                ));
-          },
-        ),
         divider(
             position: positionDivider,
             text: AppLocalizations.of(context)
                 .translate(TEXT_LOGIN_DIVIDER_TEXT)),
-        bottomButton(
+        longButton(
           position: positionBottomButton,
           label: AppLocalizations.of(context)
               .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
@@ -203,7 +183,38 @@ class _LoginFormState extends State<LoginForm> {
                           .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
                       style: TextStyle(color: Colors.black))
                 ]),
-            onTap: dispatchRegistration)
+            onTap: dispatchRegistration),
+        BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
+          builder: (BuildContext context, state) {
+            if (state is !SchoolAuthLoading) {
+              return longButton(
+                position: positionMiddleButton,
+                label: AppLocalizations.of(context)
+                    .translate(TEXT_LOGIN_LOGIN_BUTTON),
+                onTap: () {
+                  dispatchLogin();
+                },
+              );
+            } else{ return Stack(
+                children: <Widget>[
+                  longButton(
+                    position: positionMiddleButton,
+                    label: AppLocalizations.of(context)
+                        .translate(TEXT_LOGIN_LOGIN_BUTTON),
+                    onTap: () {},
+                  ),
+                  SizedBox.expand(
+                    child: Container(
+                      color: Colors.black.withOpacity(.7),
+                    ),
+                  ),
+                  Center(
+                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                  )
+                ] );
+            }
+          },
+        ),
       ],
     );
   }
@@ -225,7 +236,7 @@ class _LoginFormState extends State<LoginForm> {
         Container(
           padding: EdgeInsets.only(left: 16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(2),
             color: Colors.white,
           ),
           child: Center(
@@ -354,7 +365,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget bottomButton(
+  Widget longButton(
       {@required double position, @required String label, Function onTap}) {
     return Positioned(
       left: 16,
@@ -364,7 +375,7 @@ class _LoginFormState extends State<LoginForm> {
         height: 50,
         child: RaisedButton(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
           onPressed: onTap,
           color: accentColor,
           elevation: 10,

@@ -13,6 +13,7 @@
   "login_register_here_prefix": "¿Aún no eres miembro? \n      Regístrate ",
   "login_register_here_main": "¡Aquí!",
   "login_register_here_suffix": "\n   Escuelas solamente",
+  "login_login_button": "Iniciar sesión",
 
 
   "artwork_upload_price_1": "$5",
@@ -60,6 +61,7 @@
   "registration_city_label": "Ingrese la ciudad de su escuela",
   "registration_state_label": "Ingrese el estado de su escuela",
   "registration_zipcode_label": "Ingrese el código postal de su escuela",
+  "registration_button_label" : "Registrarse",
 
 
   "school_gallery_app_bar_title": "Galería de arte escolar",
