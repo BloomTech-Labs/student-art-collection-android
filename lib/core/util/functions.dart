@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:graphql/client.dart';
 import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
@@ -34,9 +35,10 @@ Artwork convertResultToArtwork(QueryResult result, String mainKey) {
 }
 
 bool emailValidation(String email) {
-  return RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-      .hasMatch(email);
+  if(email != ""){
+    return EmailValidator.validate(email);
+  }
+  else return false;
 }
 
 String formatDate(DateTime dateTime) {
