@@ -139,7 +139,6 @@ class _UploadWidgetState extends State<UploadWidget> {
     return BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
       listener: (context, state) {
         if (state is ArtworkUploadSuccess) {
-          var i = 0;
           popAndReturn(
             context,
             'upload',
@@ -502,7 +501,6 @@ class _UploadWidgetState extends State<UploadWidget> {
     String message,
   ) {
     if (Navigator.canPop(context)) {
-      var i = 0;
       Navigator.pop(
           context,
           ArtworkToReturn(
