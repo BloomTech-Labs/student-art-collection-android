@@ -15,7 +15,6 @@ import 'package:student_art_collection/core/presentation/widget/carousel_image_v
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
-//for initial commit
 
 class ArtworkDetailsPage extends StatefulWidget {
   static const ID = "/artwork_details";
@@ -50,7 +49,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    String title = artwork.title != '' ? artwork.title : AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_UNTITLED_LABEL);
+    String title = artwork.title != '' ? artwork.title : displayLocalizedString(context,TEXT_ARTWORK_DETAILS_UNTITLED_LABEL);
 
     return BlocProvider<ArtworkDetailsBloc>(
       create: (context) => sl<ArtworkDetailsBloc>(),
@@ -65,7 +64,6 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
             if(state is ArtworkDetailsFormSubmittedState){
              Navigator.pop(context, TEXT_ARTWORK_DETAILS_FORM_SUBMITTED_MESSAGE);
             }
-            //listener logic
           },
           child: BlocBuilder<ArtworkDetailsBloc, ArtworkDetailsState>(
             builder: (context, state) {
@@ -120,7 +118,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
       height: topBannerHeight,
       alignment: Alignment.center,
       padding: EdgeInsets.all(8),
-      child: Text(AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_TOP_BANNER_MESSAGE)),
+      child: Text(displayLocalizedString(context,TEXT_ARTWORK_DETAILS_TOP_BANNER_MESSAGE)),
     );
   }
 
@@ -129,7 +127,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
 
     //Todo: replace hard coded values with real default price when backend is updated
     String price = artwork.price == 0 ? '20' : artwork.price.toString();
-    String artworkTitle = artwork.title == "" ? AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_UNTITLED_LABEL) : artwork.title;
+    String artworkTitle = artwork.title == "" ? displayLocalizedString(context,TEXT_ARTWORK_DETAILS_UNTITLED_LABEL) : artwork.title;
     String artworkDate = artwork.datePosted == null
         ? DateTime.now().year.toString()
         : artwork.datePosted.year.toString();
@@ -155,7 +153,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           right: 16,
           child: Container(
             child: Text(
-              AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_SUGGESTED_DONATION) + price,
+              displayLocalizedString(context,TEXT_ARTWORK_DETAILS_SUGGESTED_DONATION) + price,
               textAlign: TextAlign.center,
             ),
           ),
@@ -191,7 +189,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   maxLength: 40,
                   maxLengthEnforced: true,
                   decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_NAME_LABEL),
+                      labelText: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_NAME_LABEL),
                       counterText: "",
                       border: OutlineInputBorder(
                           borderRadius:
@@ -207,7 +205,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   maxLength: 40,
                   maxLengthEnforced: true,
                   decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_EMAIL_LABEL),
+                      labelText: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_EMAIL_LABEL),
                       counterText: "",
                       border: OutlineInputBorder(
                           borderRadius:
@@ -227,7 +225,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   maxLengthEnforced: true,
                   decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_MESSAGE_LABEL),
+                      labelText: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_MESSAGE_LABEL),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(cardCornerRadius),
                       )),
@@ -251,11 +249,11 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                 artworkDetailsBloc.add(SubmitContactForm(ContactForm(
                     sendTo: artwork.schoolInfo.email,
                     from: emailController.text,
-                    message: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_REPLY_TO) + emailController.text + "\n\n" + messageController.text,
-                    subject: nameController.text + AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) + artwork.title + " #: " + artwork.artId.toString(),
+                    message: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_REPLY_TO) + emailController.text + "\n\n" + messageController.text,
+                    subject: nameController.text + displayLocalizedString(context,TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) + artwork.title + " #: " + artwork.artId.toString(),
                     name: nameController.text)));
               },
-              child: Text(AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL)),
+              child: Text(displayLocalizedString(context,TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL)),
             ),
           ),
         )
