@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
@@ -99,23 +101,23 @@ class _LoginFormState extends State<LoginForm> {
       children: <Widget>[
         topBanner(
             position: positionTopBanner,
-            text: 'Welcome \n back!',
+            text: AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
             fontSize: 40),
         textFieldWidget(
             position: positionTopTextField,
-            text: 'Email',
+            text: AppLocalizations.of(context).translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
             onChanged: (value) {
               email = value;
             }),
         textFieldWidget(
             position: positionBottomTextField,
-            text: 'Password',
+            text: AppLocalizations.of(context).translate(TEXT_LOGIN_PASSWORD_LABEL),
             onChanged: (value) {
               password = value;
             }),
         checkBoxWithLabel(
           position: positionCheckBox,
-          label: 'Remember Me?',
+          label: AppLocalizations.of(context).translate(TEXT_LOGIN_REMEMBER_ME_BOX),
           onChanged: (value) {
             _onCheckboxChange();
           },
@@ -133,27 +135,27 @@ class _LoginFormState extends State<LoginForm> {
                 size: 45,
               ));
              },),
-        divider(position: positionDivider, text: 'OR'),
+        divider(position: positionDivider, text: AppLocalizations.of(context).translate(TEXT_LOGIN_DIVIDER_TEXT)),
         bottomButton(
           position: positionBottomButton,
-          label: 'Continue as Guest',
+          label: AppLocalizations.of(context).translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
           onTap: () {
             Navigator.pushNamed(context, GalleryPage.ID);
           },
         ),
         footerWidget(
             textSpan: TextSpan(
-                text: 'Not a member yet? \n    Sign Up ',
+                text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
                 style: TextStyle(color: Colors.black),
                 children: <TextSpan>[
                   TextSpan(
-                    text: 'Here!',
+                    text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
                       color: Colors.blue,
                     ),
                   ),
                   TextSpan(
-                      text: '\n     Schools Only',
+                      text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
                       style: TextStyle(color: Colors.black))
                 ]),
             onTap: dispatchRegistration)
