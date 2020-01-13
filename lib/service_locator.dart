@@ -132,7 +132,7 @@ Future init() async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => SessionManager());
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  sl.registerLazySingleton(() => prefs);
+  sl.registerLazySingleton<SharedPreferences>(() => prefs);
 
   // External
   sl.registerLazySingleton(() => DataConnectionChecker());

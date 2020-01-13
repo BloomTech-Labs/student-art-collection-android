@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/domain/usecase/usecase.dart';
 import 'package:student_art_collection/core/error/failure.dart';
@@ -13,6 +14,8 @@ import 'package:student_art_collection/features/list_art/domain/usecase/register
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 import 'package:meta/meta.dart';
+
+import '../../../../../service_locator.dart';
 
 class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
   final LoginSchool loginSchool;
@@ -42,12 +45,16 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       final credentials = converter.loginInfoToCredentials(
         email: event.email,
         password: event.password,
+        shouldRemember: event.shouldRemember,
       );
       yield* credentials.fold(
         (failure) async* {
           yield SchoolAuthError(message: failure.message);
         },
         (credentials) async* {
+          if (credentials.shouldRemember) {
+            storeUserCredentials(credentials.email, credentials.password);
+          }
           yield SchoolAuthLoading();
           final loginResult = await loginSchool(credentials);
           yield* _eitherAuthorizedOrErrorState(loginResult);
@@ -104,10 +111,32 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       },
       (school) {
         sessionManager.currentUser = Authorized(school: school);
+        storeSchoolInfo();
         return Authorized(
           school: school,
         );
       },
     );
+  }
+
+  void storeUserCredentials(String email, String password) {
+    sl<SharedPreferences>().setString('email', email);
+    sl<SharedPreferences>().setString('password', password);
+  }
+
+  void storeSchoolInfo() {
+    final currentUser = sessionManager.currentUser;
+    if (currentUser is Authorized) {
+      sl<SharedPreferences>().setInt('id', currentUser.school.id);
+      sl<SharedPreferences>()
+          .setString('schoolId', currentUser.school.schoolId);
+      sl<SharedPreferences>()
+          .setString('schoolName', currentUser.school.schoolName);
+      sl<SharedPreferences>()
+          .setString('schoolEmail', currentUser.school.email);
+      sl<SharedPreferences>().setString('address', currentUser.school.address);
+      sl<SharedPreferences>().setString('state', currentUser.school.state);
+      sl<SharedPreferences>().setString('zipcode', currentUser.school.zipcode);
+    }
   }
 }
