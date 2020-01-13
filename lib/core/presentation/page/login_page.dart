@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
+import 'package:student_art_collection/core/util/entity_constants.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
@@ -98,17 +99,20 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setRememberedInfo();
   }
 
   void setRememberedInfo() {
     setState(() {
-      final storedEmail = sl<SharedPreferences>().getString('email' ?? '');
+      final storedEmail =
+          sl<SharedPreferences>().getString(LOCAL_STORAGE_USER_EMAIL ?? '');
       emailController.text = storedEmail;
       passwordController.text =
-          sl<SharedPreferences>().getString('password' ?? '');
+          sl<SharedPreferences>().getString(LOCAL_STORAGE_USER_PASSWORD ?? '');
+      if (storedEmail != null) {
+        dispatchLoginOnReturn();
+      }
     });
   }
 

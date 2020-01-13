@@ -25,6 +25,7 @@ void main() {
   MockFirebaseAuth mockFirebaseAuth;
   MockAuthResult mockAuthResult;
   MockFirebaseUser mockFirebaseUser;
+  MockLocalDataSource mockLocalDataSource;
 
   setUp(() {
     mockRemoteDataSource = MockRemoteDataSource();
@@ -32,11 +33,13 @@ void main() {
     mockFirebaseAuth = MockFirebaseAuth();
     mockAuthResult = MockAuthResult();
     mockFirebaseUser = MockFirebaseUser();
+    mockLocalDataSource = MockLocalDataSource();
 
     repository = FirebaseAuthRepository(
         networkInfo: mockNetworkInfo,
         remoteDataSource: mockRemoteDataSource,
-        firebaseAuth: mockFirebaseAuth);
+        firebaseAuth: mockFirebaseAuth,
+        localDataSource: mockLocalDataSource);
   });
 
   void runTestsOnline(Function body) {
@@ -216,6 +219,19 @@ void main() {
   });
 
   group('loginSchoolOnReturn', () {
+    test(
+        'should login school on return when user exists and has not logged out',
+        () async {
+      when(mockFirebaseAuth.currentUser())
+          .thenAnswer((_) async => mockFirebaseUser);
+      when(mockLocalDataSource.getCurrentlyStoredSchool(any))
+          .thenAnswer(((_) async => tRegisteredSchool));
+
+      final result = await repository.loginSchoolOnReturn();
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Right(tRegisteredSchool));
+    });
+
     test('should return FirebaseFailure when unable to login school on return',
         () async {
       when(mockFirebaseAuth.currentUser()).thenAnswer((_) async => null);
@@ -224,6 +240,21 @@ void main() {
 
       verify(mockFirebaseAuth.currentUser());
       expect(result, Left(FirebaseFailure(LOGIN_ON_RETURN_ERROR)));
+    });
+
+    test(
+        'should return ServerFailure and logout firebase user when server does not return school',
+        () async {
+      when(mockLocalDataSource.getCurrentlyStoredSchool(any))
+          .thenThrow(ServerException());
+      when(mockFirebaseAuth.currentUser())
+          .thenAnswer((_) async => mockFirebaseUser);
+      when(mockFirebaseUser.uid).thenReturn('test');
+
+      final result = await repository.loginSchoolOnReturn();
+
+      verify(mockFirebaseAuth.currentUser());
+      expect(result, Left(ServerFailure()));
     });
   });
 }

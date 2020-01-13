@@ -9,5 +9,5 @@ abstract class SchoolAuthRepository {
   Future<Either<Failure, School>> registerNewSchool(SchoolToRegister school);
   Future<Either<Failure, School>> loginSchool(Credentials credentials);
   Future<Either<Failure, bool>> logoutSchool();
-  Future<Either<Failure, String>> loginSchoolOnReturn();
+  Future<Either<Failure, School>> loginSchoolOnReturn();
 }

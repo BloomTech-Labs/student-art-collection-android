@@ -24,13 +24,13 @@ void main() {
       'should return user school from repository if user was previously logged in',
       () async {
     when(mockSchoolAuthRepository.loginSchoolOnReturn())
-        .thenAnswer((_) async => Right('test uid'));
+        .thenAnswer((_) async => Right(tRegisteredSchool));
 
     final result = await usecase(NoParams());
 
     verify(mockSchoolAuthRepository.loginSchoolOnReturn());
     verifyNoMoreInteractions(mockSchoolAuthRepository);
-    expect(result, Right('test uid'));
+    expect(result, Right(tRegisteredSchool));
   });
 
   test('should return FirebaseFailure if unable to login previous user',

@@ -52,9 +52,6 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
           yield SchoolAuthError(message: failure.message);
         },
         (credentials) async* {
-          if (credentials.shouldRemember) {
-            storeUserCredentials(credentials.email, credentials.password);
-          }
           yield SchoolAuthLoading();
           final loginResult = await loginSchool(credentials);
           yield* _eitherAuthorizedOrErrorState(loginResult);
@@ -86,7 +83,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
     if (event is LoginOnReturnEvent) {
       yield SchoolAuthLoading();
       final loginResult = await loginSchoolOnReturn(NoParams());
-      yield* _eitherAuthorizedOrErrorReturn(loginResult);
+      yield* _eitherAuthorizedOrErrorState(loginResult);
     }
     if (event is LogoutSchool) {
       yield SchoolAuthLoading();
@@ -111,55 +108,10 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       },
       (school) {
         sessionManager.currentUser = Authorized(school: school);
-        storeSchoolInfo();
         return Authorized(
           school: school,
         );
       },
     );
-  }
-
-  Stream<SchoolAuthState> _eitherAuthorizedOrErrorReturn(
-      Either<Failure, String> failureOrSchool) async* {
-    yield failureOrSchool.fold(
-      (failure) {
-        if (failure is FirebaseFailure)
-          return SchoolAuthError(message: failure.message);
-        return SchoolAuthError(message: 'Something went wrong');
-      },
-      (uid) {
-        final school = School(
-          id: sl<SharedPreferences>().getInt('id' ?? ''),
-          schoolId: sl<SharedPreferences>().getString('uid' ?? ''),
-          email: sl<SharedPreferences>().getString('schoolEmail' ?? ''),
-          address: sl<SharedPreferences>().getString('address' ?? ''),
-          city: sl<SharedPreferences>().getString('city' ?? ''),
-          state: sl<SharedPreferences>().getString('state' ?? ''),
-          zipcode: sl<SharedPreferences>().getString('zipcode' ?? ''),
-        );
-        sessionManager.currentUser = Authorized(school: school);
-        return sessionManager.currentUser;
-      },
-    );
-  }
-
-  void storeUserCredentials(String email, String password) {
-    sl<SharedPreferences>().setString('email', email);
-    sl<SharedPreferences>().setString('password', password);
-  }
-
-  void storeSchoolInfo() {
-    final currentUser = sessionManager.currentUser;
-    if (currentUser is Authorized) {
-      sl<SharedPreferences>().setInt('id', currentUser.school.id);
-      sl<SharedPreferences>().setString('uid', currentUser.school.schoolId);
-      sl<SharedPreferences>()
-          .setString('schoolName', currentUser.school.schoolName);
-      sl<SharedPreferences>()
-          .setString('schoolEmail', currentUser.school.email);
-      sl<SharedPreferences>().setString('address', currentUser.school.address);
-      sl<SharedPreferences>().setString('state', currentUser.school.state);
-      sl<SharedPreferences>().setString('zipcode', currentUser.school.zipcode);
-    }
   }
 }

@@ -5,11 +5,14 @@ import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:meta/meta.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/util/entity_constants.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 
 abstract class SchoolLocalDataSource {
   Future<School> getCurrentlyStoredSchool(String uid);
 
   Future<bool> storeSchool(School schoolToStore);
+
+  Future<bool> storeCredentials(Credentials credentials);
 }
 
 class SharedPrefsLocalDataSource implements SchoolLocalDataSource {
@@ -29,8 +32,8 @@ class SharedPrefsLocalDataSource implements SchoolLocalDataSource {
     final completableSchool = Completer<School>();
     final id = sharedPrefs
         .getInt(LOCAL_STORAGE_SCHOOL_ID ?? LOCAL_STORAGE_DEFAULT_RESPONSE_INT);
-    final name = sharedPrefs
-        .getString(LOCAL_STORAGE_SCHOOL_NAME ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
+    final name = sharedPrefs.getString(
+        LOCAL_STORAGE_SCHOOL_NAME ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
     final email = sharedPrefs.getString(
         LOCAL_STORAGE_SCHOOL_EMAIL ?? LOCAL_STORAGE_DEFAULT_RESPONSE_STRING);
     final address = sharedPrefs.getString(
@@ -68,5 +71,13 @@ class SharedPrefsLocalDataSource implements SchoolLocalDataSource {
     sharedPrefs.setString(LOCAL_STORAGE_SCHOOL_ZIPCODE, schoolToStore.zipcode);
     completableSchool.complete(true);
     return completableSchool.future;
+  }
+
+  Future<bool> storeCredentials(Credentials credentials) {
+    final completable = Completer<bool>();
+    sharedPrefs.setString(LOCAL_STORAGE_USER_EMAIL, credentials.email);
+    sharedPrefs.setString(LOCAL_STORAGE_USER_PASSWORD, credentials.password);
+    completable.complete(true);
+    return completable.future;
   }
 }
