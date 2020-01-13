@@ -4,12 +4,15 @@
   "starter_guest_button": "Continue as Guest",
 
 
-  "login_app_bar_title": "Login",
-  "login_email_address_label": "Enter School Email Address",
-  "login_remember_me_box": "Remember Me",
-  "login_password_label": "Enter your password",
-  "login_login_button": "Login",
-  "login_register_here_label": "Don\"t have an account? Register here!",
+  "login_header_text": "Welcome \n back!",
+  "login_email_address_label": "Email",
+  "login_remember_me_box": "Remember Me?",
+  "login_password_label": "Password",
+  "login_guest_login_button": "Continue as Guest",
+  "login_divider_text": "OR",
+  "login_register_here_prefix": "Not a member yet? \n    Sign Up ",
+  "login_register_here_main": "Here!",
+  "login_register_here_suffix": "\n     Schools Only",
 
 
   "artwork_upload_price_1": "$5",

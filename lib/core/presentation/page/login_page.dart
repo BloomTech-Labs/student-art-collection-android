@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
@@ -10,35 +13,37 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/auth/
 import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
 
+import '../../../features/buy_art/presentation/page/gallery_page.dart';
+import '../../../features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
+import '../../../features/list_art/presentation/bloc/auth/school_auth_state.dart';
+import '../../../features/list_art/presentation/bloc/auth/school_auth_state.dart';
 import '../../../service_locator.dart';
+import '../../util/theme_constants.dart';
+import '../../util/theme_constants.dart';
 
 class LoginPage extends StatelessWidget {
   static const String ID = "/";
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider<SchoolAuthBloc>(
       create: (context) => sl<SchoolAuthBloc>(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: primaryColor,
-        body: Padding(
-          padding: EdgeInsets.all(0),
-          child: SingleChildScrollView(
-            child: BlocListener<SchoolAuthBloc, SchoolAuthState>(
-              listener: (context, state) {
-                if (state is Authorized) {
-                  Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
-                } else if (state is SchoolAuthError) {
-                  final snackBar = SnackBar(content: Text(state.message));
-                  Scaffold.of(context).showSnackBar(snackBar);
-                }
-              },
-              child: LoginForm(
-                screenHeight: screenHeight,
-              ),
-            ),
-          ),
+        body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
+          listener: (context, state) {
+            if (state is Authorized) {
+              Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
+            } else if (state is SchoolAuthError) {
+              final snackBar = SnackBar(content: Text(state.message));
+              Scaffold.of(context).showSnackBar(snackBar);
+            }
+          },
+          child: LayoutBuilder(builder:
+              (BuildContext context, BoxConstraints viewportConstraints) {
+            return LoginForm(screenHeight: viewportConstraints.maxHeight);
+          }),
         ),
       ),
     );
@@ -46,180 +51,25 @@ class LoginPage extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
-  final screenHeight;
+  final double screenHeight;
 
-  const LoginForm({Key key, @required this.screenHeight}) : super(key: key);
+  const LoginForm({Key key, this.screenHeight}) : super(key: key);
 
   @override
-  _LoginFormState createState() => _LoginFormState(screenHeight: screenHeight);
+  _LoginFormState createState() => _LoginFormState(screenHeight);
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final screenHeight;
+  final double screenHeight;
   String email, password;
   bool shouldRemember = false;
 
-  _LoginFormState({@required this.screenHeight});
+  _LoginFormState(this.screenHeight);
 
   void _onCheckboxChange() {
     setState(() {
       shouldRemember = !shouldRemember;
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: screenHeight * .29,
-                  padding: EdgeInsets.only(left: 12),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Welcome\nback!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: screenHeight * .25,
-                  child: Column(
-                    children: <Widget>[
-
-                      textFieldWidgetNoBorderWhite(label: 'Email', onChanged: (value){email = value;}),
-                      Center(child: SizedBox(height: 20)),
-                      textFieldWidgetNoBorderWhite(label: 'Password', onChanged: (value){password = value;}),
-                      Container(
-                        padding: EdgeInsets.only(top: 16),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              color: Colors.white,
-                              margin: EdgeInsets.only(right: 8),
-                              child: CustomCheckbox(
-                                value: shouldRemember,
-                                activeColor: accentColor,
-                                materialTapTargetSize: null,
-                                onChanged: (value) {
-                                  _onCheckboxChange();
-                                },
-                                useTapTarget: false,
-                              ),
-                            ),
-                            Text(
-                              'Remember Me?',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: screenHeight * .4,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: dispatchLogin,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: accentColor,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Row(children: <Widget>[
-                        Expanded(
-                            child: Divider(
-                          color: Colors.white,
-                          thickness: 1.5,
-                        )),
-                        Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              "OR",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            )),
-                        Expanded(
-                            child: Divider(
-                          color: Colors.white,
-                          thickness: 1.5,
-                        )),
-                      ]),
-                      Center(
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: accentColor,
-                              borderRadius:
-                                  BorderRadiusDirectional.circular(5)),
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(context, GalleryPage.ID);
-                              },
-                              child: Text(
-                                'Continue as Guest',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: InkWell(
-                          child: Text.rich(
-                            TextSpan(
-                                text: 'Not a member yet? \n    ',
-                                style: TextStyle(color: Colors.white),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: 'Sign Up Here!',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        decoration: TextDecoration.underline,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  TextSpan(
-                                      text: '\n     Schools Only',
-                                      style: TextStyle(color: Colors.white))
-                                ]),
-                          ),
-                          onTap: () {
-                            dispatchGuest();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void dispatchLogin() {
@@ -229,11 +79,110 @@ class _LoginFormState extends State<LoginForm> {
     ));
   }
 
-  void dispatchGuest() {
+  void dispatchRegistration() {
     Navigator.pushNamed(context, SchoolRegistrationPage.ID);
   }
 
-  Widget textFieldWidgetNoBorderWhite({String label, Function(String value) onChanged}) {
+  void dispatchGuest() {
+    Navigator.pushNamed(context, GalleryPage.ID);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double positionTopBanner = screenHeight * (.77);
+    double positionTopTextField = screenHeight * (.62);
+    double positionBottomTextField = screenHeight * (.50);
+    double positionCheckBox = screenHeight * (.45);
+    double positionMiddleButton = screenHeight * (.37);
+    double positionDivider = screenHeight * (.31);
+    double positionBottomButton = screenHeight * (.18);
+
+    return Stack(
+      children: <Widget>[
+        topBanner(
+            position: positionTopBanner,
+            text:
+                AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
+            fontSize: 40),
+        textFieldWidget(
+            position: positionTopTextField,
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
+            onChanged: (value) {
+              email = value;
+            }),
+        textFieldWidget(
+            position: positionBottomTextField,
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_PASSWORD_LABEL),
+            onChanged: (value) {
+              password = value;
+            }),
+        checkBoxWithLabel(
+          position: positionCheckBox,
+          label: AppLocalizations.of(context)
+              .translate(TEXT_LOGIN_REMEMBER_ME_BOX),
+          onChanged: (value) {
+            _onCheckboxChange();
+          },
+        ),
+        BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
+          builder: (BuildContext context, state) {
+            if (state is SchoolAuthLoading) {
+              return middleButton(
+                  position: positionMiddleButton,
+                  onTap: () {},
+                  icon: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ));
+            }
+            return middleButton(
+                position: positionMiddleButton,
+                onTap: dispatchLogin,
+                icon: Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                  size: 45,
+                ));
+          },
+        ),
+        divider(
+            position: positionDivider,
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_DIVIDER_TEXT)),
+        bottomButton(
+          position: positionBottomButton,
+          label: AppLocalizations.of(context)
+              .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
+          onTap: () {
+            Navigator.pushNamed(context, GalleryPage.ID);
+          },
+        ),
+        footerWidget(
+            textSpan: TextSpan(
+                text: AppLocalizations.of(context)
+                    .translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
+                style: TextStyle(color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: AppLocalizations.of(context)
+                        .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  TextSpan(
+                      text: AppLocalizations.of(context)
+                          .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
+                      style: TextStyle(color: Colors.black))
+                ]),
+            onTap: dispatchRegistration)
+      ],
+    );
+  }
+
+  Widget textFieldWidgetNoBorderWhite(
+      {String label, Function(String value) onChanged}) {
     return Column(
       children: <Widget>[
         Container(
@@ -253,12 +202,156 @@ class _LoginFormState extends State<LoginForm> {
           child: Center(
             child: TextField(
               keyboardType: TextInputType.visiblePassword,
-              onChanged:(value) => onChanged(value),
+              onChanged: (value) => onChanged(value),
               decoration: InputDecoration.collapsed(hintText: ""),
             ),
           ),
         )
       ],
+    );
+  }
+
+  Widget topBanner(
+      {@required double position,
+      @required String text,
+      @required double fontSize}) {
+    return Positioned(
+      bottom: position,
+      left: 24,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget textFieldWidget(
+      {@required double position,
+      @required String text,
+      @required Function(String) onChanged}) {
+    return Positioned(
+        bottom: position,
+        left: 16,
+        right: 16,
+        child: textFieldWidgetNoBorderWhite(label: text, onChanged: onChanged));
+  }
+
+  Widget checkBoxWithLabel(
+      {@required double position,
+      @required String label,
+      Function(bool) onChanged}) {
+    return Positioned(
+      left: 16,
+      bottom: position,
+      child: Container(
+        padding: EdgeInsets.only(top: 16),
+        child: Row(
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              margin: EdgeInsets.only(right: 8),
+              child: CustomCheckbox(
+                value: shouldRemember,
+                activeColor: accentColor,
+                materialTapTargetSize: null,
+                onChanged: (value) => onChanged(value),
+                useTapTarget: false,
+              ),
+            ),
+            Text(
+              label,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget middleButton(
+      {@required double position, Function onTap, Widget icon}) {
+    return Positioned(
+      right: 16,
+      bottom: position,
+      child: Container(
+        child: RaisedButton(
+          padding: EdgeInsets.all(8),
+          onPressed: onTap,
+          elevation: 10,
+          color: accentColor,
+          shape: CircleBorder(),
+          child: icon,
+        ),
+      ),
+    );
+  }
+
+  Widget divider({@required double position, String text}) {
+    return Positioned(
+      bottom: position,
+      left: 0,
+      right: 0,
+      child: Row(children: <Widget>[
+        Expanded(
+            child: Divider(
+          color: Colors.white,
+          thickness: 1.5,
+        )),
+        Container(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              text,
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            )),
+        Expanded(
+            child: Divider(
+          color: Colors.white,
+          thickness: 1.5,
+        )),
+      ]),
+    );
+  }
+
+  Widget bottomButton(
+      {@required double position, @required String label, Function onTap}) {
+    return Positioned(
+      left: 16,
+      right: 16,
+      bottom: position,
+      child: Container(
+        height: 50,
+        child: RaisedButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          onPressed: onTap,
+          color: accentColor,
+          elevation: 10,
+          textTheme: ButtonTextTheme.primary,
+          child: Center(child: Text(label)),
+        ),
+      ),
+    );
+  }
+
+  Widget footerWidget({TextSpan textSpan, Function onTap}) {
+    return Positioned(
+      bottom: 24,
+      left: 0,
+      right: 0,
+      child: Center(
+        child: Container(
+          child: InkWell(
+            child: Text.rich(textSpan),
+            onTap: () {
+              dispatchRegistration();
+            },
+          ),
+        ),
+      ),
     );
   }
 }

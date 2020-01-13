@@ -57,10 +57,15 @@ class GalleryGrid extends StatelessWidget {
         scrollDirection: Axis.vertical,
         crossAxisCount: staggerCount,
         itemCount: validatedArtworkList.length,
-        itemBuilder: (BuildContext context, int index) => GridTile(
-          artwork: validatedArtworkList[index],
-          onTap: (artwork) => onTap(artwork, index),
-          heroOnURL: heroOnURL,
+        itemBuilder: (BuildContext context, int index) => Padding(
+          padding: (index == 0 || index == 1)
+              ? const EdgeInsets.only(top: 16.0)
+              : const EdgeInsets.all(0.0),
+          child: GridTile(
+            artwork: validatedArtworkList[index],
+            onTap: (artwork) => onTap(artwork, index),
+            heroOnURL: heroOnURL,
+          ),
         ),
         staggeredTileBuilder: (int index) {
           StaggeredTile staggeredTile = StaggeredTile.count(
