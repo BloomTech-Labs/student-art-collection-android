@@ -28,22 +28,28 @@ class GalleryGrid extends StatelessWidget {
   final int mainAxisSpacing;
   final int crossAxisSpacing;
   final Function(aw.Artwork, int index) onTap;
-  final bool heroOnURL;
+  final bool heroOnURL, showEmptyArtworks;
 
-  const GalleryGrid(
-      {Key key,
-      @required this.artworkList,
-      @required this.isStaggered,
-      this.padding,
-      this.mainAxisSpacing,
-      this.crossAxisSpacing,
-      this.onTap,
-      this.heroOnURL})
-      : super(key: key);
+  const GalleryGrid({
+    Key key,
+    @required this.artworkList,
+    @required this.isStaggered,
+    this.padding,
+    this.mainAxisSpacing,
+    this.crossAxisSpacing,
+    this.onTap,
+    this.heroOnURL,
+    this.showEmptyArtworks = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<aw.Artwork> validatedArtworkList = artworkValidation(artworkList);
+    List<aw.Artwork> validatedArtworkList;
+    if (showEmptyArtworks) {
+      validatedArtworkList = artworkList;
+    } else {
+      validatedArtworkList = artworkValidation(artworkList);
+    }
     List<int> sizeList = [];
     for (int i = 0; i < validatedArtworkList.length; i++) {
       sizeList.add(randomInRange(
@@ -57,10 +63,15 @@ class GalleryGrid extends StatelessWidget {
         scrollDirection: Axis.vertical,
         crossAxisCount: staggerCount,
         itemCount: validatedArtworkList.length,
-        itemBuilder: (BuildContext context, int index) => GridTile(
-          artwork: validatedArtworkList[index],
-          onTap: (artwork) => onTap(artwork, index),
-          heroOnURL: heroOnURL,
+        itemBuilder: (BuildContext context, int index) => Padding(
+          padding: (index == 0 || index == 1)
+              ? const EdgeInsets.only(top: 16.0)
+              : const EdgeInsets.all(0.0),
+          child: GridTile(
+            artwork: validatedArtworkList[index],
+            onTap: (artwork) => onTap(artwork, index),
+            heroOnURL: heroOnURL,
+          ),
         ),
         staggeredTileBuilder: (int index) {
           StaggeredTile staggeredTile = StaggeredTile.count(
@@ -121,15 +132,22 @@ class GridTile extends StatelessWidget {
         child: Center(
           child: Stack(
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color:
-                          borderColor == null ? gridBorderColor : borderColor),
-                  borderRadius: BorderRadius.circular(cornerRadius),
-                  image: DecorationImage(
-                    image: NetworkImage(artwork.images[0].imageUrl),
-                    fit: BoxFit.cover,
+              Hero(
+                tag: "tagImage" + artwork.artId.toString(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: borderColor == null
+                            ? gridBorderColor
+                            : borderColor),
+                    borderRadius: BorderRadius.circular(cornerRadius),
+                    image: DecorationImage(
+                      image: artwork.images.length > 0
+                          ? NetworkImage(artwork.images[0].imageUrl)
+                          : NetworkImage(
+                              'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -149,9 +167,12 @@ class GridTile extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(bottom: 10),
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  title,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                child: Hero(
+                  tag: "tagText" + artwork.artId.toString(),
+                  child: Text(
+                    title,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               )
             ],

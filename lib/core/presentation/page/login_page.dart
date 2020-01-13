@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
+import 'package:student_art_collection/core/util/entity_constants.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
@@ -36,8 +38,10 @@ class LoginPage extends StatelessWidget {
             if (state is Authorized) {
               Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
             } else if (state is SchoolAuthError) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
+              if (state.message != null) {
+                final snackBar = SnackBar(content: Text(state.message));
+                Scaffold.of(context).showSnackBar(snackBar);
+              }
             }
           },
           child: LayoutBuilder(builder:
@@ -64,6 +68,9 @@ class _LoginFormState extends State<LoginForm> {
   String email, password;
   bool shouldRemember = false;
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   _LoginFormState(this.screenHeight);
 
   void _onCheckboxChange() {
@@ -76,7 +83,12 @@ class _LoginFormState extends State<LoginForm> {
     BlocProvider.of<SchoolAuthBloc>(context).add(LoginSchoolEvent(
       email: email,
       password: password,
+      shouldRemember: shouldRemember,
     ));
+  }
+
+  void dispatchLoginOnReturn() {
+    BlocProvider.of<SchoolAuthBloc>(context).add(LoginOnReturnEvent());
   }
 
   void dispatchRegistration() {
@@ -85,6 +97,19 @@ class _LoginFormState extends State<LoginForm> {
 
   void dispatchGuest() {
     Navigator.pushNamed(context, GalleryPage.ID);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    dispatchLoginOnReturn();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -101,61 +126,81 @@ class _LoginFormState extends State<LoginForm> {
       children: <Widget>[
         topBanner(
             position: positionTopBanner,
-            text: AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
+            text:
+                AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
             fontSize: 40),
         textFieldWidget(
+            controller: emailController,
             position: positionTopTextField,
-            text: AppLocalizations.of(context).translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
             onChanged: (value) {
               email = value;
             }),
         textFieldWidget(
+            controller: passwordController,
             position: positionBottomTextField,
-            text: AppLocalizations.of(context).translate(TEXT_LOGIN_PASSWORD_LABEL),
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_PASSWORD_LABEL),
             onChanged: (value) {
               password = value;
             }),
         checkBoxWithLabel(
           position: positionCheckBox,
-          label: AppLocalizations.of(context).translate(TEXT_LOGIN_REMEMBER_ME_BOX),
+          label: AppLocalizations.of(context)
+              .translate(TEXT_LOGIN_REMEMBER_ME_BOX),
           onChanged: (value) {
             _onCheckboxChange();
           },
         ),
         BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
-             builder: (BuildContext context, state) {
-               if(state is SchoolAuthLoading){
-                 return  middleButton(position: positionMiddleButton, onTap: (){}, icon: CircularProgressIndicator(
-                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                 ));
-               }
-              return middleButton(position: positionMiddleButton, onTap: dispatchLogin, icon: Icon(
-                Icons.arrow_forward,
-                color: Colors.white,
-                size: 45,
-              ));
-             },),
-        divider(position: positionDivider, text: AppLocalizations.of(context).translate(TEXT_LOGIN_DIVIDER_TEXT)),
+          builder: (BuildContext context, state) {
+            if (state is SchoolAuthLoading) {
+              return middleButton(
+                  position: positionMiddleButton,
+                  onTap: () {},
+                  icon: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ));
+            }
+            return middleButton(
+                position: positionMiddleButton,
+                onTap: dispatchLogin,
+                icon: Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                  size: 45,
+                ));
+          },
+        ),
+        divider(
+            position: positionDivider,
+            text: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_DIVIDER_TEXT)),
         bottomButton(
           position: positionBottomButton,
-          label: AppLocalizations.of(context).translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
+          label: AppLocalizations.of(context)
+              .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
           onTap: () {
             Navigator.pushNamed(context, GalleryPage.ID);
           },
         ),
         footerWidget(
             textSpan: TextSpan(
-                text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
+                text: AppLocalizations.of(context)
+                    .translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
                 style: TextStyle(color: Colors.black),
                 children: <TextSpan>[
                   TextSpan(
-                    text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
+                    text: AppLocalizations.of(context)
+                        .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
                       color: Colors.blue,
                     ),
                   ),
                   TextSpan(
-                      text: AppLocalizations.of(context).translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
+                      text: AppLocalizations.of(context)
+                          .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
                       style: TextStyle(color: Colors.black))
                 ]),
             onTap: dispatchRegistration)
@@ -164,7 +209,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Widget textFieldWidgetNoBorderWhite(
-      {String label, Function(String value) onChanged}) {
+      {String label,
+      Function(String value) onChanged,
+      TextEditingController controller}) {
     return Column(
       children: <Widget>[
         Container(
@@ -183,6 +230,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           child: Center(
             child: TextField(
+              controller: controller,
               keyboardType: TextInputType.visiblePassword,
               onChanged: (value) => onChanged(value),
               decoration: InputDecoration.collapsed(hintText: ""),
@@ -210,15 +258,21 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget textFieldWidget(
-      {@required double position,
-      @required String text,
-      @required Function(String) onChanged}) {
+  Widget textFieldWidget({
+    @required double position,
+    @required String text,
+    @required Function(String) onChanged,
+    @required TextEditingController controller,
+  }) {
     return Positioned(
         bottom: position,
         left: 16,
         right: 16,
-        child: textFieldWidgetNoBorderWhite(label: text, onChanged: onChanged));
+        child: textFieldWidgetNoBorderWhite(
+          label: text,
+          onChanged: onChanged,
+          controller: controller,
+        ));
   }
 
   Widget checkBoxWithLabel(
@@ -254,18 +308,21 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget middleButton({@required double position, Function onTap, Widget icon}) {
+  Widget middleButton(
+      {@required double position, Function onTap, Widget icon}) {
     return Positioned(
       right: 16,
       bottom: position,
       child: Container(
-        child: RaisedButton(
-          padding: EdgeInsets.all(8),
-          onPressed: onTap,
-          elevation: 10,
-          color: accentColor,
-          shape: CircleBorder(),
-          child: icon,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FloatingActionButton(
+            backgroundColor: accentColor,
+            onPressed: onTap,
+            elevation: 10,
+            shape: CircleBorder(),
+            child: icon,
+          ),
         ),
       ),
     );

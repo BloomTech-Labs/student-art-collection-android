@@ -6,6 +6,7 @@ import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/core/util/error.dart';
+import 'package:student_art_collection/features/list_art/data/data_source/school_local_data_source.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/school_remote_data_source.dart';
 import 'package:student_art_collection/features/list_art/domain/repository/school_auth_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
@@ -16,11 +17,14 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
   final NetworkInfo networkInfo;
   final SchoolRemoteDataSource remoteDataSource;
   final FirebaseAuth firebaseAuth;
+  final SchoolLocalDataSource localDataSource;
 
-  FirebaseAuthRepository(
-      {@required this.remoteDataSource,
-      @required this.networkInfo,
-      @required this.firebaseAuth});
+  FirebaseAuthRepository({
+    @required this.remoteDataSource,
+    @required this.networkInfo,
+    @required this.firebaseAuth,
+    @required this.localDataSource,
+  });
 
   @override
   Future<Either<Failure, School>> loginSchool(Credentials credentials) async {
@@ -29,6 +33,10 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
         final authResult = await firebaseAuth.signInWithEmailAndPassword(
             email: credentials.email, password: credentials.password);
         final school = await remoteDataSource.loginSchool(authResult.user.uid);
+        if (credentials.shouldRemember) {
+          localDataSource.storeSchool(school);
+          localDataSource.storeCredentials(credentials);
+        }
         return Right(school);
       } on PlatformException catch (e) {
         return Left(FirebaseFailure(e.message));
@@ -87,13 +95,17 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
       final currentUser = await firebaseAuth.currentUser();
       if (currentUser == null)
         return Left(FirebaseFailure(LOGIN_ON_RETURN_ERROR));
-      final school = await remoteDataSource.loginSchool(currentUser.uid);
+      final school =
+          await localDataSource.getCurrentlyStoredSchool(currentUser.uid);
       return Right(school);
     } on PlatformException catch (e) {
       return Left(FirebaseFailure(e.message));
     } on ServerException {
       firebaseAuth.signOut();
       return Left(ServerFailure());
+    } on CacheException {
+      firebaseAuth.signOut();
+      return Left(CacheFailure());
     }
   }
 }

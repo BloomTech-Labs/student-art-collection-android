@@ -72,7 +72,10 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
       },
     );
     final QueryResult result = await client.mutate(options);
-    return handleAuthResult(result, "school");
+    if (result.hasException) {
+      throw ServerException();
+    }
+    return handleAuthResult(result, 'action');
   }
 
   Future<School> handleAuthResult(QueryResult result, String key) async {
@@ -108,6 +111,9 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
           'description': artworkToUpload.description,
         });
     final QueryResult result = await client.mutate(options);
+    if (result.hasException) {
+      throw ServerException(message: result.exception.graphqlErrors[0].message);
+    }
     final Artwork savedArtwork = convertResultToArtwork(result, 'action');
     final uploadedImages =
         await uploadImages(savedArtwork.artId, artworkToUpload.imagesToUpload);

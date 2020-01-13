@@ -27,24 +27,29 @@ class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
         final remoteArtworkList = await remoteDataSource.getAllArtwork();
         localDataSource.cacheArtworkList(remoteArtworkList);
         return Right(await remoteDataSource.getAllArtwork());
-    } on ServerException {
-    return Left(ServerFailure());
-    }
+      } on ServerException {
+        return Left(ServerFailure());
+      }
     } else {
-    try {
-    final localArtworkList = await localDataSource.getLastArtworkList();
-    return Right(localArtworkList);
-    } on CacheException {
-    return Left(CacheFailure());
-    }
+      try {
+        final localArtworkList = await localDataSource.getLastArtworkList();
+        if (localArtworkList == null) {
+          return Left(CacheFailure());
+        }
+        return Right(localArtworkList);
+      } on CacheException {
+        return Left(CacheFailure());
+      }
     }
   }
 
   @override
-  Future<Either<Failure, ContactForm>> contactFormConfirmation({ContactForm contactForm}) async {
+  Future<Either<Failure, ContactForm>> contactFormConfirmation(
+      {ContactForm contactForm}) async {
     if (await networkInfo.isConnected) {
       try {
-        final ContactForm result = await remoteDataSource.contactFormConfirmation(contactForm: contactForm);
+        final ContactForm result = await remoteDataSource
+            .contactFormConfirmation(contactForm: contactForm);
         return Right(result);
       } on ServerException {
         return Left(ServerFailure());

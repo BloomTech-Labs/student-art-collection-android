@@ -89,7 +89,7 @@ class _GalleryPageState extends State<GalleryPage> {
     final snackBar = SnackBar(
       content: Text(
         displayLocalizedString(
-          context,
+          _scaffoldkey.currentContext,
           message,
         ),
         textAlign: TextAlign.center,

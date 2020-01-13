@@ -5,6 +5,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql/client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
@@ -33,6 +34,7 @@ import 'features/buy_art/data/data_source/buyer_remote_data_source.dart';
 import 'features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'features/buy_art/domain/usecase/get_all_artwork.dart';
 import 'features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
+import 'features/list_art/data/data_source/school_local_data_source.dart';
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
@@ -107,6 +109,7 @@ Future init() async {
         remoteDataSource: sl(),
         networkInfo: sl(),
         firebaseAuth: sl(),
+        localDataSource: sl(),
       ));
 
   sl.registerLazySingleton<SchoolArtworkRepository>(
@@ -122,6 +125,11 @@ Future init() async {
             cloudinaryClient: sl(),
           ));
 
+  sl.registerLazySingleton<SchoolLocalDataSource>(
+      () => SharedPrefsLocalDataSource(
+            sharedPrefs: sl(),
+          ));
+
   sl.registerLazySingleton(() => FirebaseAuth.instance);
 
   /** Feature: Core */
@@ -130,6 +138,8 @@ Future init() async {
   sl.registerLazySingleton(() => InputConverter());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => SessionManager());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => prefs);
 
   // External
   sl.registerLazySingleton(() => DataConnectionChecker());

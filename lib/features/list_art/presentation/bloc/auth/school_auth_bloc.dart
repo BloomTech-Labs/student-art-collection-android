@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/domain/usecase/usecase.dart';
 import 'package:student_art_collection/core/error/failure.dart';
@@ -42,10 +43,12 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       final credentials = converter.loginInfoToCredentials(
         email: event.email,
         password: event.password,
+        shouldRemember: event.shouldRemember,
       );
       yield* credentials.fold(
         (failure) async* {
           yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
         },
         (credentials) async* {
           yield SchoolAuthLoading();
@@ -68,6 +71,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       yield* schoolToRegister.fold(
         (failure) async* {
           yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
         },
         (school) async* {
           yield SchoolAuthLoading();
@@ -96,15 +100,22 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
 
   Stream<SchoolAuthState> _eitherAuthorizedOrErrorState(
       Either<Failure, School> failureOrSchool) async* {
-    yield failureOrSchool.fold(
-      (failure) {
-        if (failure is FirebaseFailure)
-          return SchoolAuthError(message: failure.message);
-        return SchoolAuthError(message: 'Something went wrong');
+    yield* failureOrSchool.fold(
+      (failure) async* {
+        if (failure is FirebaseFailure) {
+          yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
+        } else if (failure is CacheFailure) {
+          yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
+        }   else {
+          yield SchoolAuthError(message: 'Something went wrong');
+          yield Unauthorized();
+        }
       },
-      (school) {
+      (school) async* {
         sessionManager.currentUser = Authorized(school: school);
-        return Authorized(
+        yield Authorized(
           school: school,
         );
       },

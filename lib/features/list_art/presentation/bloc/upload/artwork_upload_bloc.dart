@@ -135,7 +135,7 @@ class ArtworkUploadBloc extends Bloc<ArtworkUploadEvent, ArtworkUploadState> {
         return ArtworkUploadError(message: TEXT_GENERIC_ERROR_MESSAGE_LABEL);
       },
       (artwork) {
-        return ArtworkUploadSuccess(
+        return ArtworkUpdateSuccess(
           artwork: artwork,
           message: message,
         );

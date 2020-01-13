@@ -14,7 +14,6 @@ void main() {
       schoolName: 'test',
       address: 'test',
       city: 'test',
-      state: 'test',
       zipcode: 'test');
 
   test('should be a subclass of a School entity', () {

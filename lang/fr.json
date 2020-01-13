@@ -1,0 +1,89 @@
+{
+  "starter_app_name": "ArtCo",
+  "starter_login_button": "Connectez-vous en tant qu'administrateur de l'école",
+  "starter_guest_button": "Continuer en tant qu'invité",
+
+
+  "login_header_text": "Nous saluons \nle retour!",
+  "login_email_address_label": "Email",
+  "login_remember_me_box": "Souviens-toi de moi?",
+  "login_password_label": "Mot de passe",
+  "login_guest_login_button": "Continuer en tant qu'invité",
+  "login_divider_text": "OU",
+  "login_register_here_prefix": "Pas encore membre?\n      S'inscrire ",
+  "login_register_here_main": "Ici!",
+  "login_register_here_suffix": "\nÉcoles uniquement",
+
+
+  "artwork_upload_price_1": "$5",
+  "artwork_upload_price_2": "$10",
+  "artwork_upload_price_3": "$15",
+  "artwork_upload_price_4": "$20",
+  "artwork_upload_price_5": "$25",
+  "artwork_upload_price_6": "$30",
+  "artwork_upload_price_7": "$35",
+  "artwork_upload_price_8": "$40",
+  "artwork_upload_price_9": "$45",
+  "artwork_upload_price_10": "$50",
+
+  "artwork_upload_category_1": "La photographie",
+  "artwork_upload_category_2": "Dessin",
+  "artwork_upload_category_3": "La peinture",
+  "artwork_upload_category_4": "Sculpture",
+  "artwork_upload_category_5": "Autre",
+
+  "artwork_upload_artwork_title_label": "Entrez le titre de l'oeuvre",
+  "artwork_upload_student_name_label": "Entrez le nom de l'élève",
+  "artwork_upload_date_selection_label": "Sélectionnez la date de création",
+  "artwork_upload_price_selection_label": "Sélectionner le prix de l'oeuvre",
+  "artwork_upload_category_selection_label": "Sélectionner une catégorie d'œuvres d'art",
+  "artwork_upload_upload_button_label": "Soumettre",
+
+  "artwork_upload_uploading_message_label": "Téléchargement de l'illustration, ne fermez pas l'application.",
+  "artwork_upload_updating_message_label": "Mise à jour de l'illustration, veuillez ne pas fermer l'application.",
+  "image_uploading_message_label": "Téléchargement d'image",
+  "artwork_upload_success_label": "L'art a été téléchargé avec succès!",
+  "artwork_update_success_label": "L'art a été mis à jour avec succès!",
+  "generic_error_message_label": "Quelque chose s'est mal passé",
+  "generic_image_host_error_message_label": "Un problème est survenu lors du téléchargement de votre image",
+  "artwork_uploading_wait_message_label": "Veuillez attendre la fin du téléchargement",
+  "artwork_delete_error_message_label": "Un problème est survenu lors de la suppression de l'illustration",
+  "artwork_delete_success_message_label": "L'œuvre a bien été supprimée!",
+
+  "registration_app_bar_title": "S'inscrire",
+  "registration_app_bar_error_state_message": "Erreur",
+  "registration_email_label": "Entrer votre Email",
+  "registration_password_label": "Tapez votre mot de passe",
+  "registration_password_confirmation_label": "Entrez à nouveau votre mot de passe",
+  "registration_street_address_label": "Entrez l'adresse municipale de votre école",
+  "registration_school_name_label": "Entrez le nom de votre école",
+  "registration_city_label": "Entrez dans la ville de votre école",
+  "registration_state_label": "Entrez dans l'état de votre école",
+  "registration_zipcode_label": "Entrez le code postal de votre école",
+
+
+  "school_gallery_app_bar_title": "School Art Gallery",
+  "school_gallery_home_tag": "Accueil",
+  "school_gallery_search_tag": "Chercher",
+  "school_gallery_messages_tag": "Messages",
+
+
+  "gallery_app_bar_title": "Galerie",
+  "gallery_error_state_message": "Erreur",
+
+
+  "artwork_details_top_banner_message": "Vous voulez acheter cette pièce? Remplissez le formulaire ci-dessous",
+  "artwork_details_untitled_label": "Sans titre",
+  "artwork_details_suggested_donation": "Don suggéré:",
+  "artwork_details_name_label": "Nom",
+  "artwork_details_email_label": "Email",
+  "artwork_details_message_label": "Message",
+  "artwork_details_reply_to": "Répondre à: ",
+  "artwork_details_inquires_about": "Demandes de renseignements sur:",
+  "artwork_details_submit_button_label": "Soumettre",
+  "artwork_details_form_submitted_message": "Formulaire soumis",
+
+
+  "carousel_widget_default_student_name": "Anonyme",
+  "gallery_grid_widget_default_artwork_title": "Sans titre"
+}

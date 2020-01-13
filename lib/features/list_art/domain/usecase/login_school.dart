@@ -20,10 +20,12 @@ class LoginSchool implements UseCase<School, Credentials> {
 class Credentials extends Equatable {
   final String email;
   final String password;
+  final bool shouldRemember;
 
   Credentials({
     @required this.email,
     @required this.password,
+    this.shouldRemember = false,
   });
 
   @override
