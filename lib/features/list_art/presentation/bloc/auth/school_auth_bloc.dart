@@ -15,8 +15,6 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/auth/
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../../service_locator.dart';
-
 class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
   final LoginSchool loginSchool;
   final RegisterNewSchool registerNewSchool;

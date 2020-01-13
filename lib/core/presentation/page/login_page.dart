@@ -100,20 +100,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    setRememberedInfo();
-  }
-
-  void setRememberedInfo() {
-    setState(() {
-      final storedEmail =
-          sl<SharedPreferences>().getString(LOCAL_STORAGE_USER_EMAIL ?? '');
-      emailController.text = storedEmail;
-      passwordController.text =
-          sl<SharedPreferences>().getString(LOCAL_STORAGE_USER_PASSWORD ?? '');
-      if (storedEmail != null) {
-        dispatchLoginOnReturn();
-      }
-    });
+    dispatchLoginOnReturn();
   }
 
   @override
