@@ -48,6 +48,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       yield* credentials.fold(
         (failure) async* {
           yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
         },
         (credentials) async* {
           yield SchoolAuthLoading();
@@ -70,6 +71,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
       yield* schoolToRegister.fold(
         (failure) async* {
           yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
         },
         (school) async* {
           yield SchoolAuthLoading();
@@ -98,15 +100,19 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
 
   Stream<SchoolAuthState> _eitherAuthorizedOrErrorState(
       Either<Failure, School> failureOrSchool) async* {
-    yield failureOrSchool.fold(
-      (failure) {
-        if (failure is FirebaseFailure)
-          return SchoolAuthError(message: failure.message);
-        return SchoolAuthError(message: 'Something went wrong');
+    yield* failureOrSchool.fold(
+      (failure) async* {
+        if (failure is FirebaseFailure) {
+          yield SchoolAuthError(message: failure.message);
+          yield Unauthorized();
+        } else {
+          yield SchoolAuthError(message: 'Something went wrong');
+          yield Unauthorized();
+        }
       },
-      (school) {
+      (school) async* {
         sessionManager.currentUser = Authorized(school: school);
-        return Authorized(
+        yield Authorized(
           school: school,
         );
       },

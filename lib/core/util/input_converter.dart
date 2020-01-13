@@ -14,6 +14,10 @@ class InputConverter {
     password: String,
     shouldRemember: bool,
   }) {
+    if (!checkNullOrEmpty(email) || !checkNullOrEmpty(password)) {
+      return Left(
+          UserInputFailure(message: 'Please make sure fields are not empty'));
+    }
     return Right(Credentials(
       email: email,
       password: password,
@@ -94,5 +98,12 @@ class InputConverter {
       imagesToUpload: imagesToUpload,
       imagesToDelete: imagesToDelete,
     ));
+  }
+
+  bool checkNullOrEmpty(String stringToValidate) {
+    if (['', null].contains(stringToValidate)) {
+      return false;
+    }
+    return true;
   }
 }
