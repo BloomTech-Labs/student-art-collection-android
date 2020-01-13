@@ -14,12 +14,14 @@ import 'artwork_details_page.dart';
 class GalleryPage extends StatelessWidget {
   static const ID = "/gallery";
 
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GalleryBloc>(
       create: (context) => sl<GalleryBloc>(),
       child: Scaffold(
-        backgroundColor: Colors.grey.shade100,
+        key: _scaffoldkey,
         appBar: AppBar(
           centerTitle: true,
           title: Text(AppLocalizations.of(context)
@@ -76,10 +78,30 @@ class GalleryPage extends StatelessWidget {
     return GalleryGrid(
       artworkList: artworkList,
       isStaggered: true,
-      onTap: (artwork, index) {
-        Navigator.pushNamed(context, ArtworkDetailsPage.ID, arguments: artwork);
+      onTap: (artwork, index) async {
+        final result = await Navigator.pushNamed(context, ArtworkDetailsPage.ID,
+            arguments: artwork);
+        if (result != null) {
+          showSnackBar(context, result);
+        }
       },
     );
+  }
+
+  String displayLocalizedString(BuildContext context, String label) {
+    return AppLocalizations.of(context).translate(label);
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        displayLocalizedString(
+          context,
+          message,
+        ), textAlign: TextAlign.center,
+      ),
+    );
+    _scaffoldkey.currentState.showSnackBar(snackBar);
   }
 
   void getArtworkList(BuildContext context) {

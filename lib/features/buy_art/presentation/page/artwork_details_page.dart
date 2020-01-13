@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
@@ -14,7 +15,6 @@ import 'package:student_art_collection/core/presentation/widget/carousel_image_v
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 
-//for initial commit
 
 class ArtworkDetailsPage extends StatefulWidget {
   static const ID = "/artwork_details";
@@ -29,6 +29,8 @@ class ArtworkDetailsPage extends StatefulWidget {
 
 class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   final Artwork artwork;
+
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   _ArtworkDetailsPageState({@required this.artwork});
 
@@ -47,25 +49,26 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    String title = artwork.title != '' ? artwork.title : AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_UNTITLED_LABEL);
+    String title = artwork.title != '' ? artwork.title : displayLocalizedString(context,TEXT_ARTWORK_DETAILS_UNTITLED_LABEL);
 
     return BlocProvider<ArtworkDetailsBloc>(
       create: (context) => sl<ArtworkDetailsBloc>(),
       child: Scaffold(
+        key: _scaffoldkey,
         appBar: AppBar(
           centerTitle: true,
           title: Text(title),
         ),
         body: BlocListener<ArtworkDetailsBloc, ArtworkDetailsState>(
           listener: (context, state) {
-            //listener logic
+            if(state is ArtworkDetailsFormSubmittedState){
+             Navigator.pop(context, TEXT_ARTWORK_DETAILS_FORM_SUBMITTED_MESSAGE);
+            }
           },
           child: BlocBuilder<ArtworkDetailsBloc, ArtworkDetailsState>(
             builder: (context, state) {
-              if (state is ArtworkDetailsLoadingState) {
+              if (state is ArtworkDetailsLoadingState || state is ArtworkDetailsFormSubmittedState) {
                 return BuildLoading();
-              } else if (state is ArtworkDetailsFormSubmittedState) {
-                return buildFormConfirmation(screenHeight: screenHeight);
               } else if (state is ArtworkDetailsErrorState) {
                 return buildError();
               } else
@@ -98,18 +101,6 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
     );
   }
 
-  Widget buildFormConfirmation({@required double screenHeight}) {
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: screenHeight * .06,
-        ),
-        carouselWidget(screenHeight: screenHeight),
-        contactFormConfirmationWidget(screenHeight: screenHeight),
-      ],
-    );
-  }
-
   Widget buildLoaded(
       {@required double screenHeight, @required BuildContext context}) {
     return Column(
@@ -127,7 +118,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
       height: topBannerHeight,
       alignment: Alignment.center,
       padding: EdgeInsets.all(8),
-      child: Text(AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_TOP_BANNER_MESSAGE)),
+      child: Text(displayLocalizedString(context,TEXT_ARTWORK_DETAILS_TOP_BANNER_MESSAGE)),
     );
   }
 
@@ -136,7 +127,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
 
     //Todo: replace hard coded values with real default price when backend is updated
     String price = artwork.price == 0 ? '20' : artwork.price.toString();
-    String artworkTitle = artwork.title == "" ? AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_UNTITLED_LABEL) : artwork.title;
+    String artworkTitle = artwork.title == "" ? displayLocalizedString(context,TEXT_ARTWORK_DETAILS_UNTITLED_LABEL) : artwork.title;
     String artworkDate = artwork.datePosted == null
         ? DateTime.now().year.toString()
         : artwork.datePosted.year.toString();
@@ -162,7 +153,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           right: 16,
           child: Container(
             child: Text(
-              AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_SUGGESTED_DONATION) + price,
+              displayLocalizedString(context,TEXT_ARTWORK_DETAILS_SUGGESTED_DONATION) + price,
               textAlign: TextAlign.center,
             ),
           ),
@@ -198,7 +189,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   maxLength: 40,
                   maxLengthEnforced: true,
                   decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_NAME_LABEL),
+                      labelText: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_NAME_LABEL),
                       counterText: "",
                       border: OutlineInputBorder(
                           borderRadius:
@@ -214,7 +205,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   maxLength: 40,
                   maxLengthEnforced: true,
                   decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_EMAIL_LABEL),
+                      labelText: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_EMAIL_LABEL),
                       counterText: "",
                       border: OutlineInputBorder(
                           borderRadius:
@@ -234,7 +225,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   maxLengthEnforced: true,
                   decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_MESSAGE_LABEL),
+                      labelText: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_MESSAGE_LABEL),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(cardCornerRadius),
                       )),
@@ -256,14 +247,13 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
             child: FlatButton(
               onPressed: () {
                 artworkDetailsBloc.add(SubmitContactForm(ContactForm(
-                    //TODO: replace sendto with artwork.schoolInfo.email after testing
                     sendTo: artwork.schoolInfo.email,
                     from: emailController.text,
-                    message: AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_REPLY_TO) + emailController.text + "\n\n" + messageController.text,
-                    subject: nameController.text + AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) + artwork.title + " #: " + artwork.artId.toString(),
+                    message: displayLocalizedString(context,TEXT_ARTWORK_DETAILS_REPLY_TO) + emailController.text + "\n\n" + messageController.text,
+                    subject: nameController.text + displayLocalizedString(context,TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) + artwork.title + " #: " + artwork.artId.toString(),
                     name: nameController.text)));
               },
-              child: Text(AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL)),
+              child: Text(displayLocalizedString(context,TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL)),
             ),
           ),
         )
@@ -271,13 +261,21 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
     );
   }
 
-  Widget contactFormConfirmationWidget({@required double screenHeight}) {
-    return Center(
-      child: Container(
-        child: Center(
-          child: Text(AppLocalizations.of(context).translate(TEXT_ARTWORK_DETAILS_FORM_SUBMITTED_MESSAGE)),
-        ),
-      ),
-    );
+  String displayLocalizedString(BuildContext context, String label) {
+    return AppLocalizations.of(context).translate(label);
   }
+
+  void popAndReturn(
+      BuildContext context,
+      String message,
+      ) {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(
+          context, message
+          );
+    } else {
+      SystemNavigator.pop();
+    }
+  }
+
 }
