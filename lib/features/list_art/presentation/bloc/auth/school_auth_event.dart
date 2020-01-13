@@ -41,10 +41,12 @@ class RegisterNewSchoolEvent extends SchoolAuthEvent {
 
 class LoginSchoolEvent extends SchoolAuthEvent {
   final String email, password;
+  final bool shouldRemember;
 
   LoginSchoolEvent({
     @required this.email,
     @required this.password,
+    this.shouldRemember = false,
   });
 
   @override

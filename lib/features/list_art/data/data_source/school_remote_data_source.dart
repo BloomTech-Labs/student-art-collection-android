@@ -68,6 +68,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
         'email': schoolToRegister.email,
         'address': schoolToRegister.address,
         'city': schoolToRegister.city,
+        'state': schoolToRegister.state,
         'zipcode': schoolToRegister.zipcode
       },
     );

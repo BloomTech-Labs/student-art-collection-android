@@ -34,6 +34,7 @@ import 'features/buy_art/data/data_source/buyer_remote_data_source.dart';
 import 'features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'features/buy_art/domain/usecase/get_all_artwork.dart';
 import 'features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
+import 'features/list_art/data/data_source/school_local_data_source.dart';
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
@@ -108,6 +109,7 @@ Future init() async {
         remoteDataSource: sl(),
         networkInfo: sl(),
         firebaseAuth: sl(),
+        localDataSource: sl(),
       ));
 
   sl.registerLazySingleton<SchoolArtworkRepository>(
@@ -123,6 +125,11 @@ Future init() async {
             cloudinaryClient: sl(),
           ));
 
+  sl.registerLazySingleton<SchoolLocalDataSource>(
+      () => SharedPrefsLocalDataSource(
+            sharedPrefs: sl(),
+          ));
+
   sl.registerLazySingleton(() => FirebaseAuth.instance);
 
   /** Feature: Core */
@@ -132,7 +139,7 @@ Future init() async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(() => SessionManager());
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  sl.registerLazySingleton(() => prefs);
+  sl.registerLazySingleton<SharedPreferences>(() => prefs);
 
   // External
   sl.registerLazySingleton(() => DataConnectionChecker());

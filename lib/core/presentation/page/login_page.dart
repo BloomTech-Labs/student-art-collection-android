@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
+import 'package:student_art_collection/core/util/entity_constants.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
@@ -64,6 +66,9 @@ class _LoginFormState extends State<LoginForm> {
   String email, password;
   bool shouldRemember = false;
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   _LoginFormState(this.screenHeight);
 
   void _onCheckboxChange() {
@@ -76,7 +81,12 @@ class _LoginFormState extends State<LoginForm> {
     BlocProvider.of<SchoolAuthBloc>(context).add(LoginSchoolEvent(
       email: email,
       password: password,
+      shouldRemember: shouldRemember,
     ));
+  }
+
+  void dispatchLoginOnReturn() {
+    BlocProvider.of<SchoolAuthBloc>(context).add(LoginOnReturnEvent());
   }
 
   void dispatchRegistration() {
@@ -85,6 +95,19 @@ class _LoginFormState extends State<LoginForm> {
 
   void dispatchGuest() {
     Navigator.pushNamed(context, GalleryPage.ID);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    dispatchLoginOnReturn();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -105,6 +128,7 @@ class _LoginFormState extends State<LoginForm> {
                 AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
             fontSize: 40),
         textFieldWidget(
+            controller: emailController,
             position: positionTopTextField,
             text: AppLocalizations.of(context)
                 .translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
@@ -112,6 +136,7 @@ class _LoginFormState extends State<LoginForm> {
               email = value;
             }),
         textFieldWidget(
+            controller: passwordController,
             position: positionBottomTextField,
             text: AppLocalizations.of(context)
                 .translate(TEXT_LOGIN_PASSWORD_LABEL),
@@ -182,7 +207,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Widget textFieldWidgetNoBorderWhite(
-      {String label, Function(String value) onChanged}) {
+      {String label,
+      Function(String value) onChanged,
+      TextEditingController controller}) {
     return Column(
       children: <Widget>[
         Container(
@@ -201,6 +228,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           child: Center(
             child: TextField(
+              controller: controller,
               keyboardType: TextInputType.visiblePassword,
               onChanged: (value) => onChanged(value),
               decoration: InputDecoration.collapsed(hintText: ""),
@@ -228,15 +256,21 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget textFieldWidget(
-      {@required double position,
-      @required String text,
-      @required Function(String) onChanged}) {
+  Widget textFieldWidget({
+    @required double position,
+    @required String text,
+    @required Function(String) onChanged,
+    @required TextEditingController controller,
+  }) {
     return Positioned(
         bottom: position,
         left: 16,
         right: 16,
-        child: textFieldWidgetNoBorderWhite(label: text, onChanged: onChanged));
+        child: textFieldWidgetNoBorderWhite(
+          label: text,
+          onChanged: onChanged,
+          controller: controller,
+        ));
   }
 
   Widget checkBoxWithLabel(
