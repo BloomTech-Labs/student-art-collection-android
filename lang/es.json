@@ -38,6 +38,7 @@
   "artwork_upload_date_selection_label": "Seleccionar fecha de creación",
   "artwork_upload_price_selection_label": "Seleccionar precio de la obra de arte",
   "artwork_upload_category_selection_label": "Seleccionar categoría de ilustraciones",
+  "artwork_description_form_hint_label": "Ingrese la descripción",
   "artwork_upload_upload_button_label": "Enviar",
 
   "artwork_upload_uploading_message_label": "Subiendo ilustraciones, por favor no cierre la aplicación",

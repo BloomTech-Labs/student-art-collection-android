@@ -249,59 +249,72 @@ class _UploadWidgetState extends State<UploadWidget> {
                                 TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
                       ),
                       SizedBox(height: 10),
-                      Stack(
-                        overflow: Overflow.visible,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          TextField(
-                            enabled: false,
-                            decoration: getAuthInputDecoration(
-                                displayLocalizedString(
-                                    TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
-                            controller: dateTextController,
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.date_range,
-                                  color: accentColor,
+                          Flexible(
+                            flex: 1,
+                            child: Stack(
+                              overflow: Overflow.visible,
+                              children: <Widget>[
+                                TextField(
+                                  enabled: false,
+                                  decoration: getAuthInputDecoration(
+                                      displayLocalizedString(
+                                          TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
+                                  controller: dateTextController,
                                 ),
-                                onPressed: () {
-                                  _selectDate(context);
-                                },
-                              ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.date_range,
+                                        color: accentColor,
+                                      ),
+                                      onPressed: () {
+                                        _selectDate(context);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Stack(
-                        overflow: Overflow.visible,
-                        children: <Widget>[
-                          TextField(
-                            enabled: false,
-                            decoration: getAuthInputDecoration(
-                                displayLocalizedString(
-                                    TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
-                            controller: priceTextController,
+                          SizedBox(
+                            width: 10.0,
                           ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.attach_money,
-                                  color: accentColor,
+                          Flexible(
+                            flex: 1,
+                            child: Stack(
+                              overflow: Overflow.visible,
+                              children: <Widget>[
+                                TextField(
+                                  enabled: false,
+                                  decoration: getAuthInputDecoration(
+                                      displayLocalizedString(
+                                          TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
+                                  controller: priceTextController,
                                 ),
-                                onPressed: () {
-                                  _showPricePicker(context);
-                                },
-                              ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.attach_money,
+                                        color: accentColor,
+                                      ),
+                                      onPressed: () {
+                                        _showPricePicker(context);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -334,6 +347,21 @@ class _UploadWidgetState extends State<UploadWidget> {
                             ),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        controller: descriptionTextController,
+                        maxLines: null,
+                        maxLength: 200,
+                        maxLengthEnforced: true,
+                        decoration: getAuthInputDecoration(
+                            displayLocalizedString(
+                                TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
+                        onChanged: (value) {
+                          description = value;
+                        },
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

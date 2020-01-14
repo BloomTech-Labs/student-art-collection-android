@@ -14,3 +14,5 @@ const TEXT_ARTWORK_DELETE_ERROR_MESSAGE_LABEL =
     'artwork_delete_error_message_label';
 const TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL =
     'artwork_delete_success_message_label';
+const TEXT_ARTWORK_DESCRIPTION_FORM_HINT_LABEL =
+    "artwork_description_form_hint_label";

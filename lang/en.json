@@ -37,9 +37,10 @@
 
   "artwork_upload_artwork_title_label": "Enter Artwork Title",
   "artwork_upload_student_name_label": "Enter Student Name",
-  "artwork_upload_date_selection_label": "Select Date Created",
-  "artwork_upload_price_selection_label": "Select Artwork Price",
+  "artwork_upload_date_selection_label": "Select Date",
+  "artwork_upload_price_selection_label": "Select Price",
   "artwork_upload_category_selection_label": "Select Artwork Category",
+  "artwork_description_form_hint_label": "Enter Description",
   "artwork_upload_upload_button_label": "Submit",
 
   "artwork_upload_uploading_message_label": "Uploading artwork, please do not close the App.",

@@ -1,4 +1,4 @@
-const BASE_URL = 'https://student-artco-staging.herokuapp.com/graphql';
+const BASE_URL = 'https://student-artco.herokuapp.com/graphql';
 
 //image
 const IMAGE_ID = 'id';
@@ -35,8 +35,8 @@ const SCHOOL_ARTWORKS = 'artworks'; //not implemented yet
 
 //TODO: fill this in when backend is setup
 //Contact Form
-const CONTACT_FORM_SEND_TO =  'sendto';
+const CONTACT_FORM_SEND_TO = 'sendto';
 const CONTACT_FORM_NAME = 'name';
-const CONTACT_FORM_MESSAGE =  'message';
-const CONTACT_FORM_FROM =  'fromUser';
-const CONTACT_FORM_SUBJECT =  'subject';
+const CONTACT_FORM_MESSAGE = 'message';
+const CONTACT_FORM_FROM = 'fromUser';
+const CONTACT_FORM_SUBJECT = 'subject';
