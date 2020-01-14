@@ -217,7 +217,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                   child: Stack(
                     children: <Widget>[
                       Material(
-                        elevation: 4,
+                        elevation: 2,
                         child: OutlineButton(
                           child: CarouselImageViewer(
                             isEditable: true,
@@ -255,7 +255,6 @@ class _UploadWidgetState extends State<UploadWidget> {
                     children: <Widget>[
                       SizedBox(height: 10),
                       Material(
-                        elevation: 4,
                         child: TextField(
                           controller: titleTextController,
                           keyboardType: TextInputType.text,
@@ -269,7 +268,6 @@ class _UploadWidgetState extends State<UploadWidget> {
                       ),
                       SizedBox(height: 10),
                       Material(
-                        elevation: 4,
                         child: TextField(
                           controller: studentTextController,
                           keyboardType: TextInputType.text,
@@ -291,7 +289,6 @@ class _UploadWidgetState extends State<UploadWidget> {
                               overflow: Overflow.visible,
                               children: <Widget>[
                                 Material(
-                                  elevation: 4,
                                   child: TextField(
                                     enabled: false,
                                     decoration: getAuthInputDecoration(
@@ -328,7 +325,6 @@ class _UploadWidgetState extends State<UploadWidget> {
                               overflow: Overflow.visible,
                               children: <Widget>[
                                 Material(
-                                  elevation: 4,
                                   child: TextField(
                                     enabled: false,
                                     decoration: getAuthInputDecoration(
@@ -363,7 +359,6 @@ class _UploadWidgetState extends State<UploadWidget> {
                         overflow: Overflow.visible,
                         children: <Widget>[
                           Material(
-                            elevation: 4,
                             child: TextField(
                               enabled: false,
                               decoration: getAuthInputDecoration(
@@ -394,7 +389,6 @@ class _UploadWidgetState extends State<UploadWidget> {
                         height: 10,
                       ),
                       Material(
-                        elevation: 4,
                         child: TextField(
                           controller: descriptionTextController,
                           maxLines: null,
