@@ -14,3 +14,15 @@ const TEXT_ARTWORK_DELETE_ERROR_MESSAGE_LABEL =
     'artwork_delete_error_message_label';
 const TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL =
     'artwork_delete_success_message_label';
+const TEXT_ARTWORK_DESCRIPTION_FORM_HINT_LABEL =
+    "artwork_description_form_hint_label";
+const TEXT_ARTWORK_DELETE_DIALOG_TITLE_LABEL = 'artwork_delete_dialog_title';
+const TEXT_ARTWORK_DELETE_DIALOG_DESCRIPTION_LABEL =
+    'artwork_delete_dialog_description';
+const TEXT_ARTWORK_IMAGE_DIALOG_TITLE_LABEL = 'artwork_dialog_image_title';
+const TEXT_ARTWORK_IMAGE_DIALOG_DESCRIPTION_LABEL =
+    'artwork_dialog_image_description';
+const TEXT_ARTWORK_IMAGE_DIALOG_CAMERA_TEXT_LABEL =
+    'artwork_image_dialog_camera_text_label';
+const TEXT_ARTWORK_IMAGE_DIALOG_GALLERY_TEXT_LABEL =
+    'artwork_image_dialog_gallery_text_label';

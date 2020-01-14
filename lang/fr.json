@@ -35,9 +35,10 @@
 
   "artwork_upload_artwork_title_label": "Entrez le titre de l'oeuvre",
   "artwork_upload_student_name_label": "Entrez le nom de l'élève",
-  "artwork_upload_date_selection_label": "Sélectionnez la date de création",
-  "artwork_upload_price_selection_label": "Sélectionner le prix de l'oeuvre",
+  "artwork_upload_date_selection_label": "Date de création",
+  "artwork_upload_price_selection_label": "Prix",
   "artwork_upload_category_selection_label": "Sélectionner une catégorie d'œuvres d'art",
+  "artwork_description_form_hint_label": "Entrez la description",
   "artwork_upload_upload_button_label": "Soumettre",
 
   "artwork_upload_uploading_message_label": "Téléchargement de l'illustration, ne fermez pas l'application.",
@@ -50,6 +51,12 @@
   "artwork_uploading_wait_message_label": "Veuillez attendre la fin du téléchargement",
   "artwork_delete_error_message_label": "Un problème est survenu lors de la suppression de l'illustration",
   "artwork_delete_success_message_label": "L'œuvre a bien été supprimée!",
+  "artwork_delete_dialog_title": "Supprimer l'art?",
+  "artwork_delete_dialog_description": "Etes-vous sûr que vous voulez supprimer? L'œuvre ne peut pas être récupérée.",
+  "artwork_dialog_image_title": "La source",
+  "artwork_dialog_image_description": "Veuillez sélectionner d'où vous souhaitez obtenir une image.",
+  "artwork_image_dialog_camera_text_label": "Caméra",
+  "artwork_image_dialog_gallery_text_label": "Galerie",
 
   "registration_app_bar_title": "S'inscrire",
   "registration_app_bar_error_state_message": "Erreur",
@@ -64,7 +71,7 @@
   "registration_button_label" : "S'inscrire",
 
 
-  "school_gallery_app_bar_title": "School Art Gallery",
+  "school_gallery_app_bar_title": "Galerie D'art Scolaire",
   "school_gallery_home_tag": "Accueil",
   "school_gallery_search_tag": "Chercher",
   "school_gallery_messages_tag": "Messages",

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloudinary_client/cloudinary_client.dart';
 import 'package:cloudinary_client/models/CloudinaryResponse.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
@@ -99,6 +100,40 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
 
   @override
   Future<Artwork> uploadArtwork(ArtworkToUpload artworkToUpload) async {
+    final QueryResult result = await client.mutate(
+      getProdOptions(artworkToUpload),
+    );
+    if (result.hasException) {
+      throw ServerException(message: result.exception.graphqlErrors[0].message);
+    }
+    final Artwork savedArtwork = convertResultToArtwork(result, 'action');
+    final uploadedImages =
+        await uploadImages(savedArtwork.artId, artworkToUpload.imagesToUpload);
+    uploadedImages.forEach((image) {
+      savedArtwork.images.add(image);
+    });
+    return savedArtwork;
+  }
+
+  MutationOptions getStagingOptions(ArtworkToUpload artworkToUpload) {
+    final MutationOptions options = MutationOptions(
+        documentNode: gql(ADD_ARTWORK_MUTATION2),
+        variables: <String, dynamic>{
+          'input': {
+            'school_id': 2,
+            'category': artworkToUpload.category,
+            'price': artworkToUpload.price,
+            'sold': artworkToUpload.sold,
+            'title': artworkToUpload.title,
+            'artist_name': artworkToUpload.artistName,
+            'description': artworkToUpload.description,
+            'image_url': artworkToUpload.imagesToUpload[0],
+          }
+        });
+    return options;
+  }
+
+  MutationOptions getProdOptions(ArtworkToUpload artworkToUpload) {
     final MutationOptions options = MutationOptions(
         documentNode: gql(ADD_ARTWORK_MUTATION),
         variables: <String, dynamic>{
@@ -110,17 +145,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
           'artist_name': artworkToUpload.artistName,
           'description': artworkToUpload.description,
         });
-    final QueryResult result = await client.mutate(options);
-    if (result.hasException) {
-      throw ServerException(message: result.exception.graphqlErrors[0].message);
-    }
-    final Artwork savedArtwork = convertResultToArtwork(result, 'action');
-    final uploadedImages =
-        await uploadImages(savedArtwork.artId, artworkToUpload.imagesToUpload);
-    uploadedImages.forEach((image) {
-      savedArtwork.images.add(image);
-    });
-    return savedArtwork;
+    return options;
   }
 
   @override
@@ -198,4 +223,26 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
     final int deletedId = int.parse(deleteResult.data['action']['id']);
     return ArtworkToDeleteId(artId: deletedId);
   }
+}
+
+class NewArtInput {
+  final int category;
+  final int school_id;
+  final int price;
+  final bool sold;
+  final String title;
+  final String artist_name;
+  final String description;
+  final String image_url;
+
+  NewArtInput({
+    this.category,
+    this.school_id,
+    this.price,
+    this.sold,
+    this.title,
+    this.artist_name,
+    this.description,
+    this.image_url,
+  });
 }
