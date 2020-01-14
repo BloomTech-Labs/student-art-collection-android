@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
+import 'package:student_art_collection/core/presentation/widget/dialog_button.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
@@ -36,6 +38,7 @@ class ArtworkUploadPage extends StatelessWidget {
       create: (context) => sl<ArtworkUploadBloc>(),
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.delete),
@@ -121,10 +124,33 @@ class _UploadWidgetState extends State<UploadWidget> {
   }
 
   Future _getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      dispatchImageHost(image);
-    }
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.WARNING,
+      animType: AnimType.BOTTOMSLIDE,
+      tittle: displayLocalizedString(TEXT_ARTWORK_IMAGE_DIALOG_TITLE_LABEL),
+      desc: displayLocalizedString(TEXT_ARTWORK_IMAGE_DIALOG_DESCRIPTION_LABEL),
+      btnOkOnPress: () async {
+        var image = await ImagePicker.pickImage(source: ImageSource.camera);
+        if (image != null) {
+          dispatchImageHost(image);
+        }
+      },
+      btnOkColor: accentColor,
+      btnOkText:
+          displayLocalizedString(TEXT_ARTWORK_IMAGE_DIALOG_CAMERA_TEXT_LABEL),
+      btnCancelText:
+          displayLocalizedString(TEXT_ARTWORK_IMAGE_DIALOG_GALLERY_TEXT_LABEL),
+      btnCancelColor: accentColor,
+      btnOkIcon: Icons.camera,
+      btnCancelIcon: Icons.image,
+      btnCancelOnPress: () async {
+        var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+        if (image != null) {
+          dispatchImageHost(image);
+        }
+      },
+    ).show();
   }
 
   @override
@@ -190,18 +216,19 @@ class _UploadWidgetState extends State<UploadWidget> {
                   width: double.infinity,
                   child: Stack(
                     children: <Widget>[
-                      OutlineButton(
-                        child: CarouselImageViewer(
-                          isEditable: true,
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          imageList: imageUrls,
-                          artwork: null,
-                        ),
-                        onPressed: () {
-                          _getImage();
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
+                      Material(
+                        elevation: 4,
+                        child: OutlineButton(
+                          child: CarouselImageViewer(
+                            isEditable: true,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            imageList: imageUrls,
+                            artwork: null,
+                          ),
+                          onPressed: () {},
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
                         ),
                       ),
                       Positioned(
@@ -227,26 +254,32 @@ class _UploadWidgetState extends State<UploadWidget> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 10),
-                      TextField(
-                        controller: titleTextController,
-                        keyboardType: TextInputType.text,
-                        onChanged: (value) {
-                          title = value;
-                        },
-                        decoration: getAuthInputDecoration(
-                            displayLocalizedString(
-                                TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
+                      Material(
+                        elevation: 4,
+                        child: TextField(
+                          controller: titleTextController,
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            title = value;
+                          },
+                          decoration: getAuthInputDecoration(
+                              displayLocalizedString(
+                                  TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
+                        ),
                       ),
                       SizedBox(height: 10),
-                      TextField(
-                        controller: studentTextController,
-                        keyboardType: TextInputType.text,
-                        onChanged: (value) {
-                          artistName = value;
-                        },
-                        decoration: getAuthInputDecoration(
-                            displayLocalizedString(
-                                TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
+                      Material(
+                        elevation: 4,
+                        child: TextField(
+                          controller: studentTextController,
+                          keyboardType: TextInputType.text,
+                          onChanged: (value) {
+                            artistName = value;
+                          },
+                          decoration: getAuthInputDecoration(
+                              displayLocalizedString(
+                                  TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
+                        ),
                       ),
                       SizedBox(height: 10),
                       Row(
@@ -257,12 +290,15 @@ class _UploadWidgetState extends State<UploadWidget> {
                             child: Stack(
                               overflow: Overflow.visible,
                               children: <Widget>[
-                                TextField(
-                                  enabled: false,
-                                  decoration: getAuthInputDecoration(
-                                      displayLocalizedString(
-                                          TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
-                                  controller: dateTextController,
+                                Material(
+                                  elevation: 4,
+                                  child: TextField(
+                                    enabled: false,
+                                    decoration: getAuthInputDecoration(
+                                        displayLocalizedString(
+                                            TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
+                                    controller: dateTextController,
+                                  ),
                                 ),
                                 Positioned(
                                   top: 0,
@@ -291,12 +327,15 @@ class _UploadWidgetState extends State<UploadWidget> {
                             child: Stack(
                               overflow: Overflow.visible,
                               children: <Widget>[
-                                TextField(
-                                  enabled: false,
-                                  decoration: getAuthInputDecoration(
-                                      displayLocalizedString(
-                                          TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
-                                  controller: priceTextController,
+                                Material(
+                                  elevation: 4,
+                                  child: TextField(
+                                    enabled: false,
+                                    decoration: getAuthInputDecoration(
+                                        displayLocalizedString(
+                                            TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
+                                    controller: priceTextController,
+                                  ),
                                 ),
                                 Positioned(
                                   top: 0,
@@ -323,12 +362,15 @@ class _UploadWidgetState extends State<UploadWidget> {
                       Stack(
                         overflow: Overflow.visible,
                         children: <Widget>[
-                          TextField(
-                            enabled: false,
-                            decoration: getAuthInputDecoration(
-                                displayLocalizedString(
-                                    TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
-                            controller: categoryTextController,
+                          Material(
+                            elevation: 4,
+                            child: TextField(
+                              enabled: false,
+                              decoration: getAuthInputDecoration(
+                                  displayLocalizedString(
+                                      TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
+                              controller: categoryTextController,
+                            ),
                           ),
                           Positioned(
                             top: 0,
@@ -351,17 +393,19 @@ class _UploadWidgetState extends State<UploadWidget> {
                       SizedBox(
                         height: 10,
                       ),
-                      TextField(
-                        controller: descriptionTextController,
-                        maxLines: null,
-                        maxLength: 200,
-                        maxLengthEnforced: true,
-                        decoration: getAuthInputDecoration(
-                            displayLocalizedString(
-                                TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
-                        onChanged: (value) {
-                          description = value;
-                        },
+                      Material(
+                        elevation: 4,
+                        child: TextField(
+                          controller: descriptionTextController,
+                          maxLines: null,
+                          maxLength: 200,
+                          decoration: getAuthInputDecoration(
+                              displayLocalizedString(
+                                  TEXT_ARTWORK_DESCRIPTION_FORM_HINT_LABEL)),
+                          onChanged: (value) {
+                            description = value;
+                          },
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -369,9 +413,21 @@ class _UploadWidgetState extends State<UploadWidget> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: FloatingActionButton(
+                                elevation: 4,
                                 heroTag: 'delete_button',
                                 onPressed: () {
-                                  dispatchDelete();
+                                  AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.WARNING,
+                                      animType: AnimType.BOTTOMSLIDE,
+                                      tittle: displayLocalizedString(
+                                          TEXT_ARTWORK_DELETE_DIALOG_TITLE_LABEL),
+                                      desc: displayLocalizedString(
+                                          TEXT_ARTWORK_DELETE_DIALOG_DESCRIPTION_LABEL),
+                                      btnCancelOnPress: () {},
+                                      btnOkOnPress: () {
+                                        dispatchDelete();
+                                      }).show();
                                 },
                                 backgroundColor: accentColor,
                                 child: Icon(Icons.delete)),
@@ -381,6 +437,7 @@ class _UploadWidgetState extends State<UploadWidget> {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: FloatingActionButton(
+                                    elevation: 4,
                                     heroTag: 'save_button',
                                     onPressed: () {
                                       if (state is ArtworkUploadLoading) {

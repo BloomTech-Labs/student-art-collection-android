@@ -44,6 +44,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
       child: Scaffold(
         key: _scaffoldkey,
         appBar: AppBar(
+          centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<SchoolGalleryChoice>(
               onSelected: _select,
@@ -136,13 +137,23 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
         bottomNavigationBar: BottomAppBar(
           color: Colors.transparent,
           child: TitledBottomNavigationBar(
-            currentIndex: 2, // Use this to update the Bar giving a position
+            currentIndex: 0, // Use this to update the Bar giving a position
             onTap: (index) {
               print("Selected Index: $index");
             },
             items: [
-              TitledNavigationBarItem(title: 'Home', icon: Icons.home),
-              TitledNavigationBarItem(title: 'Search', icon: Icons.search),
+              TitledNavigationBarItem(
+                  title: displayLocalizedString(
+                    context,
+                    TEXT_SCHOOL_GALLERY_HOME_TAG,
+                  ),
+                  icon: Icons.home),
+              TitledNavigationBarItem(
+                  title: displayLocalizedString(
+                    context,
+                    TEXT_SCHOOL_GALLERY_SEARCH_TAG,
+                  ),
+                  icon: Icons.search),
             ],
             activeColor: accentColor,
           ),

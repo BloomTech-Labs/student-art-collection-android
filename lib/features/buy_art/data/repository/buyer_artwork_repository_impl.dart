@@ -26,7 +26,7 @@ class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
       try {
         final remoteArtworkList = await remoteDataSource.getAllArtwork();
         localDataSource.cacheArtworkList(remoteArtworkList);
-        return Right(await remoteDataSource.getAllArtwork());
+        return Right(remoteArtworkList);
       } on ServerException {
         return Left(ServerFailure());
       }

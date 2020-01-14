@@ -17,6 +17,7 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  BuildContext _blocContext;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,14 @@ class _GalleryPageState extends State<GalleryPage> {
       child: Scaffold(
         key: _scaffoldkey,
         appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                buildInitial(_blocContext);
+              },
+            )
+          ],
           centerTitle: true,
           title: Text(
             displayLocalizedString(context, TEXT_GALLERY_APP_BAR_TITLE),
@@ -39,6 +48,7 @@ class _GalleryPageState extends State<GalleryPage> {
           },
           child: BlocBuilder<GalleryBloc, GalleryState>(
             builder: (context, state) {
+              _blocContext = context;
               if (state is GalleryLoadingState) {
                 return BuildLoading();
               } else if (state is GalleryLoadedState) {
@@ -102,5 +112,4 @@ class _GalleryPageState extends State<GalleryPage> {
     final galleryBloc = BlocProvider.of<GalleryBloc>(context);
     galleryBloc.add(GetArtworkList());
   }
-
 }

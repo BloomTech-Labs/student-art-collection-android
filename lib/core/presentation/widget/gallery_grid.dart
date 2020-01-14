@@ -24,14 +24,14 @@ const double staggeredGridCrossAxisSpacing = 16.0;
 bool showTitleAnimations = false;
 int prevIndex = 0;
 
-void setShowTitleAnimations({@required int newIndex}){
+void setShowTitleAnimations({@required int newIndex}) {
   int tempIndex = prevIndex;
   prevIndex = newIndex;
- if(tempIndex > newIndex){
-   showTitleAnimations = false;
- }else {
-   showTitleAnimations = true;
- }
+  if (tempIndex > newIndex) {
+    showTitleAnimations = false;
+  } else {
+    showTitleAnimations = true;
+  }
 }
 
 class GalleryGrid extends StatelessWidget {
@@ -67,7 +67,6 @@ class GalleryGrid extends StatelessWidget {
       sizeList.add(randomInRange(
           (minImageHeight + maxImageHeight) ~/ 2.5, maxImageHeight));
     }
-
 
     return Padding(
       padding:
@@ -123,7 +122,8 @@ class GridTile extends StatelessWidget {
     @required this.artwork,
     this.borderColor,
     this.setCornerRadius,
-    this.onTap, this.index,
+    this.onTap,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -141,44 +141,44 @@ class GridTile extends StatelessWidget {
 
     final bool isAnimatedTitle = showTitleAnimations;
 
-
-
     return GestureDetector(
       onTap: onTap == null ? () {} : () => onTap(artwork),
-      child: Container(
-        child: Center(
-          child: Stack(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: borderColor == null
-                          ? gridBorderColor
-                          : borderColor),
-                  borderRadius: BorderRadius.circular(cornerRadius),
-                  image: DecorationImage(
-                    image: artwork.images.length > 0
-                        ? NetworkImage(artwork.images[0].imageUrl)
-                        : NetworkImage(
-                            'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Stack(
-                children: <Widget>[ Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(.5),
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(cornerRadius),
-                        bottomLeft: Radius.circular(cornerRadius),
-                      ),
+      child: Material(
+        elevation: 4,
+        child: Container(
+          child: Center(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: borderColor == null
+                            ? gridBorderColor
+                            : borderColor),
+                    borderRadius: BorderRadius.circular(cornerRadius),
+                    image: DecorationImage(
+                      image: artwork.images.length > 0
+                          ? NetworkImage(artwork.images[0].imageUrl)
+                          : NetworkImage(
+                              'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
+                Stack(children: <Widget>[
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(.5),
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(cornerRadius),
+                          bottomLeft: Radius.circular(cornerRadius),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     padding: EdgeInsets.only(bottom: 10),
                     alignment: Alignment.bottomCenter,
@@ -187,9 +187,9 @@ class GridTile extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
-                ]
-              ),
-            ],
+                ]),
+              ],
+            ),
           ),
         ),
       ),

@@ -186,7 +186,7 @@ class _LoginFormState extends State<LoginForm> {
             onTap: dispatchRegistration),
         BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
           builder: (BuildContext context, state) {
-            if (state is !SchoolAuthLoading) {
+            if (state is! SchoolAuthLoading) {
               return longButton(
                 position: positionMiddleButton,
                 label: AppLocalizations.of(context)
@@ -195,23 +195,24 @@ class _LoginFormState extends State<LoginForm> {
                   dispatchLogin();
                 },
               );
-            } else{ return Stack(
-                children: <Widget>[
-                  longButton(
-                    position: positionMiddleButton,
-                    label: AppLocalizations.of(context)
-                        .translate(TEXT_LOGIN_LOGIN_BUTTON),
-                    onTap: () {},
+            } else {
+              return Stack(children: <Widget>[
+                longButton(
+                  position: positionMiddleButton,
+                  label: AppLocalizations.of(context)
+                      .translate(TEXT_LOGIN_LOGIN_BUTTON),
+                  onTap: () {},
+                ),
+                SizedBox.expand(
+                  child: Container(
+                    color: Colors.black.withOpacity(.7),
                   ),
-                  SizedBox.expand(
-                    child: Container(
-                      color: Colors.black.withOpacity(.7),
-                    ),
-                  ),
-                  Center(
-                    child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
-                  )
-                ] );
+                ),
+                Center(
+                  child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                )
+              ]);
             }
           },
         ),
@@ -233,18 +234,21 @@ class _LoginFormState extends State<LoginForm> {
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            color: Colors.white,
-          ),
-          child: Center(
-            child: TextField(
-              controller: controller,
-              keyboardType: TextInputType.visiblePassword,
-              onChanged: (value) => onChanged(value),
-              decoration: InputDecoration.collapsed(hintText: ""),
+        Material(
+          elevation: 4,
+          child: Container(
+            padding: EdgeInsets.only(left: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+              color: Colors.white,
+            ),
+            child: Center(
+              child: TextField(
+                controller: controller,
+                keyboardType: TextInputType.visiblePassword,
+                onChanged: (value) => onChanged(value),
+                decoration: InputDecoration.collapsed(hintText: ""),
+              ),
             ),
           ),
         )
@@ -374,8 +378,7 @@ class _LoginFormState extends State<LoginForm> {
       child: Container(
         height: 50,
         child: RaisedButton(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
           onPressed: onTap,
           color: accentColor,
           elevation: 10,

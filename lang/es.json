@@ -35,8 +35,8 @@
 
   "artwork_upload_artwork_title_label": "Ingrese el título de la obra de arte",
   "artwork_upload_student_name_label": "Ingrese el nombre del estudiante",
-  "artwork_upload_date_selection_label": "Seleccionar fecha de creación",
-  "artwork_upload_price_selection_label": "Seleccionar precio de la obra de arte",
+  "artwork_upload_date_selection_label": "Fecha",
+  "artwork_upload_price_selection_label": "Precio",
   "artwork_upload_category_selection_label": "Seleccionar categoría de ilustraciones",
   "artwork_description_form_hint_label": "Ingrese la descripción",
   "artwork_upload_upload_button_label": "Enviar",
@@ -51,6 +51,12 @@
   "artwork_uploading_wait_message_label": "Espere hasta que se complete la carga",
   "artwork_delete_error_message_label": "Hubo un problema al eliminar la obra de arte",
   "artwork_delete_success_message_label": "¡Las ilustraciones se eliminaron con éxito!",
+  "artwork_delete_dialog_title": "¿Eliminar arte?",
+  "artwork_delete_dialog_description": "¿Estas seguro que quieres borrarlo? Las ilustraciones no se pueden recuperar.",
+  "artwork_dialog_image_title": "Fuente",
+  "artwork_dialog_image_description": "Seleccione de dónde desea obtener una imagen.",
+  "artwork_image_dialog_camera_text_label": "Cámara",
+  "artwork_image_dialog_gallery_text_label": "Galería",
 
   "registration_app_bar_title": "Registrarse",
   "registration_app_bar_error_state_message": "Error",

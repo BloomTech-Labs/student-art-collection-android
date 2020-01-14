@@ -53,6 +53,12 @@
   "artwork_uploading_wait_message_label": "Please wait until uploading is complete",
   "artwork_delete_error_message_label": "There was a problem deleting the artwork",
   "artwork_delete_success_message_label": "Artwork was successfully deleted!",
+  "artwork_delete_dialog_title": "Delete Artwork?",
+  "artwork_delete_dialog_description": "Are you sure you want to delete? Artwork cannot be recovered.",
+  "artwork_dialog_image_title": "Source",
+  "artwork_dialog_image_description": "Please select where you would like to get an image from.",
+  "artwork_image_dialog_camera_text_label": "Camera",
+  "artwork_image_dialog_gallery_text_label": "Gallery",
 
   "registration_app_bar_title": "Register",
   "registration_app_bar_error_state_message": "Error",
