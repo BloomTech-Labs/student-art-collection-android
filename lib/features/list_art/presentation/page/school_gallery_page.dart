@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
+import 'package:student_art_collection/core/presentation/widget/app_bar_logo.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
@@ -25,7 +26,7 @@ class SchoolGalleryPage extends StatefulWidget {
 }
 
 class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
-  GlobalKey<ScaffoldState> _scaffoldkey =
+  GlobalKey<ScaffoldState> _scaffoldKey =
       new GlobalKey<ScaffoldState>(); // The app's "state".
   BuildContext _blocContext;
 
@@ -42,7 +43,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     return BlocProvider<SchoolGalleryBloc>(
       create: (context) => sl<SchoolGalleryBloc>(),
       child: Scaffold(
-        key: _scaffoldkey,
+        key: _scaffoldKey,
         appBar: AppBar(
           centerTitle: true,
           actions: <Widget>[
@@ -52,16 +53,17 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                 return schoolGalleryChoices.map((SchoolGalleryChoice choice) {
                   return PopupMenuItem<SchoolGalleryChoice>(
                     value: choice,
-                    child: Text(choice.title),
+                    child: Material(
+                      child: Text(
+                        choice.title,
+                      ),
+                    ),
                   );
                 }).toList();
               },
             )
           ],
-          title: Text(
-            AppLocalizations.of(context)
-                .translate(TEXT_SCHOOL_GALLERY_APP_BAR_TITLE),
-          ),
+          title: AppBarLogo(),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
@@ -183,7 +185,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
           context,
           message,
         )));
-    _scaffoldkey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   String displayLocalizedString(BuildContext context, String label) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
@@ -16,7 +17,7 @@ class GalleryPage extends StatefulWidget {
 }
 
 class _GalleryPageState extends State<GalleryPage> {
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BuildContext _blocContext;
 
   @override
@@ -24,7 +25,7 @@ class _GalleryPageState extends State<GalleryPage> {
     return BlocProvider<GalleryBloc>(
       create: (context) => sl<GalleryBloc>(),
       child: Scaffold(
-        key: _scaffoldkey,
+        key: _scaffoldKey,
         appBar: AppBar(
           actions: <Widget>[
             IconButton(
@@ -35,8 +36,14 @@ class _GalleryPageState extends State<GalleryPage> {
             )
           ],
           centerTitle: true,
-          title: Text(
-            displayLocalizedString(context, TEXT_GALLERY_APP_BAR_TITLE),
+          title: Hero(
+            tag: 'logo',
+            child: SvgPicture.asset(
+              'assets/artco_logo_large.svg',
+              color: Colors.white,
+              semanticsLabel: 'App Logo',
+              fit: BoxFit.contain,
+            ),
           ),
         ),
         body: BlocListener<GalleryBloc, GalleryState>(
@@ -98,13 +105,13 @@ class _GalleryPageState extends State<GalleryPage> {
     final snackBar = SnackBar(
       content: Text(
         displayLocalizedString(
-          _scaffoldkey.currentContext,
+          _scaffoldKey.currentContext,
           message,
         ),
         textAlign: TextAlign.center,
       ),
     );
-    _scaffoldkey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   void getArtworkList(BuildContext context) {

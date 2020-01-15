@@ -5,6 +5,7 @@ import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_localization.dart';
 import 'service_locator.dart' as locator;
+
 //test
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,9 +30,9 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           textTheme: TextTheme(
-            title: TextStyle(color: Colors.black, fontSize: 20),
+            title: TextStyle(color: Colors.white, fontSize: 20),
           ),
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.white),
           color: primaryColor,
         ),
         primaryColor: primaryColor,

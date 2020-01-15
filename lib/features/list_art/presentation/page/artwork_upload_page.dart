@@ -9,6 +9,7 @@ import 'package:flutter_picker/Picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/widget/app_bar_logo.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
 import 'package:student_art_collection/core/presentation/widget/dialog_button.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
@@ -142,11 +143,25 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
       create: (context) => _artworkUploadBloc,
       child: Scaffold(
         appBar: AppBar(
+          title: AppBarLogo(),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.delete),
-              onPressed: () {},
+              onPressed: () {
+                AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.WARNING,
+                    animType: AnimType.BOTTOMSLIDE,
+                    tittle: displayLocalizedString(
+                        TEXT_ARTWORK_DELETE_DIALOG_TITLE_LABEL),
+                    desc: displayLocalizedString(
+                        TEXT_ARTWORK_DELETE_DIALOG_DESCRIPTION_LABEL),
+                    btnCancelOnPress: () {},
+                    btnOkOnPress: () {
+                      dispatchDelete();
+                    }).show();
+              },
             )
           ],
           bottom: PreferredSize(
@@ -396,30 +411,8 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
                             ),
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: FloatingActionButton(
-                                    elevation: 4,
-                                    heroTag: 'delete_button',
-                                    onPressed: () {
-                                      AwesomeDialog(
-                                          context: context,
-                                          dialogType: DialogType.WARNING,
-                                          animType: AnimType.BOTTOMSLIDE,
-                                          tittle: displayLocalizedString(
-                                              TEXT_ARTWORK_DELETE_DIALOG_TITLE_LABEL),
-                                          desc: displayLocalizedString(
-                                              TEXT_ARTWORK_DELETE_DIALOG_DESCRIPTION_LABEL),
-                                          btnCancelOnPress: () {},
-                                          btnOkOnPress: () {
-                                            dispatchDelete();
-                                          }).show();
-                                    },
-                                    backgroundColor: accentColor,
-                                    child: Icon(Icons.delete)),
-                              ),
                               BlocBuilder<ArtworkUploadBloc,
                                   ArtworkUploadState>(
                                 builder: (context, state) {
@@ -427,7 +420,6 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
                                     padding: const EdgeInsets.only(top: 10),
                                     child: FloatingActionButton(
                                         elevation: 4,
-                                        heroTag: 'save_button',
                                         onPressed: () {
                                           if (state is ArtworkUploadLoading) {
                                             showSnackBar(context,
