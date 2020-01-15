@@ -169,19 +169,20 @@ class _LoginFormState extends State<LoginForm> {
             textSpan: TextSpan(
                 text: AppLocalizations.of(context)
                     .translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
-                style: TextStyle(color: Colors.black),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 children: <TextSpan>[
                   TextSpan(
                     text: AppLocalizations.of(context)
                         .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: accentColor,
                     ),
                   ),
                   TextSpan(
                       text: AppLocalizations.of(context)
                           .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
-                      style: TextStyle(color: Colors.black))
+                      style: TextStyle(color: Colors.white))
                 ]),
             onTap: dispatchRegistration),
         BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
@@ -227,7 +228,7 @@ class _LoginFormState extends State<LoginForm> {
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left: 5, bottom: 5),
+          padding: EdgeInsets.only(bottom: 5),
           alignment: Alignment.bottomLeft,
           child: Text(
             label,
