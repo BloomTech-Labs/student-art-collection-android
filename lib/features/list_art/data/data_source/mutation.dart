@@ -35,7 +35,8 @@ const String ADD_ARTWORK_MUTATION = r'''
     $sold: Boolean,
     $title: String,
     $artist_name: String,
-    $description: String) {
+    $description: String
+    $image_url: String!) {
       action: addArt(
         school_id: $school_id,
         category: $category,
@@ -43,7 +44,8 @@ const String ADD_ARTWORK_MUTATION = r'''
         sold: $sold,
         title: $title,
         artist_name: $artist_name,
-        description: $description
+        description: $description,
+        image_url: $image_url
       ) {
         id,
         category {

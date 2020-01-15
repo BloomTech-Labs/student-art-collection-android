@@ -1,4 +1,4 @@
-const BASE_URL = 'https://student-artco.herokuapp.com/graphql';
+const BASE_URL = 'https://student-artco-staging.herokuapp.com/graphql';
 
 //image
 const IMAGE_ID = 'id';

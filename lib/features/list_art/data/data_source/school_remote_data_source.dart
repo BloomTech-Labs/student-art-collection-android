@@ -110,6 +110,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
       throw ServerException(message: result.exception.graphqlErrors[0].message);
     }
     final Artwork savedArtwork = convertResultToArtwork(result, 'action');
+    artworkToUpload.imagesToUpload.removeAt(0);
     final uploadedImages =
         await uploadImages(savedArtwork.artId, artworkToUpload.imagesToUpload);
     uploadedImages.forEach((image) {
@@ -149,6 +150,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
           'title': artworkToUpload.title,
           'artist_name': artworkToUpload.artistName,
           'description': artworkToUpload.description,
+          'image_url': artworkToUpload.imagesToUpload[0],
         });
     return options;
   }
@@ -172,6 +174,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
           'title': artworkToUpdate.title,
           'artist_name': artworkToUpdate.artistName,
           'description': artworkToUpdate.description,
+          'category': artworkToUpdate.category,
         });
     final QueryResult result = await client.mutate(options);
     if (result.hasException) throw ServerException();
