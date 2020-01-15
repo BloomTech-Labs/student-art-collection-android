@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
 import 'package:student_art_collection/core/util/route_generator.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
@@ -10,7 +11,10 @@ import 'service_locator.dart' as locator;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await locator.init();
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {
