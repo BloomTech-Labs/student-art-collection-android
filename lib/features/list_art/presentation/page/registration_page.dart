@@ -93,6 +93,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             SizedBox(height: 10),
             TextField(
               keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
               onChanged: (value) {
                 password = value;
               },
@@ -101,6 +102,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             SizedBox(height: 10),
             TextField(
+              obscureText: true,
               keyboardType: TextInputType.visiblePassword,
               onChanged: (value) {
                 verifyPassword = value;

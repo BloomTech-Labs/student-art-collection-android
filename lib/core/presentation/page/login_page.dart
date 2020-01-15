@@ -142,7 +142,8 @@ class _LoginFormState extends State<LoginForm> {
                 .translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
             onChanged: (value) {
               email = value;
-            }),
+            },
+            isObscured: false),
         textFieldWidget(
             controller: passwordController,
             position: positionBottomTextField,
@@ -150,7 +151,8 @@ class _LoginFormState extends State<LoginForm> {
                 .translate(TEXT_LOGIN_PASSWORD_LABEL),
             onChanged: (value) {
               password = value;
-            }),
+            },
+            isObscured: true),
         checkBoxWithLabel(
           position: positionCheckBox,
           label: AppLocalizations.of(context)
@@ -227,10 +229,12 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget textFieldWidgetNoBorderWhite(
-      {String label,
-      Function(String value) onChanged,
-      TextEditingController controller}) {
+  Widget textFieldWidgetNoBorderWhite({
+    String label,
+    Function(String value) onChanged,
+    TextEditingController controller,
+    isObscured: bool,
+  }) {
     return Column(
       children: <Widget>[
         Container(
@@ -251,6 +255,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             child: Center(
               child: TextField(
+                obscureText: isObscured,
                 controller: controller,
                 keyboardType: TextInputType.visiblePassword,
                 onChanged: (value) => onChanged(value),
@@ -287,6 +292,7 @@ class _LoginFormState extends State<LoginForm> {
     @required String text,
     @required Function(String) onChanged,
     @required TextEditingController controller,
+    isObscured: bool,
   }) {
     return Positioned(
         bottom: position,
@@ -296,6 +302,7 @@ class _LoginFormState extends State<LoginForm> {
           label: text,
           onChanged: onChanged,
           controller: controller,
+          isObscured: isObscured,
         ));
   }
 
