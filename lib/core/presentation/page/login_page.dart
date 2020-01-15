@@ -40,8 +40,7 @@ class LoginPage extends StatelessWidget {
               Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
             } else if (state is SchoolAuthError) {
               if (state.message != null) {
-                final snackBar = SnackBar(content: Text(state.message));
-                Scaffold.of(context).showSnackBar(snackBar);
+                showSnackBar(context, state.message);
               }
             }
           },
@@ -52,6 +51,12 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    Scaffold.of(context).removeCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 

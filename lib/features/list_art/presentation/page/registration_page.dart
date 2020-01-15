@@ -23,7 +23,8 @@ class SchoolRegistrationPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).translate(TEXT_REGISTRATION_APP_BAR_TITLE)),
+          title: Text(AppLocalizations.of(context)
+              .translate(TEXT_REGISTRATION_APP_BAR_TITLE)),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
@@ -41,15 +42,21 @@ class SchoolRegistrationPage extends StatelessWidget {
               if (state is Authorized) {
                 Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
               } else if (state is SchoolAuthError) {
-                final snackBar = SnackBar(content: Text(state.message));
-                Scaffold.of(context).showSnackBar(snackBar);
+                showSnackBar(context, state.message);
               } else if (state is Unauthorized) {
-                print(AppLocalizations.of(context).translate(TEXT_REGISTRATION_APP_BAR_ERROR_STATE_MESSAGE));
+                print(AppLocalizations.of(context)
+                    .translate(TEXT_REGISTRATION_APP_BAR_ERROR_STATE_MESSAGE));
               }
             },
             child: RegistrationForm()),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    Scaffold.of(context).removeCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 
@@ -80,7 +87,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 email = value;
               },
-              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_EMAIL_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_EMAIL_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -88,7 +96,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 password = value;
               },
-              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_PASSWORD_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_PASSWORD_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -96,7 +105,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 verifyPassword = value;
               },
-              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_PASSWORD_CONFIRMATION_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_PASSWORD_CONFIRMATION_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -104,8 +114,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 address = value;
               },
-              decoration:
-                  getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_STREET_ADDRESS_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_STREET_ADDRESS_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -113,7 +123,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 schoolName = value;
               },
-              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_SCHOOL_NAME_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_SCHOOL_NAME_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -121,7 +132,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 city = value;
               },
-              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_CITY_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_CITY_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -129,7 +141,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 state = value;
               },
-              decoration: getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_STATE_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_STATE_LABEL)),
             ),
             SizedBox(height: 10),
             TextField(
@@ -137,14 +150,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
               onChanged: (value) {
                 zipcode = value;
               },
-              decoration:
-                  getAuthInputDecoration(AppLocalizations.of(context).translate(TEXT_REGISTRATION_ZIPCODE_LABEL)),
+              decoration: getAuthInputDecoration(AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_ZIPCODE_LABEL)),
             ),
             SizedBox(height: 10),
             RaisedButton(
                 color: accentColor,
                 child: Text(
-                  AppLocalizations.of(context).translate(TEXT_REGISTRATION_BUTTON_LABEL),
+                  AppLocalizations.of(context)
+                      .translate(TEXT_REGISTRATION_BUTTON_LABEL),
                   style: TextStyle(
                     color: Colors.white,
                   ),

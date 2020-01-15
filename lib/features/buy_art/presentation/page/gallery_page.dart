@@ -111,6 +111,7 @@ class _GalleryPageState extends State<GalleryPage> {
         textAlign: TextAlign.center,
       ),
     );
+    _scaffoldKey.currentState.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 

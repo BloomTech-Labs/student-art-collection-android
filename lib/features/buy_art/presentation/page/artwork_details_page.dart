@@ -30,7 +30,7 @@ class ArtworkDetailsPage extends StatefulWidget {
 class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   final Artwork artwork;
 
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   _ArtworkDetailsPageState({@required this.artwork});
 
@@ -56,7 +56,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
     return BlocProvider<ArtworkDetailsBloc>(
       create: (context) => sl<ArtworkDetailsBloc>(),
       child: Scaffold(
-        key: _scaffoldkey,
+        key: _scaffoldKey,
         appBar: AppBar(
           centerTitle: true,
           title: Text(title),
@@ -333,6 +333,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
         textAlign: TextAlign.center,
       ),
     );
-    _scaffoldkey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

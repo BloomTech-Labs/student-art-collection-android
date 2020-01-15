@@ -108,7 +108,7 @@ class SchoolAuthBloc extends Bloc<SchoolAuthEvent, SchoolAuthState> {
         } else if (failure is CacheFailure) {
           yield SchoolAuthError(message: failure.message);
           yield Unauthorized();
-        }   else {
+        } else {
           yield SchoolAuthError(message: 'Something went wrong');
           yield Unauthorized();
         }

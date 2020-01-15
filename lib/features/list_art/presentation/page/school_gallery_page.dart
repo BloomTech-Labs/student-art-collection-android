@@ -7,6 +7,7 @@ import 'package:student_art_collection/core/presentation/widget/empty_container.
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/artwork_to_return.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_event.dart';
@@ -35,6 +36,8 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   void _select(SchoolGalleryChoice choice) {
     if (choice.title == 'Logout') {
       _dispatchLogoutEvent();
+    } else if (choice.title == 'Buyer') {
+      Navigator.pushNamed(context, GalleryPage.ID);
     }
   }
 
@@ -48,14 +51,27 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<SchoolGalleryChoice>(
+              icon: Icon(Icons.settings),
+              elevation: 4,
               onSelected: _select,
               itemBuilder: (context) {
                 return schoolGalleryChoices.map((SchoolGalleryChoice choice) {
                   return PopupMenuItem<SchoolGalleryChoice>(
+                    height: 20.0,
                     value: choice,
                     child: Material(
-                      child: Text(
-                        choice.title,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Text(
+                            choice.title,
+                            style: TextStyle(
+                              backgroundColor: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -185,6 +201,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
           context,
           message,
         )));
+    _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
@@ -202,5 +219,6 @@ class SchoolGalleryChoice {
 
 const List<SchoolGalleryChoice> schoolGalleryChoices =
     const <SchoolGalleryChoice>[
-  const SchoolGalleryChoice(title: 'Logout', icon: Icons.local_gas_station),
+  const SchoolGalleryChoice(title: 'Logout'),
+  const SchoolGalleryChoice(title: 'Buyer'),
 ];

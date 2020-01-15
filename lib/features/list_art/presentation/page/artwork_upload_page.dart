@@ -526,6 +526,7 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
 
   void showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(displayLocalizedString(message)));
+    Scaffold.of(context).removeCurrentSnackBar();
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
