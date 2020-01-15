@@ -9,15 +9,15 @@ import 'package:student_art_collection/features/buy_art/data/data_source/query.d
 import 'package:student_art_collection/features/buy_art/data/model/contact_form_model.dart';
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 
-abstract class BuyerRemoteDataSource{
-
+abstract class BuyerRemoteDataSource {
   /// Throws a [ServerException] for all error codes
-  Future <List<Artwork>> getAllArtwork();
+  Future<List<Artwork>> getAllArtwork();
 
-  Future <ContactForm> contactFormConfirmation({@required ContactForm contactForm});
+  Future<ContactForm> contactFormConfirmation(
+      {@required ContactForm contactForm});
 }
 
-class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource{
+class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource {
   final GraphQLClient client;
 
   GraphQLBuyerRemoteDataSource({this.client});
@@ -25,38 +25,36 @@ class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource{
   @override
   Future<List<Artwork>> getAllArtwork() async {
     final QueryOptions queryOptions = QueryOptions(
+      fetchPolicy: FetchPolicy.noCache,
       documentNode: gql(GET_ALL_ARTWORK_FOR_BUYER),
     );
-    final QueryResult result  = await client.query(queryOptions);
-    if(result.hasException){
+    final QueryResult result = await client.query(queryOptions);
+    if (result.hasException) {
       throw ServerException();
     }
     return convertResultToArtworkList(result, "allArts");
   }
 
   @override
-  Future<ContactForm> contactFormConfirmation({@required ContactForm contactForm}) async {
+  Future<ContactForm> contactFormConfirmation(
+      {@required ContactForm contactForm}) async {
     final MutationOptions options = MutationOptions(
       documentNode: gql(SUBMIT_CONTACT_FORM_MUTATION),
       variables: <String, dynamic>{
-        CONTACT_FORM_SEND_TO : contactForm.sendTo,
-        CONTACT_FORM_FROM : contactForm.from,
-        CONTACT_FORM_SUBJECT : contactForm.subject,
-        CONTACT_FORM_MESSAGE : contactForm.message,
-        CONTACT_FORM_NAME : contactForm.name
+        CONTACT_FORM_SEND_TO: contactForm.sendTo,
+        CONTACT_FORM_FROM: contactForm.from,
+        CONTACT_FORM_SUBJECT: contactForm.subject,
+        CONTACT_FORM_MESSAGE: contactForm.message,
+        CONTACT_FORM_NAME: contactForm.name
       },
     );
 
     final QueryResult result = await client.mutate(options);
 
-    if(result.hasException){
+    if (result.hasException) {
       throw ServerException();
     }
 
     return ContactFormModel.fromJson(result.data['action']);
-
   }
-
-
-
 }

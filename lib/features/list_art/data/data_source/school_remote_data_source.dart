@@ -50,6 +50,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   @override
   Future<School> loginSchool(String uid) async {
     final QueryOptions queryOptions = QueryOptions(
+      fetchPolicy: FetchPolicy.noCache,
       documentNode: gql(GET_SCHOOL_QUERY),
       variables: <String, dynamic>{
         'school_id': uid,
@@ -62,6 +63,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   @override
   Future<School> registerNewSchool(SchoolToRegister schoolToRegister) async {
     final MutationOptions options = MutationOptions(
+      fetchPolicy: FetchPolicy.noCache,
       documentNode: gql(ADD_SCHOOL_MUTATION),
       variables: <String, dynamic>{
         'schoolId': schoolToRegister.schoolId,
@@ -90,6 +92,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   @override
   Future<List<Artwork>> getArtworksForSchool(int schoolId) async {
     final QueryOptions options = QueryOptions(
+        fetchPolicy: FetchPolicy.noCache,
         documentNode: gql(GET_ARTWORK_FOR_SCHOOL),
         variables: <String, dynamic>{
           'school_id': schoolId,
@@ -117,6 +120,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
 
   MutationOptions getStagingOptions(ArtworkToUpload artworkToUpload) {
     final MutationOptions options = MutationOptions(
+        fetchPolicy: FetchPolicy.noCache,
         documentNode: gql(ADD_ARTWORK_MUTATION2),
         variables: <String, dynamic>{
           'input': {
@@ -135,6 +139,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
 
   MutationOptions getProdOptions(ArtworkToUpload artworkToUpload) {
     final MutationOptions options = MutationOptions(
+        fetchPolicy: FetchPolicy.noCache,
         documentNode: gql(ADD_ARTWORK_MUTATION),
         variables: <String, dynamic>{
           'school_id': artworkToUpload.schoolId,
@@ -158,6 +163,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   Future<Artwork> updateArtwork(ArtworkToUpload artworkToUpdate) async {
     await deleteImages(artworkToUpdate.imagesToDelete);
     final MutationOptions options = MutationOptions(
+        fetchPolicy: FetchPolicy.noCache,
         documentNode: gql(UPDATE_ARTWORK_MUTATION),
         variables: <String, dynamic>{
           'id': artworkToUpdate.artworkToCompare.artId,
@@ -181,6 +187,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   Future deleteImages(List<Image> imagesToDelete) async {
     await Future.forEach(imagesToDelete, (image) async {
       final MutationOptions options = MutationOptions(
+          fetchPolicy: FetchPolicy.noCache,
           documentNode: gql(DELETE_IMAGE_FROM_ARTWORK),
           variables: <String, dynamic>{
             'id': image.imageId,
@@ -198,6 +205,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
     List<Image> savedImages = List();
     await Future.forEach(imagesToUpload, (imageUrl) async {
       final MutationOptions imageOptions = MutationOptions(
+          fetchPolicy: FetchPolicy.noCache,
           documentNode: gql(ADD_IMAGE_TO_ARTWORK_MUTATION),
           variables: <String, dynamic>{'art_id': artId, 'image_url': imageUrl});
       final QueryResult imageResult = await client.mutate(imageOptions);
@@ -212,6 +220,7 @@ class GraphQLSchoolRemoteDataSource implements SchoolRemoteDataSource {
   @override
   Future<ArtworkToDeleteId> deleteArtwork(int id) async {
     final MutationOptions options = MutationOptions(
+        fetchPolicy: FetchPolicy.noCache,
         documentNode: gql(DELETE_ARTWORK),
         variables: <String, dynamic>{
           'id': id,
