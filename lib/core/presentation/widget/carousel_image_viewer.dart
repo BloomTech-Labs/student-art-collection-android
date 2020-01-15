@@ -146,13 +146,15 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
 
   Widget imageUrlWidget(
       {@required BuildContext context, @required String imageUrl}) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(carouselCardCornerRadius),
-        image:
-            DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
+    return Material(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(carouselCardCornerRadius),
+          image:
+              DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
+        ),
       ),
     );
   }
@@ -161,7 +163,7 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
     return Positioned(
       child: Container(
         child: Text(
-          artistName == ""
+          artistName == "" || artistName == null
               ? AppLocalizations.of(context)
                   .translate(TEXT_CAROUSEL_WIDGET_DEFAULT_STUDENT_NAME)
               : artistName,

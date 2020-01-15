@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
@@ -39,8 +40,7 @@ class LoginPage extends StatelessWidget {
               Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
             } else if (state is SchoolAuthError) {
               if (state.message != null) {
-                final snackBar = SnackBar(content: Text(state.message));
-                Scaffold.of(context).showSnackBar(snackBar);
+                showSnackBar(context, state.message);
               }
             }
           },
@@ -51,6 +51,12 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    Scaffold.of(context).removeCurrentSnackBar();
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 
@@ -169,19 +175,20 @@ class _LoginFormState extends State<LoginForm> {
             textSpan: TextSpan(
                 text: AppLocalizations.of(context)
                     .translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
-                style: TextStyle(color: Colors.black),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 children: <TextSpan>[
                   TextSpan(
                     text: AppLocalizations.of(context)
                         .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: accentColor,
                     ),
                   ),
                   TextSpan(
                       text: AppLocalizations.of(context)
                           .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
-                      style: TextStyle(color: Colors.black))
+                      style: TextStyle(color: Colors.white))
                 ]),
             onTap: dispatchRegistration),
         BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
@@ -227,7 +234,7 @@ class _LoginFormState extends State<LoginForm> {
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left: 5, bottom: 5),
+          padding: EdgeInsets.only(bottom: 5),
           alignment: Alignment.bottomLeft,
           child: Text(
             label,
@@ -261,16 +268,18 @@ class _LoginFormState extends State<LoginForm> {
       @required String text,
       @required double fontSize}) {
     return Positioned(
-      bottom: position,
-      left: 24,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: fontSize,
-          color: Colors.white,
-        ),
-      ),
-    );
+        bottom: position,
+        left: 24,
+        child: Hero(
+          tag: 'logo',
+          child: SvgPicture.asset(
+            'assets/artco_logo_large.svg',
+            color: Colors.white,
+            semanticsLabel: 'App Logo',
+            width: 140,
+            height: 60,
+          ),
+        ));
   }
 
   Widget textFieldWidget({

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
+import 'package:student_art_collection/core/presentation/widget/app_bar_logo.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/artwork_to_return.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_event.dart';
@@ -25,7 +27,7 @@ class SchoolGalleryPage extends StatefulWidget {
 }
 
 class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
-  GlobalKey<ScaffoldState> _scaffoldkey =
+  GlobalKey<ScaffoldState> _scaffoldKey =
       new GlobalKey<ScaffoldState>(); // The app's "state".
   BuildContext _blocContext;
 
@@ -34,6 +36,8 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   void _select(SchoolGalleryChoice choice) {
     if (choice.title == 'Logout') {
       _dispatchLogoutEvent();
+    } else if (choice.title == 'Buyer') {
+      Navigator.pushNamed(context, GalleryPage.ID);
     }
   }
 
@@ -42,26 +46,40 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     return BlocProvider<SchoolGalleryBloc>(
       create: (context) => sl<SchoolGalleryBloc>(),
       child: Scaffold(
-        key: _scaffoldkey,
+        key: _scaffoldKey,
         appBar: AppBar(
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<SchoolGalleryChoice>(
+              icon: Icon(Icons.settings),
+              elevation: 4,
               onSelected: _select,
               itemBuilder: (context) {
                 return schoolGalleryChoices.map((SchoolGalleryChoice choice) {
                   return PopupMenuItem<SchoolGalleryChoice>(
+                    height: 20.0,
                     value: choice,
-                    child: Text(choice.title),
+                    child: Material(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Text(
+                            choice.title,
+                            style: TextStyle(
+                              backgroundColor: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   );
                 }).toList();
               },
             )
           ],
-          title: Text(
-            AppLocalizations.of(context)
-                .translate(TEXT_SCHOOL_GALLERY_APP_BAR_TITLE),
-          ),
+          title: AppBarLogo(),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
             child: BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
@@ -183,7 +201,8 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
           context,
           message,
         )));
-    _scaffoldkey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   String displayLocalizedString(BuildContext context, String label) {
@@ -200,5 +219,6 @@ class SchoolGalleryChoice {
 
 const List<SchoolGalleryChoice> schoolGalleryChoices =
     const <SchoolGalleryChoice>[
-  const SchoolGalleryChoice(title: 'Logout', icon: Icons.local_gas_station),
+  const SchoolGalleryChoice(title: 'Logout'),
+  const SchoolGalleryChoice(title: 'Buyer'),
 ];

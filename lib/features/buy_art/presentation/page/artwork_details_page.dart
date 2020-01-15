@@ -30,7 +30,7 @@ class ArtworkDetailsPage extends StatefulWidget {
 class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   final Artwork artwork;
 
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   _ArtworkDetailsPageState({@required this.artwork});
 
@@ -56,7 +56,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
     return BlocProvider<ArtworkDetailsBloc>(
       create: (context) => sl<ArtworkDetailsBloc>(),
       child: Scaffold(
-        key: _scaffoldkey,
+        key: _scaffoldKey,
         appBar: AppBar(
           centerTitle: true,
           title: Text(title),
@@ -174,12 +174,14 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                   children: [
                     TextSpan(
                         text: displayLocalizedString(
-                            context, TEXT_ARTWORK_DETAILS_SUGGESTED_DONATION), style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    )),
+                            context, TEXT_ARTWORK_DETAILS_SUGGESTED_DONATION),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        )),
                     TextSpan(text: "\$" + price),
                   ],
-                ),textAlign: TextAlign.center,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
@@ -219,8 +221,8 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                           context, TEXT_ARTWORK_DETAILS_NAME_LABEL),
                       counterText: "",
                       border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(cardCornerRadius))),
+                        borderRadius: BorderRadius.circular(cardCornerRadius),
+                      )),
                 ),
               ),
               SizedBox(
@@ -294,8 +296,11 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
                         artwork.artId.toString(),
                     name: nameController.text)));
               },
-              child: Text(displayLocalizedString(
-                  context, TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL), style: TextStyle(color: Colors.white),),
+              child: Text(
+                displayLocalizedString(
+                    context, TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL),
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         )
@@ -328,6 +333,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
         textAlign: TextAlign.center,
       ),
     );
-    _scaffoldkey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

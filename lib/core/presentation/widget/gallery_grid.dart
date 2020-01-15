@@ -145,6 +145,7 @@ class GridTile extends StatelessWidget {
       onTap: onTap == null ? () {} : () => onTap(artwork),
       child: Material(
         elevation: 4,
+        shadowColor: accentColor,
         child: Container(
           child: Center(
             child: Stack(
