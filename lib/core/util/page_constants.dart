@@ -1,0 +1,2 @@
+// GalleryGrid Widget Constants
+
