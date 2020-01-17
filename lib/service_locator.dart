@@ -122,7 +122,7 @@ Future init() async {
   // Data Sources
   sl.registerLazySingleton<SchoolRemoteDataSource>(
       () => GraphQLSchoolRemoteDataSource(
-            client: sl(),
+            graphQLClient: sl<GraphQLClient>(),
             cloudinaryClient: sl(),
           ));
 
