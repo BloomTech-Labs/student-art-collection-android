@@ -180,7 +180,7 @@ class _LoginFormState extends State<LoginForm> {
                     text: AppLocalizations.of(context)
                         .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
-                      color: accentColor,
+                      color: textLinkOnBlack,
                     ),
                   ),
                   TextSpan(
