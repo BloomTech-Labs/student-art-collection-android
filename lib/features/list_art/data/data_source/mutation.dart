@@ -73,49 +73,6 @@ const String ADD_ARTWORK_MUTATION = r'''
     }
 ''';
 
-const ADD_ARTWORK_QUERY_VARIABLE = r'''
-  {
-    "category": $category,
-    "school_id": $school_id,
-    "price": $price,
-    "sold": $sold,
-    "title": $title,
-    "artist_name": $artist_name,
-    "description": $description,
-    "image_url": $image_url
-  }
-''';
-
-const String ADD_ARTWORK_MUTATION2 = r'''
-  mutation AddArtworkToSchool(
-    $input: NewArtInput) {
-      action: addArt(newArt: $input) {
-        id,
-        category {
-          id,
-          category
-        },
-        school {
-          school_name,
-          id,
-          school_id,
-          email
-        }
-        price,
-        sold,
-        title,
-        artist_name,
-        description,
-        date_posted,
-        images {
-          id,
-          art_id,
-          image_url
-        }
-      }
-    }
-''';
-
 const String UPDATE_ARTWORK_MUTATION = r'''
   mutation AddArtworkToSchool(
     $id: ID!,
