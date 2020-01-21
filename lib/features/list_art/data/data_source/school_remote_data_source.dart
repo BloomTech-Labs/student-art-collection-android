@@ -54,10 +54,10 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     final QueryResult result = await performQuery(
       GET_SCHOOL_QUERY,
       <String, dynamic>{
-        'school_id': uid,
+        SCHOOL_SCHOOL_ID: uid,
       },
     );
-    return handleAuthResult(result, "schoolBySchoolId");
+    return handleAuthResult(result, LOGIN_SCHOOL_QUERY_KEY);
   }
 
   @override
@@ -65,15 +65,15 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     final QueryResult result = await performMutation(
       ADD_SCHOOL_MUTATION,
       <String, dynamic>{
-        'schoolId': schoolToRegister.schoolId,
-        'schoolName': schoolToRegister.schoolName,
-        'email': schoolToRegister.email,
-        'address': schoolToRegister.address,
-        'city': schoolToRegister.city,
-        'zipcode': schoolToRegister.zipcode
+        SCHOOL_SCHOOL_ID: schoolToRegister.schoolId,
+        SCHOOL_NAME: schoolToRegister.schoolName,
+        SCHOOL_EMAIL: schoolToRegister.email,
+        SCHOOL_ADDRESS: schoolToRegister.address,
+        SCHOOL_CITY: schoolToRegister.city,
+        SCHOOL_ZIPCODE: schoolToRegister.zipcode
       },
     );
-    return handleAuthResult(result, 'action');
+    return handleAuthResult(result, SCHOOL_MUTATION_RESULT_KEY);
   }
 
   Future<School> handleAuthResult(QueryResult result, String key) async {
@@ -89,7 +89,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     final QueryResult result = await performQuery(
       GET_ARTWORK_FOR_SCHOOL,
       {
-        'school_id': schoolId,
+        SCHOOL_SCHOOL_ID: schoolId,
       },
     );
     return convertResultToArtworkList(result, 'artBySchool');
@@ -100,22 +100,21 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     final QueryResult result = await performMutation(
       ADD_ARTWORK_MUTATION,
       {
-        'input': {
-          'school_id': 2,
-          'category': artworkToUpload.category,
-          'price': artworkToUpload.price,
-          'sold': artworkToUpload.sold,
-          'title': artworkToUpload.title,
-          'artist_name': artworkToUpload.artistName,
-          'description': artworkToUpload.description,
-          'image_url': artworkToUpload.imagesToUpload[0],
-        }
+        SCHOOL_SCHOOL_ID: 2,
+        ARTWORK_CATEGORY: artworkToUpload.category,
+        ARTWORK_PRICE: artworkToUpload.price,
+        ARTWORK_SOLD: artworkToUpload.sold,
+        ARTWORK_TITLE: artworkToUpload.title,
+        ARTWORK_ARTIST_NAME: artworkToUpload.artistName,
+        ARTWORK_DESCRIPTION: artworkToUpload.description,
+        IMAGE_URL: artworkToUpload.imagesToUpload[0],
       },
     );
     if (result.hasException) {
       throw ServerException(message: result.exception.graphqlErrors[0].message);
     }
-    final Artwork savedArtwork = convertResultToArtwork(result, 'action');
+    final Artwork savedArtwork =
+        convertResultToArtwork(result, SCHOOL_MUTATION_RESULT_KEY);
     artworkToUpload.imagesToUpload.removeAt(0);
     final uploadedImages =
         await uploadImages(savedArtwork.artId, artworkToUpload.imagesToUpload);
@@ -123,23 +122,6 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
       savedArtwork.images.add(image);
     });
     return savedArtwork;
-  }
-
-  MutationOptions getProdOptions(ArtworkToUpload artworkToUpload) {
-    final MutationOptions options = MutationOptions(
-        fetchPolicy: FetchPolicy.noCache,
-        documentNode: gql(ADD_ARTWORK_MUTATION),
-        variables: <String, dynamic>{
-          'school_id': artworkToUpload.schoolId,
-          'category': artworkToUpload.category,
-          'price': artworkToUpload.price,
-          'sold': artworkToUpload.sold,
-          'title': artworkToUpload.title,
-          'artist_name': artworkToUpload.artistName,
-          'description': artworkToUpload.description,
-          'image_url': artworkToUpload.imagesToUpload[0],
-        });
-    return options;
   }
 
   @override
@@ -151,21 +133,21 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
   @override
   Future<Artwork> updateArtwork(ArtworkToUpload artworkToUpdate) async {
     await deleteImages(artworkToUpdate.imagesToDelete);
-    final MutationOptions options = MutationOptions(
-        fetchPolicy: FetchPolicy.noCache,
-        documentNode: gql(UPDATE_ARTWORK_MUTATION),
-        variables: <String, dynamic>{
-          'id': artworkToUpdate.artworkToCompare.artId,
-          'price': artworkToUpdate.price,
-          'sold': artworkToUpdate.sold,
-          'title': artworkToUpdate.title,
-          'artist_name': artworkToUpdate.artistName,
-          'description': artworkToUpdate.description,
-          'category': artworkToUpdate.category,
-        });
-    final QueryResult result = await graphQLClient.mutate(options);
+    final QueryResult result = await performMutation(
+      UPDATE_ARTWORK_MUTATION,
+      {
+        ARTWORK_ID: artworkToUpdate.artworkToCompare.artId,
+        ARTWORK_PRICE: artworkToUpdate.price,
+        ARTWORK_SOLD: artworkToUpdate.sold,
+        ARTWORK_TITLE: artworkToUpdate.title,
+        ARTWORK_ARTIST_NAME: artworkToUpdate.artistName,
+        ARTWORK_DESCRIPTION: artworkToUpdate.description,
+        ARTWORK_CATEGORY: artworkToUpdate.category,
+      },
+    );
     if (result.hasException) throw ServerException();
-    final Artwork updatedArtwork = convertResultToArtwork(result, 'action');
+    final Artwork updatedArtwork =
+        convertResultToArtwork(result, SCHOOL_MUTATION_RESULT_KEY);
     final List<Image> uploadedImages = await uploadImages(
         updatedArtwork.artId, artworkToUpdate.imagesToUpload);
     uploadedImages.forEach((image) {
@@ -176,13 +158,12 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
 
   Future deleteImages(List<Image> imagesToDelete) async {
     await Future.forEach(imagesToDelete, (image) async {
-      final MutationOptions options = MutationOptions(
-          fetchPolicy: FetchPolicy.noCache,
-          documentNode: gql(DELETE_IMAGE_FROM_ARTWORK),
-          variables: <String, dynamic>{
-            'id': image.imageId,
-          });
-      final QueryResult result = await graphQLClient.mutate(options);
+      final QueryResult result = await performMutation(
+        DELETE_IMAGE_FROM_ARTWORK,
+        {
+          IMAGE_ID: image.imageId,
+        },
+      );
       if (result.hasException) {
         throw ServerException();
       }
@@ -196,12 +177,13 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     await Future.forEach(imagesToUpload, (imageUrl) async {
       final QueryResult imageResult = await performMutation(
         ADD_IMAGE_TO_ARTWORK_MUTATION,
-        {'art_id': artId, 'image_url': imageUrl},
+        {ARTWORK_ID: artId, IMAGE_URL: imageUrl},
       );
       if (imageResult.hasException) {
         throw ServerException();
       }
-      savedImages.add(ImageModel.fromJson(imageResult.data['action']));
+      savedImages.add(
+          ImageModel.fromJson(imageResult.data[SCHOOL_MUTATION_RESULT_KEY]));
     });
     return savedImages;
   }
@@ -211,13 +193,14 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     final QueryResult result = await performMutation(
       DELETE_ARTWORK,
       {
-        'id': id,
+        ARTWORK_ID: id,
       },
     );
     if (result.hasException) {
       throw ServerException();
     }
-    final int deletedId = int.parse(result.data['action']['id']);
+    final int deletedId =
+        int.parse(result.data[SCHOOL_MUTATION_RESULT_KEY][ARTWORK_ID]);
     return ArtworkToDeleteId(artId: deletedId);
   }
 }

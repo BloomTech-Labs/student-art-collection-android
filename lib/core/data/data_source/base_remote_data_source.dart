@@ -11,8 +11,11 @@ abstract class BaseRemoteDataSource {
     String mutation,
     Map<String, dynamic> variables,
   ) async {
-    final MutationOptions mutationOptions =
-        MutationOptions(documentNode: gql(mutation), variables: variables);
+    final MutationOptions mutationOptions = MutationOptions(
+      documentNode: gql(mutation),
+      variables: variables,
+      fetchPolicy: FetchPolicy.noCache,
+    );
     return await graphQLClient.mutate(mutationOptions);
   }
 
@@ -23,6 +26,7 @@ abstract class BaseRemoteDataSource {
     final QueryOptions queryOptions = QueryOptions(
       documentNode: gql(query),
       variables: variables,
+      fetchPolicy: FetchPolicy.noCache,
     );
     return await graphQLClient.query(queryOptions);
   }

@@ -2,15 +2,15 @@ import 'package:dartz/dartz.dart';
 
 const String ADD_SCHOOL_MUTATION = r'''
   mutation AddSchool(
-    $schoolId: ID!, 
-    $schoolName: String!,
+    school_id: ID!, 
+    $school_name: String!,
     $email: String!,
     $address: String!,
     $city: String!,
     $zipcode: String!) {
       action: addSchool(
-        school_id: $schoolId,
-        school_name: $schoolName,
+        school_id: $school_id,
+        school_name: $school_name,
         email: $email,
         address: $address,
         city: $city,
