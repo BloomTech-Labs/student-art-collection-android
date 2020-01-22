@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
-import 'package:student_art_collection/core/util/entity_constants.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
@@ -19,9 +17,7 @@ import 'package:student_art_collection/features/list_art/presentation/page/schoo
 import '../../../features/buy_art/presentation/page/gallery_page.dart';
 import '../../../features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import '../../../features/list_art/presentation/bloc/auth/school_auth_state.dart';
-import '../../../features/list_art/presentation/bloc/auth/school_auth_state.dart';
 import '../../../service_locator.dart';
-import '../../util/theme_constants.dart';
 import '../../util/theme_constants.dart';
 
 class LoginPage extends StatelessWidget {
@@ -33,7 +29,7 @@ class LoginPage extends StatelessWidget {
       create: (context) => sl<SchoolAuthBloc>(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: primaryColor,
+        backgroundColor: backgroundColor,
         body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
           listener: (context, state) {
             if (state is Authorized) {
@@ -184,7 +180,7 @@ class _LoginFormState extends State<LoginForm> {
                     text: AppLocalizations.of(context)
                         .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
-                      color: accentColor,
+                      color: textLinkOnBlack,
                     ),
                   ),
                   TextSpan(
@@ -196,20 +192,19 @@ class _LoginFormState extends State<LoginForm> {
         BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
           builder: (BuildContext context, state) {
             if (state is! SchoolAuthLoading) {
-              return longButton(
+              return middleButton(
                 position: positionMiddleButton,
-                label: AppLocalizations.of(context)
-                    .translate(TEXT_LOGIN_LOGIN_BUTTON),
+                 icon: Icon(Icons.arrow_forward, size:40,color: Colors.black,),
+               /* label: AppLocalizations.of(context)*/
+               /*     .translate(TEXT_LOGIN_LOGIN_BUTTON),*/
                 onTap: () {
                   dispatchLogin();
                 },
               );
             } else {
               return Stack(children: <Widget>[
-                longButton(
+                middleButton(
                   position: positionMiddleButton,
-                  label: AppLocalizations.of(context)
-                      .translate(TEXT_LOGIN_LOGIN_BUTTON),
                   onTap: () {},
                 ),
                 SizedBox.expand(
@@ -217,9 +212,11 @@ class _LoginFormState extends State<LoginForm> {
                     color: Colors.black.withOpacity(.7),
                   ),
                 ),
-                Center(
+                Positioned(
+                  bottom: positionMiddleButton + 18,
+                  right: 34,
                   child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
                 )
               ]);
             }
@@ -227,7 +224,7 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ],
     );
-  }
+  }                                  
 
   Widget textFieldWidgetNoBorderWhite({
     String label,
@@ -348,7 +345,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: FloatingActionButton(
-            backgroundColor: accentColor,
+            backgroundColor: Colors.white,
             onPressed: onTap,
             elevation: 10,
             shape: CircleBorder(),
@@ -396,7 +393,7 @@ class _LoginFormState extends State<LoginForm> {
         child: RaisedButton(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
           onPressed: onTap,
-          color: accentColor,
+          color: Colors.white,
           elevation: 10,
           textTheme: ButtonTextTheme.primary,
           child: Center(child: Text(label)),

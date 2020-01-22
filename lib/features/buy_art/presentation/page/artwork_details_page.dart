@@ -278,7 +278,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
             alignment: Alignment.center,
             child: MaterialButton(
               elevation: 5,
-              color: accentColor,
+              color: Colors.black,
               onPressed: () {
                 artworkDetailsBloc.add(SubmitContactForm(ContactForm(
                     sendTo: artwork.schoolInfo.email,
