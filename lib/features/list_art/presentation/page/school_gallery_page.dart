@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
 import 'package:student_art_collection/core/presentation/widget/app_bar_logo.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
@@ -11,7 +12,6 @@ import 'package:student_art_collection/features/buy_art/presentation/page/galler
 import 'package:student_art_collection/features/list_art/presentation/artwork_to_return.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_event.dart';
-import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_state.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/artwork_upload_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
@@ -82,10 +82,10 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
           title: AppBarLogo(),
           bottom: PreferredSize(
             preferredSize: Size(double.infinity, 1.0),
-            child: BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
+            child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
               builder: (context, state) {
                 _blocContext = context;
-                if (state is SchoolGalleryLoading) {
+                if (state is GalleryLoadingState) {
                   return AppBarLoading();
                 }
                 return EmptyContainer();
@@ -93,18 +93,18 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
             ),
           ),
         ),
-        body: BlocListener<SchoolGalleryBloc, SchoolGalleryState>(
+        body: BlocListener<SchoolGalleryBloc, GalleryState>(
           listener: (context, state) {
             _blocContext = context;
-            if (state is SchoolGalleryLoaded) {
+            if (state is GalleryLoadedState) {
             } else if (state is Unauthorized) {
               Navigator.pushReplacementNamed(context, LoginPage.ID);
             }
           },
-          child: BlocBuilder<SchoolGalleryBloc, SchoolGalleryState>(
+          child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
             builder: (context, state) {
-              if (state is SchoolGalleryLoaded) {
-                artworks = state.artworks;
+              if (state is GalleryLoadedState) {
+                artworks = state.artworkList;
                 return GalleryGrid(
                   showEmptyArtworks: true,
                   artworkList: artworks,
@@ -127,7 +127,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                     }
                   },
                 );
-              } else if (state is SchoolGalleryEmpty) {
+              } else if (state is GalleryInitialState) {
                 _dispatchGetSchoolArtEvent(context);
               }
               return EmptyContainer();
