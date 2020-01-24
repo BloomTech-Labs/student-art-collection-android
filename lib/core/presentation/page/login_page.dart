@@ -194,9 +194,13 @@ class _LoginFormState extends State<LoginForm> {
             if (state is! SchoolAuthLoading) {
               return middleButton(
                 position: positionMiddleButton,
-                 icon: Icon(Icons.arrow_forward, size:40,color: Colors.black,),
-               /* label: AppLocalizations.of(context)*/
-               /*     .translate(TEXT_LOGIN_LOGIN_BUTTON),*/
+                icon: Icon(
+                  Icons.arrow_forward,
+                  size: 40,
+                  color: Colors.black,
+                ),
+                /* label: AppLocalizations.of(context)*/
+                /*     .translate(TEXT_LOGIN_LOGIN_BUTTON),*/
                 onTap: () {
                   dispatchLogin();
                 },
@@ -224,7 +228,7 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ],
     );
-  }                                  
+  }
 
   Widget textFieldWidgetNoBorderWhite({
     String label,
@@ -347,7 +351,7 @@ class _LoginFormState extends State<LoginForm> {
           child: FloatingActionButton(
             backgroundColor: Colors.white,
             onPressed: onTap,
-            elevation: 10,
+            elevation: 4,
             shape: CircleBorder(),
             child: icon,
           ),
@@ -394,7 +398,7 @@ class _LoginFormState extends State<LoginForm> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
           onPressed: onTap,
           color: Colors.white,
-          elevation: 10,
+          elevation: 4,
           textTheme: ButtonTextTheme.primary,
           child: Center(child: Text(label)),
         ),

@@ -38,7 +38,7 @@ class SchoolGalleryBloc extends BaseArtworkBloc<SchoolGalleryEvent> {
             schoolId: school.id,
           ),
         );
-        yield* eitherArtworksOrError(artworkResult);
+        yield* eitherArtworksOrError(artworkResult, event.sortType);
       } else if (event is LogoutEvent) {
         yield GalleryLoadingState();
         final logoutResult = await logoutSchool(NoParams());
