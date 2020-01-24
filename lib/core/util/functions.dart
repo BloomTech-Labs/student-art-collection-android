@@ -80,5 +80,33 @@ void _sortBySortType(
     artworks.sort((a, b) {
       return a.title.toLowerCase().compareTo(b.title.toLowerCase());
     });
+  } else if (sortType is SortNameDesc) {
+    artworks.sort((a, b) {
+      return b.title.toLowerCase().compareTo(a.title.toLowerCase());
+    });
+  } else if (sortType is SortStudentNameAsc) {
+    artworks.sort((a, b) {
+      return a.artistName.toLowerCase().compareTo(b.artistName.toLowerCase());
+    });
+  } else if (sortType is SortStudentNameDesc) {
+    artworks.sort((a, b) {
+      return b.artistName.toLowerCase().compareTo(a.artistName.toLowerCase());
+    });
+  } else if (sortType is SortPriceAsc) {
+    artworks.sort((a, b) {
+      return a.price.compareTo(b.price);
+    });
+  } else if (sortType is SortPriceDesc) {
+    artworks.sort((a, b) {
+      return b.price.compareTo(a.price);
+    });
+  } else if (sortType is SortDatePostedAsc) {
+    artworks.sort((a, b) {
+      return a.datePosted.compareTo(b.datePosted);
+    });
+  } else if (sortType is SortDatePostedDesc) {
+    artworks.sort((a, b) {
+      return b.datePosted.compareTo(a.datePosted);
+    });
   }
 }

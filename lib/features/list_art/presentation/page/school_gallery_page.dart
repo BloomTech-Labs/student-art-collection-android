@@ -187,7 +187,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     BlocProvider.of<SchoolGalleryBloc>(context).add(
       GetAllSchoolArtworkEvent(
         sortTypes: [
-          SortNameAsc(),
+          SortPriceDesc(),
         ],
       ),
     );
