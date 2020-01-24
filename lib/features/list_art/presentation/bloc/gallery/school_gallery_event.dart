@@ -10,11 +10,11 @@ abstract class SchoolGalleryEvent extends Equatable {
 
 class GetAllSchoolArtworkEvent extends SchoolGalleryEvent {
   final SortType sortType;
-  final FilterType filterType;
+  final List<FilterType> filterTypes;
 
   const GetAllSchoolArtworkEvent({
     this.sortType,
-    this.filterType,
+    this.filterTypes,
   });
 
   @override

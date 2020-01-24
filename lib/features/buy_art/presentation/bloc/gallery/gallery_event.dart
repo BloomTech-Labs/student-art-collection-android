@@ -7,11 +7,11 @@ abstract class GalleryEvent extends Equatable {
 
 class GetArtworkList extends GalleryEvent {
   final SortType sortType;
-  final FilterType filterType;
+  final List<FilterType> filterTypes;
 
   const GetArtworkList({
     this.sortType,
-    this.filterType,
+    this.filterTypes,
   });
 
   @override
