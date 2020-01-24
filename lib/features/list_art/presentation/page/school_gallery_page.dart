@@ -78,6 +78,10 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                   );
                 }).toList();
               },
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.filter_list),
             )
           ],
           title: AppBarLogo(),
@@ -187,7 +191,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     BlocProvider.of<SchoolGalleryBloc>(context).add(
       GetAllSchoolArtworkEvent(
         sortTypes: [
-          SortPriceDesc(),
+          SortNameDesc(),
         ],
       ),
     );
