@@ -4,7 +4,7 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/util/functions.dart';
 
-import 'base_artwork_event.dart';
+import 'base_artwork_sort_type.dart';
 import 'base_artwork_state.dart';
 
 abstract class BaseArtworkBloc<EventType>
@@ -17,7 +17,7 @@ abstract class BaseArtworkBloc<EventType>
 
   Stream<GalleryState> eitherArtworksOrError(
       Either<Failure, List<Artwork>> failureOrArtworks,
-      List<SortType> sortTypes) async* {
+      SortType sortType) async* {
     final GalleryState galleryState = failureOrArtworks.fold(
       (failure) {
         if (failure is NetworkFailure) {
@@ -32,7 +32,7 @@ abstract class BaseArtworkBloc<EventType>
       },
     );
     if (galleryState is GalleryLoadedState) {
-      await returnSortedArtworks(galleryState.artworkList, sortTypes);
+      await returnSortedArtworks(galleryState.artworkList, sortType);
       yield galleryState;
     } else {
       yield galleryState;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/core/presentation/bloc/base_artwork_event.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
 import 'package:student_art_collection/core/presentation/widget/app_bar_logo.dart';
@@ -210,9 +210,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   void _dispatchGetSchoolArtEvent(BuildContext context) {
     BlocProvider.of<SchoolGalleryBloc>(context).add(
       GetAllSchoolArtworkEvent(
-        sortTypes: [
-          SortNameDesc(),
-        ],
+        sortType: SortNameAsc(),
       ),
     );
   }

@@ -43,6 +43,7 @@ dependencies:
   flutter_svg: ^0.15.0
   flutter_inner_drawer: ^0.5.4
   grouped_buttons: ^1.0.4
+  dropdown_formfield: ^0.1.1
 
 dev_dependencies:
   intl_translation: ^0.17.9

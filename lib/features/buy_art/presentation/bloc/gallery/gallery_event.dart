@@ -6,9 +6,13 @@ abstract class GalleryEvent extends Equatable {
 }
 
 class GetArtworkList extends GalleryEvent {
-  final List<SortType> sortTypes;
+  final SortType sortType;
+  final FilterType filterType;
 
-  const GetArtworkList({this.sortTypes});
+  const GetArtworkList({
+    this.sortType,
+    this.filterType,
+  });
 
   @override
   List<Object> get props => null;

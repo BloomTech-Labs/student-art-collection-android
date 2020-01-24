@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
-import 'package:student_art_collection/core/presentation/bloc/base_artwork_event.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:collection/collection.dart';
 
 /// Generates a Random Number within a range
@@ -61,12 +61,10 @@ int pricePickerValueToInt(String value) {
 
 Future<List<Artwork>> returnSortedArtworks(
   List<Artwork> artworks,
-  List<SortType> sortTypes,
+  SortType sortType,
 ) async {
-  Future(() {
-    sortTypes.forEach((sortType) {
-      _sortBySortType(artworks, sortType);
-    });
+  return Future(() {
+    _sortBySortType(artworks, sortType);
   }).then((artworks) {
     return artworks;
   });

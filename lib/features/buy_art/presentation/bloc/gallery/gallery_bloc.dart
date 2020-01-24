@@ -4,7 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_bloc.dart';
-import 'package:student_art_collection/core/presentation/bloc/base_artwork_event.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 
@@ -21,7 +22,7 @@ class GalleryBloc extends BaseArtworkBloc<GalleryEvent> {
 
     if (event is GetArtworkList) {
       final artworkResult = await artworkRepository.getAllArtwork();
-      yield* eitherArtworksOrError(artworkResult, event.sortTypes);
+      yield* eitherArtworksOrError(artworkResult, event.sortType);
     }
   }
 }
