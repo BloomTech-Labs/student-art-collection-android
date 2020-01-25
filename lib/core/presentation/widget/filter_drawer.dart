@@ -50,7 +50,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   bool nearMeSelected = false;
   String _selectedCategory;
-  String _searchQuery;
+  String _searchQuery = '';
   String _zipcode;
 
   final searchTextController = TextEditingController();

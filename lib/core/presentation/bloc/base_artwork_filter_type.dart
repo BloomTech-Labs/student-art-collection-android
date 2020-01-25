@@ -8,7 +8,7 @@ class FilterTypeSearch extends FilterType {
   final String searchQuery;
 
   const FilterTypeSearch({
-    this.searchQuery,
+    this.searchQuery = '',
   });
 
   @override

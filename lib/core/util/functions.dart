@@ -150,5 +150,23 @@ List<Artwork> _filterByFilterTypes(
             (artwork) => artwork.category.categoryId == categoryFilter.category)
         .toList();
   }
+  FilterTypeSearch searchFilter = filters['search'];
+  if (searchFilter != null &&
+      searchFilter.searchQuery != null &&
+      searchFilter.searchQuery.isNotEmpty) {
+    filteredList = filteredList
+        .where(
+          (artwork) => (artwork.title
+                  .toLowerCase()
+                  .contains(searchFilter.searchQuery.toLowerCase()) ||
+              artwork.schoolInfo.schoolName
+                  .toLowerCase()
+                  .contains(searchFilter.searchQuery.toLowerCase()) ||
+              artwork.artistName
+                  .toLowerCase()
+                  .contains(searchFilter.searchQuery.toLowerCase())),
+        )
+        .toList();
+  }
   return filteredList;
 }
