@@ -1,34 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
+import 'package:student_art_collection/core/util/functions.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 
 class FilterDrawer extends StatefulWidget {
   final Widget scaffold;
-  GlobalKey _innerDrawerKey;
+  final GlobalKey innerDrawerKey;
+  final Function(
+    List<FilterType> filterTypes,
+    SortType sortType,
+  ) onApplyPressed;
 
-  FilterDrawer(GlobalKey key, {this.scaffold}) {
-    _innerDrawerKey = key;
-  }
+  FilterDrawer({
+    this.scaffold,
+    this.onApplyPressed,
+    this.innerDrawerKey,
+  });
 
   @override
-  _FilterDrawerState createState() =>
-      _FilterDrawerState(_innerDrawerKey, scaffold: scaffold);
+  _FilterDrawerState createState() => _FilterDrawerState(
+        innerDrawerKey,
+        scaffold: scaffold,
+        onApplyPressed: onApplyPressed,
+      );
 }
 
 class _FilterDrawerState extends State<FilterDrawer> {
   final Widget scaffold;
   GlobalKey _innerDrawerKey;
+  final Function(
+    List<FilterType> filterTypes,
+    SortType sortType,
+  ) onApplyPressed;
+  List<FilterType> selectedFilterTypes = [];
+  SortType selectedSortType;
 
-  _FilterDrawerState(GlobalKey key, {this.scaffold}) {
+  _FilterDrawerState(
+    GlobalKey key, {
+    this.scaffold,
+    this.onApplyPressed,
+  }) {
     _innerDrawerKey = key;
   }
 
+  List<String> sortLabels = [
+    'Artwork Title Asc.',
+    'Artwork Title Desc.',
+    'Artist Name Asc.',
+    'Artist Name Desc.',
+    'Most Recent',
+    'Oldest',
+    'Most expensive',
+    'Least Expensive',
+  ];
+
   @override
   Widget build(BuildContext context) {
-    String searchQuery;
-
     return Material(
       child: InnerDrawer(
         key: _innerDrawerKey,
@@ -103,21 +134,15 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     unselectedWidgetColor: accentColorOnPrimary,
                   ),
                   child: RadioButtonGroup(
+                    onSelected: (label) {
+                      selectedSortType = convertLabelToSortType(label);
+                    },
                     labelStyle: TextStyle(
                       color: accentColorOnPrimary,
                       fontSize: 16,
                     ),
                     activeColor: accentColorOnPrimary,
-                    labels: <String>[
-                      'Artwork Title Asc.',
-                      'Artwork Title Desc.',
-                      'Artist Name Asc.',
-                      'Artist Name Desc.',
-                      'Most Recent',
-                      'Oldest',
-                      'Most expensive',
-                      'Least Expensive',
-                    ],
+                    labels: sortLabels,
                   ),
                 ),
                 Divider(
@@ -135,7 +160,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           color: accentColorOnPrimary,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        onApplyPressed(selectedFilterTypes, selectedSortType);
+                      },
                       borderSide: BorderSide(
                         color: accentColorOnPrimary,
                       ),

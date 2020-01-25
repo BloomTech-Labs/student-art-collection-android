@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
@@ -59,7 +60,10 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   @override
   Widget build(BuildContext context) {
     return FilterDrawer(
-      _innerDrawerKey,
+      onApplyPressed: (filters, sort) {
+        _dispatchGetSchoolArtEvent(filterTypes: filters, sortType: sort);
+      },
+      innerDrawerKey: _innerDrawerKey,
       scaffold: BlocProvider<SchoolGalleryBloc>(
         create: (context) => sl<SchoolGalleryBloc>(),
         child: Scaffold(
@@ -126,6 +130,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
             },
             child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
               builder: (context, state) {
+                _blocContext = context;
                 if (state is GalleryLoadedState) {
                   artworks = state.artworkList;
                   return GalleryGrid(
@@ -151,7 +156,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                     },
                   );
                 } else if (state is GalleryInitialState) {
-                  _dispatchGetSchoolArtEvent(context);
+                  _dispatchGetSchoolArtEvent();
                 }
                 return EmptyContainer();
               },
@@ -207,10 +212,14 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     );
   }
 
-  void _dispatchGetSchoolArtEvent(BuildContext context) {
-    BlocProvider.of<SchoolGalleryBloc>(context).add(
+  void _dispatchGetSchoolArtEvent({
+    List<FilterType> filterTypes,
+    SortType sortType,
+  }) {
+    BlocProvider.of<SchoolGalleryBloc>(_blocContext).add(
       GetAllSchoolArtworkEvent(
-        sortType: SortNameAsc(),
+        sortType: sortType,
+        filterTypes: filterTypes,
       ),
     );
   }

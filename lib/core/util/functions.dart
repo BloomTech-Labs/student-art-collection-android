@@ -108,3 +108,28 @@ void _sortBySortType(
     });
   }
 }
+
+SortType convertLabelToSortType(String label) {
+  if (label == 'Artwork Title Asc.')
+    return SortNameAsc();
+  else if (label == 'Artwork Title Desc.')
+    return SortNameDesc();
+  else if (label == 'School Name Asc.')
+    return SchoolNameAsc();
+  else if (label == 'School Name Desc.')
+    return SchoolNameDesc();
+  else if (label == 'Artist Name Asc.')
+    return SortStudentNameAsc();
+  else if (label == 'Artist Name Desc.')
+    return SortStudentNameDesc();
+  else if (label == 'Most Recent')
+    return SortDatePostedDesc();
+  else if (label == 'Oldest')
+    return SortDatePostedAsc();
+  else if (label == 'Most expensive')
+    return SortPriceDesc();
+  else if (label == 'Least Expensive')
+    return SortPriceAsc();
+  else
+    return SortNameAsc();
+}
