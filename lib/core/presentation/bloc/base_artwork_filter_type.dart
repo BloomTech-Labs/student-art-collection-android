@@ -6,6 +6,9 @@ abstract class FilterType extends Equatable {
   const FilterType({
     this.searchQuery,
   });
+
+  @override
+  List<Object> get props => [searchQuery];
 }
 
 class FilterTypeArtworkTitle extends FilterType {
@@ -43,7 +46,7 @@ class FilterTypeZipCode extends FilterType {
   });
 
   @override
-  List<Object> get props => null;
+  List<Object> get props => [zipcode];
 }
 
 class FilterTypeCategory extends FilterType {
@@ -54,5 +57,5 @@ class FilterTypeCategory extends FilterType {
   });
 
   @override
-  List<Object> get props => null;
+  List<Object> get props => [category];
 }

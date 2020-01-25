@@ -44,6 +44,7 @@ class _GalleryPageState extends State<GalleryPage> {
       isSchool: false,
       onApplyPressed: (filters, sort) {
         getArtworkList(sortType: sort, filterTypes: filters);
+        _toggle();
       },
       scaffold: BlocProvider<GalleryBloc>(
         create: (context) => sl<GalleryBloc>(),

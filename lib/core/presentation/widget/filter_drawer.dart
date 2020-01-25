@@ -4,8 +4,11 @@ import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:student_art_collection/core/util/functions.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
+
+import '../../../app_localization.dart';
 
 class FilterDrawer extends StatefulWidget {
   final Widget scaffold;
@@ -76,6 +79,15 @@ class _FilterDrawerState extends State<FilterDrawer> {
     'Least Expensive',
   ];
 
+  List<String> categories = [
+    TEXT_ARTWORK_UPLOAD_CATEGORY_1,
+    TEXT_ARTWORK_UPLOAD_CATEGORY_2,
+    TEXT_ARTWORK_UPLOAD_CATEGORY_3,
+    TEXT_ARTWORK_UPLOAD_CATEGORY_4,
+    TEXT_ARTWORK_UPLOAD_CATEGORY_5,
+    TEXT_ARTWORK_UPLOAD_CATEGORY_6,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -97,7 +109,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 Container(
                   margin: EdgeInsets.only(
                     top: 16,
-                    bottom: 16,
+                    bottom: 8,
                   ),
                   child: Stack(
                     children: <Widget>[
@@ -137,6 +149,50 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     ],
                   ),
                 ),
+                DropdownButtonHideUnderline(
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButton(
+                      hint: Center(
+                        child: Text(
+                          'Select Category',
+                          style: TextStyle(
+                            color: accentColorOnPrimary,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      items: categories.map((String item) {
+                        return DropdownMenuItem<String>(
+                          child: Text(displayLocalizedString(item)),
+                          value: item,
+                        );
+                      }).toList(),
+                      selectedItemBuilder: (context) {
+                        return categories.map<Widget>((String item) {
+                          return Text(item);
+                        }).toList();
+                      },
+                      onChanged: (item) {},
+                    ),
+                  ),
+                ),
+                !isSchool
+                    ? Theme(
+                        data: ThemeData(
+                          unselectedWidgetColor: accentColorOnPrimary,
+                        ),
+                        child: CheckboxGroup(
+                          onSelected: (label) {},
+                          labelStyle: TextStyle(
+                            color: accentColorOnPrimary,
+                            fontSize: 16,
+                          ),
+                          activeColor: primaryColor,
+                          labels: ['Only Art Near Me'],
+                        ),
+                      )
+                    : Container(),
                 Text(
                   'Sort',
                   style: TextStyle(
@@ -206,5 +262,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
         scaffold: scaffold,
       ),
     );
+  }
+
+  String displayLocalizedString(String label) {
+    return AppLocalizations.of(context).translate(label);
   }
 }
