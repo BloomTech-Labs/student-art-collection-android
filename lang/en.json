@@ -15,9 +15,6 @@
   "login_register_here_suffix": "\n     Schools Only",
   "login_login_button": "Login",
 
-
-
-
   "artwork_upload_price_1": "$5",
   "artwork_upload_price_2": "$10",
   "artwork_upload_price_3": "$15",
@@ -35,6 +32,17 @@
   "artwork_upload_category_4": "Sculpture",
   "artwork_upload_category_5": "Other",
   "artwork_upload_category_6": "All",
+
+  "artwork_sort_title_asc": "Artwork Title Asc.",
+  "artwork_sort_title_desc": "Artwork Title Desc.",
+  "artwork_sort_artist_name_asc": "Artist Name Asc.",
+  "artwork_sort_artist_name_desc": "Artist Name Desc.",
+  "artwork_sort_school_name_asc": "School Name Asc.",
+  "artwork_sort_school_name_desc": "School Name Desc.",
+  "artwork_sort_most_recent": "Most Recent",
+  "artwork_sort_oldest": "Oldest",
+  "artwork_sort_most_expensive": "Most Expensive",
+  "artwork_sort_least_expensive": "Least Expensive",
 
   "artwork_upload_artwork_title_label": "Enter Artwork Title",
   "artwork_upload_student_name_label": "Enter Student Name",

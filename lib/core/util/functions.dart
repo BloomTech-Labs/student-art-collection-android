@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:graphql/client.dart';
 import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
@@ -9,6 +10,7 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:collection/collection.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 
 /// Generates a Random Number within a range
 Random randomNum = Random();
@@ -119,29 +121,4 @@ void _sortBySortType(
       return b.datePosted.compareTo(a.datePosted);
     });
   }
-}
-
-SortType convertLabelToSortType(String label) {
-  if (label == 'Artwork Title Asc.')
-    return SortNameAsc();
-  else if (label == 'Artwork Title Desc.')
-    return SortNameDesc();
-  else if (label == 'School Name Asc.')
-    return SortSchoolNameAsc();
-  else if (label == 'School Name Desc.')
-    return SortSchoolNameDesc();
-  else if (label == 'Artist Name Asc.')
-    return SortStudentNameAsc();
-  else if (label == 'Artist Name Desc.')
-    return SortStudentNameDesc();
-  else if (label == 'Most Recent')
-    return SortDatePostedDesc();
-  else if (label == 'Oldest')
-    return SortDatePostedAsc();
-  else if (label == 'Most expensive')
-    return SortPriceDesc();
-  else if (label == 'Least Expensive')
-    return SortPriceAsc();
-  else
-    return SortNameAsc();
 }

@@ -11,26 +11,8 @@ abstract class FilterType extends Equatable {
   List<Object> get props => [searchQuery];
 }
 
-class FilterTypeArtworkTitle extends FilterType {
-  const FilterTypeArtworkTitle({
-    searchQuery: String,
-  }) : super(searchQuery: searchQuery);
-
-  @override
-  List<Object> get props => null;
-}
-
-class FilterTypeArtistName extends FilterType {
-  const FilterTypeArtistName({
-    searchQuery: String,
-  }) : super(searchQuery: searchQuery);
-
-  @override
-  List<Object> get props => null;
-}
-
-class FilterTypeSchoolName extends FilterType {
-  const FilterTypeSchoolName({
+class FilterTypeName extends FilterType {
+  const FilterTypeName({
     searchQuery: String,
   }) : super(searchQuery: searchQuery);
 

@@ -36,6 +36,19 @@ const TEXT_ARTWORK_UPLOAD_CATEGORY_4 = 'artwork_upload_category_4';
 const TEXT_ARTWORK_UPLOAD_CATEGORY_5 = 'artwork_upload_category_5';
 const TEXT_ARTWORK_UPLOAD_CATEGORY_6 = 'artwork_upload_category_6';
 
+const TEXT_ARTWORK_SORT_TITLE_ASC_LABEL = 'artwork_sort_title_asc';
+const TEXT_ARTWORK_SORT_TITLE_DESC_LABEL = 'artwork_sort_title_desc';
+const TEXT_ARTWORK_SORT_ARTIST_NAME_ASC_LABEL = 'artwork_sort_artist_name_asc';
+const TEXT_ARTWORK_SORT_ARTIST_NAME_DESC_LABEL =
+    'artwork_sort_artist_name_desc';
+const TEXT_ARTWORK_SORT_SCHOOL_NAME_ASC_LABEL = 'artwork_sort_school_name_asc';
+const TEXT_ARTWORK_SORT_SCHOOL_NAME_DESC_LABEL =
+    'artwork_sort_school_name_desc';
+const TEXT_ARTWORK_SORT_MOST_RECENT_LABEL = 'artwork_sort_most_recent';
+const TEXT_ARTWORK_SORT_OLDEST_LABEL = 'artwork_sort_oldest';
+const TEXT_ARTWORK_SORT_MOST_EXPENSIVE_LABEL = 'artwork_sort_most_expensive';
+const TEXT_ARTWORK_SORT_LEAST_EXPENSIVE_LABEL = 'artwork_sort_least_expensive';
+
 const TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL =
     'artwork_upload_artwork_title_label';
 const TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL =

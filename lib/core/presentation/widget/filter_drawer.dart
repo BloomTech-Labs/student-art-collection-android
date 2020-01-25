@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
@@ -42,9 +43,14 @@ class _FilterDrawerState extends State<FilterDrawer> {
     List<FilterType> filterTypes,
     SortType sortType,
   ) onApplyPressed;
-  List<FilterType> selectedFilterTypes = [];
-  SortType selectedSortType;
   final bool isSchool;
+
+  bool nearMeSelected = false;
+  SortType selectedSortType;
+  FilterTypeName filterTypeName = FilterTypeName(searchQuery: '');
+  FilterTypeZipCode filterTypeZipCode = FilterTypeZipCode();
+  FilterTypeCategory filterTypeCategory = FilterTypeCategory();
+  String selectedCategory;
 
   _FilterDrawerState(
     GlobalKey key, {
@@ -56,30 +62,38 @@ class _FilterDrawerState extends State<FilterDrawer> {
   }
 
   List<String> schoolSortLabels = [
-    'Artwork Title Asc.',
-    'Artwork Title Desc.',
-    'Artist Name Asc.',
-    'Artist Name Desc.',
-    'Most Recent',
-    'Oldest',
-    'Most expensive',
-    'Least Expensive',
+    TEXT_ARTWORK_SORT_TITLE_ASC_LABEL,
+    TEXT_ARTWORK_SORT_TITLE_DESC_LABEL,
+    TEXT_ARTWORK_SORT_ARTIST_NAME_ASC_LABEL,
+    TEXT_ARTWORK_SORT_ARTIST_NAME_DESC_LABEL,
+    TEXT_ARTWORK_SORT_MOST_RECENT_LABEL,
+    TEXT_ARTWORK_SORT_OLDEST_LABEL,
+    TEXT_ARTWORK_SORT_MOST_EXPENSIVE_LABEL,
+    TEXT_ARTWORK_SORT_LEAST_EXPENSIVE_LABEL,
   ];
 
   List<String> buyerSortLabels = [
-    'Artwork Title Asc.',
-    'Artwork Title Desc.',
-    'School Name Asc.',
-    'School Name Desc.',
-    'Artist Name Asc.',
-    'Artist Name Desc.',
-    'Most Recent',
-    'Oldest',
-    'Most expensive',
-    'Least Expensive',
+    TEXT_ARTWORK_SORT_TITLE_ASC_LABEL,
+    TEXT_ARTWORK_SORT_TITLE_DESC_LABEL,
+    TEXT_ARTWORK_SORT_SCHOOL_NAME_ASC_LABEL,
+    TEXT_ARTWORK_SORT_SCHOOL_NAME_DESC_LABEL,
+    TEXT_ARTWORK_SORT_ARTIST_NAME_ASC_LABEL,
+    TEXT_ARTWORK_SORT_ARTIST_NAME_DESC_LABEL,
+    TEXT_ARTWORK_SORT_MOST_RECENT_LABEL,
+    TEXT_ARTWORK_SORT_OLDEST_LABEL,
+    TEXT_ARTWORK_SORT_MOST_EXPENSIVE_LABEL,
+    TEXT_ARTWORK_SORT_LEAST_EXPENSIVE_LABEL,
   ];
 
-  List<String> categories = [
+  List<String> getLocalizedLabels(List<String> labels) {
+    List<String> localizedLabels = [];
+    labels.forEach((label) {
+      localizedLabels.add(displayLocalizedString(label));
+    });
+    return localizedLabels;
+  }
+
+  List categories = [
     TEXT_ARTWORK_UPLOAD_CATEGORY_1,
     TEXT_ARTWORK_UPLOAD_CATEGORY_2,
     TEXT_ARTWORK_UPLOAD_CATEGORY_3,
@@ -87,6 +101,19 @@ class _FilterDrawerState extends State<FilterDrawer> {
     TEXT_ARTWORK_UPLOAD_CATEGORY_5,
     TEXT_ARTWORK_UPLOAD_CATEGORY_6,
   ];
+
+  List<DropdownMenuItem> generateMenuCategories() {
+    List<DropdownMenuItem> items = [];
+    categories.forEach((categoryLabel) {
+      items.add(DropdownMenuItem(
+        value: categoryLabel,
+        child: Container(
+          color: primaryColor,
+          child: Text(displayLocalizedString(categoryLabel)),
+        ),
+      ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,31 +176,38 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     ],
                   ),
                 ),
-                DropdownButtonHideUnderline(
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButton(
-                      hint: Center(
-                        child: Text(
+                Theme(
+                  data: ThemeData(
+                    canvasColor: primaryColor,
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
+                      child: DropdownButton(
+                        hint: Text(
                           'Select Category',
                           style: TextStyle(
                             color: accentColorOnPrimary,
-                            fontSize: 16,
                           ),
                         ),
+                        items: categories.map((category) {
+                          return new DropdownMenuItem(
+                            value: category,
+                            child: Text(
+                              displayLocalizedString(category),
+                              style: TextStyle(
+                                color: accentColorOnPrimary,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategory = value;
+                          });
+                        },
+                        value: selectedCategory,
                       ),
-                      items: categories.map((String item) {
-                        return DropdownMenuItem<String>(
-                          child: Text(displayLocalizedString(item)),
-                          value: item,
-                        );
-                      }).toList(),
-                      selectedItemBuilder: (context) {
-                        return categories.map<Widget>((String item) {
-                          return Text(item);
-                        }).toList();
-                      },
-                      onChanged: (item) {},
                     ),
                   ),
                 ),
@@ -216,7 +250,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       fontSize: 16,
                     ),
                     activeColor: accentColorOnPrimary,
-                    labels: isSchool ? schoolSortLabels : buyerSortLabels,
+                    labels: isSchool
+                        ? getLocalizedLabels(schoolSortLabels)
+                        : getLocalizedLabels(buyerSortLabels),
                   ),
                 ),
                 Divider(
@@ -235,7 +271,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         ),
                       ),
                       onPressed: () {
-                        onApplyPressed(selectedFilterTypes, selectedSortType);
+                        //onApplyPressed(selectedFilterTypes, selectedSortType);
                       },
                       borderSide: BorderSide(
                         color: accentColorOnPrimary,
@@ -266,5 +302,38 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   String displayLocalizedString(String label) {
     return AppLocalizations.of(context).translate(label);
+  }
+
+  SortType convertLabelToSortType(String label) {
+    if (label == displayLocalizedString(TEXT_ARTWORK_SORT_TITLE_ASC_LABEL))
+      return SortNameAsc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_TITLE_DESC_LABEL))
+      return SortNameDesc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_SCHOOL_NAME_ASC_LABEL))
+      return SortSchoolNameAsc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_SCHOOL_NAME_DESC_LABEL))
+      return SortSchoolNameDesc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_ARTIST_NAME_ASC_LABEL))
+      return SortStudentNameAsc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_ARTIST_NAME_DESC_LABEL))
+      return SortStudentNameDesc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_MOST_RECENT_LABEL))
+      return SortDatePostedDesc();
+    else if (label == displayLocalizedString(TEXT_ARTWORK_SORT_OLDEST_LABEL))
+      return SortDatePostedAsc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_MOST_EXPENSIVE_LABEL))
+      return SortPriceDesc();
+    else if (label ==
+        displayLocalizedString(TEXT_ARTWORK_SORT_LEAST_EXPENSIVE_LABEL))
+      return SortPriceAsc();
+    else
+      return SortNameAsc();
   }
 }

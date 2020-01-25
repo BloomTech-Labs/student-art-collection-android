@@ -34,6 +34,17 @@
   "artwork_upload_category_5": "Autre",
   "artwork_upload_category_6": "Tout",
 
+  "artwork_sort_title_asc": "Artwork Title Asc.",
+  "artwork_sort_title_desc": "Artwork Title Desc.",
+  "artwork_sort_artist_name_asc": "Artist Name Asc.",
+  "artwork_sort_artist_name_desc": "Artist Name Desc.",
+  "artwork_sort_school_name_asc": "School Name Asc.",
+  "artwork_sort_school_name_desc": "School Name Desc.",
+  "artwork_sort_most_recent": "Most Recent",
+  "artwork_sort_oldest": "Oldest",
+  "artwork_sort_most_expensive": "Most Expensive",
+  "artwork_sort_least_expensive": "Least Expensive",
+
   "artwork_upload_artwork_title_label": "Entrez le titre de l'oeuvre",
   "artwork_upload_student_name_label": "Entrez le nom de l'élève",
   "artwork_upload_date_selection_label": "Date de création",
