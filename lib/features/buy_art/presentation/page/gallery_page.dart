@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
+import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/presentation/widget/filter_drawer.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 import 'artwork_details_page.dart';
@@ -24,7 +27,7 @@ class GalleryPage extends StatefulWidget {
 class _GalleryPageState extends State<GalleryPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BuildContext _blocContext;
-
+  List<Artwork> artworks;
   //  Current State of InnerDrawerState
   final GlobalKey<InnerDrawerState> _innerDrawerKey =
       GlobalKey<InnerDrawerState>();
@@ -51,6 +54,18 @@ class _GalleryPageState extends State<GalleryPage> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 1.0),
+              child: BlocBuilder<GalleryBloc, GalleryState>(
+                builder: (context, state) {
+                  _blocContext = context;
+                  if (state is GalleryLoadingState) {
+                    return AppBarLoading();
+                  }
+                  return EmptyContainer();
+                },
+              ),
+            ),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.refresh),
@@ -87,14 +102,11 @@ class _GalleryPageState extends State<GalleryPage> {
             child: BlocBuilder<GalleryBloc, GalleryState>(
               builder: (context, state) {
                 _blocContext = context;
-                if (state is GalleryLoadingState) {
-                  return BuildLoading();
-                } else if (state is GalleryLoadedState) {
-                  return buildLoaded(artworkList: state.artworkList);
-                } else if (state is GalleryErrorState) {
-                  return buildError(context: context);
-                } else
-                  return buildInitial();
+                if (state is GalleryLoadedState) {
+                  artworks = state.artworkList;
+                  return buildLoaded(artworkList: artworks);
+                } else if (state is GalleryInitialState) return buildInitial();
+                return EmptyContainer();
               },
             ),
           ),

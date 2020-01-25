@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -159,8 +160,9 @@ class GridTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(cornerRadius),
                     image: DecorationImage(
                       image: artwork.images.length > 0
-                          ? NetworkImage(artwork.images[0].imageUrl)
-                          : NetworkImage(
+                          ? CachedNetworkImageProvider(
+                              artwork.images[0].imageUrl)
+                          : CachedNetworkImageProvider(
                               'https://i.ytimg.com/vi/cX7ZVg2IoYw/maxresdefault.jpg'),
                       fit: BoxFit.cover,
                     ),

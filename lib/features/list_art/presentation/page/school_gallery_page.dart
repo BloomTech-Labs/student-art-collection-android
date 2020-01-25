@@ -109,18 +109,6 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
               )
             ],
             title: AppBarLogo(),
-            bottom: PreferredSize(
-              preferredSize: Size(double.infinity, 1.0),
-              child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
-                builder: (context, state) {
-                  _blocContext = context;
-                  if (state is GalleryLoadingState) {
-                    return AppBarLoading();
-                  }
-                  return EmptyContainer();
-                },
-              ),
-            ),
           ),
           body: BlocListener<SchoolGalleryBloc, GalleryState>(
             listener: (context, state) {
