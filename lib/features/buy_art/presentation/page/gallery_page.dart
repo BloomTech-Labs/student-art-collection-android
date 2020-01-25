@@ -147,7 +147,7 @@ class _GalleryPageState extends State<GalleryPage> {
   }
 
   void getArtworkList({
-    List<FilterType> filterTypes,
+    Map<String, FilterType> filterTypes,
     SortType sortType,
   }) {
     // ignore: close_sinks

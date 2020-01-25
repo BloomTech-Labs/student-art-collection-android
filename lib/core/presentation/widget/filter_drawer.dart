@@ -15,7 +15,7 @@ class FilterDrawer extends StatefulWidget {
   final Widget scaffold;
   final GlobalKey innerDrawerKey;
   final Function(
-    List<FilterType> filterTypes,
+    Map<String, FilterType> filterTypes,
     SortType sortType,
   ) onApplyPressed;
   final bool isSchool;
@@ -40,17 +40,28 @@ class _FilterDrawerState extends State<FilterDrawer> {
   final Widget scaffold;
   GlobalKey _innerDrawerKey;
   final Function(
-    List<FilterType> filterTypes,
+    Map<String, FilterType> filterTypes,
     SortType sortType,
   ) onApplyPressed;
   final bool isSchool;
 
   bool nearMeSelected = false;
+  String _selectedCategory;
+  String _searchQuery;
+
+  final searchTextController = TextEditingController();
+
+  void clearSearch() {
+    setState(() {
+      _searchQuery = null;
+      searchTextController.clear();
+    });
+  }
+
   SortType selectedSortType;
-  FilterTypeName filterTypeName = FilterTypeName(searchQuery: '');
+  FilterTypeSearch filterTypeName = FilterTypeSearch(searchQuery: '');
   FilterTypeZipCode filterTypeZipCode = FilterTypeZipCode();
   FilterTypeCategory filterTypeCategory = FilterTypeCategory();
-  String selectedCategory;
 
   _FilterDrawerState(
     GlobalKey key, {
@@ -144,6 +155,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         style: TextStyle(
                           color: accentColorOnPrimary,
                         ),
+                        controller: searchTextController,
+                        onChanged: (value) {
+                          _searchQuery = value;
+                        },
                         decoration: InputDecoration(
                           labelText: 'Search',
                           labelStyle: TextStyle(
@@ -166,7 +181,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         top: 1,
                         bottom: 1,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            clearSearch();
+                          },
                           icon: Icon(
                             Icons.clear,
                             color: accentColorOnPrimary,
@@ -203,10 +220,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            selectedCategory = value;
+                            _selectedCategory = value;
                           });
                         },
-                        value: selectedCategory,
+                        value: _selectedCategory,
                       ),
                     ),
                   ),
@@ -271,7 +288,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         ),
                       ),
                       onPressed: () {
-                        //onApplyPressed(selectedFilterTypes, selectedSortType);
+                        onApplyPressed({
+                          'category': filterTypeCategory,
+                          'zipcode': filterTypeZipCode,
+                          'search': filterTypeName
+                        }, selectedSortType);
                       },
                       borderSide: BorderSide(
                         color: accentColorOnPrimary,

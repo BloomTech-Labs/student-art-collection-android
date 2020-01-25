@@ -62,7 +62,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     return FilterDrawer(
       isSchool: true,
       onApplyPressed: (filters, sort) {
-        _dispatchGetSchoolArtEvent(filterTypes: filters, sortType: sort);
+        _dispatchGetSchoolArtEvent(sortType: sort);
         _toggle();
       },
       innerDrawerKey: _innerDrawerKey,
