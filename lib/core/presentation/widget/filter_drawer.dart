@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
@@ -48,6 +51,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool nearMeSelected = false;
   String _selectedCategory;
   String _searchQuery;
+  String _zipcode;
 
   final searchTextController = TextEditingController();
 
@@ -59,7 +63,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   }
 
   SortType selectedSortType;
-  FilterTypeSearch filterTypeName = FilterTypeSearch(searchQuery: '');
+  FilterTypeSearch filterTypeSearch = FilterTypeSearch(searchQuery: '');
   FilterTypeZipCode filterTypeZipCode = FilterTypeZipCode();
   FilterTypeCategory filterTypeCategory = FilterTypeCategory();
 
@@ -112,19 +116,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
     TEXT_ARTWORK_UPLOAD_CATEGORY_5,
     TEXT_ARTWORK_UPLOAD_CATEGORY_6,
   ];
-
-  List<DropdownMenuItem> generateMenuCategories() {
-    List<DropdownMenuItem> items = [];
-    categories.forEach((categoryLabel) {
-      items.add(DropdownMenuItem(
-        value: categoryLabel,
-        child: Container(
-          color: primaryColor,
-          child: Text(displayLocalizedString(categoryLabel)),
-        ),
-      ));
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +225,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           unselectedWidgetColor: accentColorOnPrimary,
                         ),
                         child: CheckboxGroup(
-                          onSelected: (label) {},
+                          onChange: (isChecked, label, index) async {
+                            nearMeSelected = isChecked;
+                          },
                           labelStyle: TextStyle(
                             color: accentColorOnPrimary,
                             fontSize: 16,
@@ -287,11 +280,22 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           color: accentColorOnPrimary,
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        filterTypeSearch =
+                            FilterTypeSearch(searchQuery: _searchQuery);
+                        filterTypeCategory = FilterTypeCategory(
+                            category:
+                                categories.indexOf(_selectedCategory) + 1);
+                        if (nearMeSelected) {
+                          _zipcode = await getCurrentUserZipcode();
+                        }
+                        filterTypeZipCode = FilterTypeZipCode(
+                          zipcode: _zipcode,
+                        );
                         onApplyPressed({
                           'category': filterTypeCategory,
                           'zipcode': filterTypeZipCode,
-                          'search': filterTypeName
+                          'search': filterTypeSearch
                         }, selectedSortType);
                       },
                       borderSide: BorderSide(
@@ -356,5 +360,21 @@ class _FilterDrawerState extends State<FilterDrawer> {
       return SortPriceAsc();
     else
       return SortNameAsc();
+  }
+
+  Future<String> getCurrentUserZipcode() async {
+    try {
+      Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(
+        Coordinates(
+          position.latitude,
+          position.longitude,
+        ),
+      );
+      return addresses.first.postalCode;
+    } on Exception {
+      return null;
+    }
   }
 }
