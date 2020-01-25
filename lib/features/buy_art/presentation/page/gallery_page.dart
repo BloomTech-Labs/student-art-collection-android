@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/filter_drawer.dart';
@@ -40,7 +42,9 @@ class _GalleryPageState extends State<GalleryPage> {
     return FilterDrawer(
       innerDrawerKey: _innerDrawerKey,
       isSchool: false,
-      onApplyPressed: (filters, sort) {},
+      onApplyPressed: (filters, sort) {
+        getArtworkList(sortType: sort, filterTypes: filters);
+      },
       scaffold: BlocProvider<GalleryBloc>(
         create: (context) => sl<GalleryBloc>(),
         child: Scaffold(
@@ -50,7 +54,7 @@ class _GalleryPageState extends State<GalleryPage> {
               IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
-                  buildInitial(_blocContext);
+                  buildInitial();
                 },
               ),
               IconButton(
@@ -89,7 +93,7 @@ class _GalleryPageState extends State<GalleryPage> {
                 } else if (state is GalleryErrorState) {
                   return buildError(context: context);
                 } else
-                  return buildInitial(context);
+                  return buildInitial();
               },
             ),
           ),
@@ -98,8 +102,8 @@ class _GalleryPageState extends State<GalleryPage> {
     );
   }
 
-  Widget buildInitial(BuildContext context) {
-    getArtworkList(context);
+  Widget buildInitial() {
+    getArtworkList();
     return Center();
   }
 
@@ -141,9 +145,15 @@ class _GalleryPageState extends State<GalleryPage> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  void getArtworkList(BuildContext context) {
+  void getArtworkList({
+    List<FilterType> filterTypes,
+    SortType sortType,
+  }) {
     // ignore: close_sinks
-    final galleryBloc = BlocProvider.of<GalleryBloc>(context);
-    galleryBloc.add(GetArtworkList());
+    final galleryBloc = BlocProvider.of<GalleryBloc>(_blocContext);
+    galleryBloc.add(GetArtworkList(
+      sortType: sortType,
+      filterTypes: filterTypes,
+    ));
   }
 }
