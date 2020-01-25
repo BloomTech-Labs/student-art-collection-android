@@ -1,23 +1,18 @@
 import 'package:equatable/equatable.dart';
 
 abstract class FilterType extends Equatable {
+  const FilterType();
+}
+
+class FilterTypeSearch extends FilterType {
   final String searchQuery;
 
-  const FilterType({
+  const FilterTypeSearch({
     this.searchQuery,
   });
 
   @override
   List<Object> get props => [searchQuery];
-}
-
-class FilterTypeSearch extends FilterType {
-  const FilterTypeSearch({
-    searchQuery: String,
-  }) : super(searchQuery: searchQuery);
-
-  @override
-  List<Object> get props => null;
 }
 
 class FilterTypeZipCode extends FilterType {

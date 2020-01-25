@@ -62,7 +62,10 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     return FilterDrawer(
       isSchool: true,
       onApplyPressed: (filters, sort) {
-        _dispatchGetSchoolArtEvent(sortType: sort);
+        _dispatchGetSchoolArtEvent(
+          sortType: sort,
+          filterTypes: filters,
+        );
         _toggle();
       },
       innerDrawerKey: _innerDrawerKey,
@@ -203,7 +206,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   }
 
   void _dispatchGetSchoolArtEvent({
-    List<FilterType> filterTypes,
+    Map<String, FilterType> filterTypes,
     SortType sortType,
   }) {
     BlocProvider.of<SchoolGalleryBloc>(_blocContext).add(

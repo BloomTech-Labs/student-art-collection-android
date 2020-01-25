@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:collection/collection.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
@@ -121,4 +122,33 @@ void _sortBySortType(
       return b.datePosted.compareTo(a.datePosted);
     });
   }
+}
+
+Future<List<Artwork>> returnFilteredArtworks(
+  List<Artwork> artworks,
+  Map<String, FilterType> filters,
+) {
+  List<Artwork> filteredArtworks;
+  return Future(() {
+    filteredArtworks = _filterByFilterTypes(artworks, filters);
+  }).then((artworks) {
+    return filteredArtworks;
+  });
+}
+
+List<Artwork> _filterByFilterTypes(
+  List<Artwork> artworks,
+  Map<String, FilterType> filters,
+) {
+  List<Artwork> filteredList = artworks;
+  FilterTypeCategory categoryFilter = filters['category'];
+  if (categoryFilter.category != null &&
+      categoryFilter.category >= 1 &&
+      categoryFilter.category <= 5) {
+    filteredList = filteredList
+        .where(
+            (artwork) => artwork.category.categoryId == categoryFilter.category)
+        .toList();
+  }
+  return filteredList;
 }
