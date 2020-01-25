@@ -46,7 +46,7 @@ Future init() async {
   /** Feature: Buy Art */
 
   // Bloc
-  sl.registerFactory(() => GalleryBloc(artworkRepository: sl()));
+  sl.registerFactory(() => GalleryBloc(getAllArtwork: sl()));
 
   sl.registerFactory(() => ArtworkDetailsBloc(artworkRepository: sl()));
 

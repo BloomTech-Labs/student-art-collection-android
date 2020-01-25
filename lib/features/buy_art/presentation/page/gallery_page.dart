@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
+import 'package:student_art_collection/core/presentation/widget/filter_drawer.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
@@ -21,52 +23,75 @@ class _GalleryPageState extends State<GalleryPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BuildContext _blocContext;
 
+  //  Current State of InnerDrawerState
+  final GlobalKey<InnerDrawerState> _innerDrawerKey =
+      GlobalKey<InnerDrawerState>();
+
+  void _toggle() {
+    _innerDrawerKey.currentState.toggle(
+        // direction is optional
+        // if not set, the last direction will be used
+        //InnerDrawerDirection.start OR InnerDrawerDirection.end
+        direction: InnerDrawerDirection.end);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<GalleryBloc>(
-      create: (context) => sl<GalleryBloc>(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                buildInitial(_blocContext);
-              },
-            )
-          ],
-          centerTitle: true,
-          title: Hero(
-            tag: 'logo',
-            child: SvgPicture.asset(
-              'assets/artco_logo_large.svg',
-              color: Colors.white,
-              semanticsLabel: 'App Logo',
-              fit: BoxFit.contain,
+    return FilterDrawer(
+      innerDrawerKey: _innerDrawerKey,
+      isSchool: false,
+      onApplyPressed: (filters, sort) {},
+      scaffold: BlocProvider<GalleryBloc>(
+        create: (context) => sl<GalleryBloc>(),
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  buildInitial(_blocContext);
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.filter_list),
+                onPressed: () {
+                  _toggle();
+                },
+              ),
+            ],
+            centerTitle: true,
+            title: Hero(
+              tag: 'logo',
+              child: SvgPicture.asset(
+                'assets/artco_logo_large.svg',
+                color: Colors.white,
+                semanticsLabel: 'App Logo',
+                fit: BoxFit.contain,
+              ),
             ),
           ),
-        ),
-        body: BlocListener<GalleryBloc, GalleryState>(
-          listener: (context, state) {
-            if (state is GalleryErrorState) {
-              final snackBar = SnackBar(content: Text(state.message));
-              Scaffold.of(context).showSnackBar(snackBar);
-            }
-          },
-          child: BlocBuilder<GalleryBloc, GalleryState>(
-            builder: (context, state) {
+          body: BlocListener<GalleryBloc, GalleryState>(
+            listener: (context, state) {
               _blocContext = context;
-              if (state is GalleryLoadingState) {
-                return BuildLoading();
-              } else if (state is GalleryLoadedState) {
-                return buildLoaded(
-                    artworkList: state.artworkList, context: context);
-              } else if (state is GalleryErrorState) {
-                return buildError(context: context);
-              } else
-                return buildInitial(context);
+              if (state is GalleryErrorState) {
+                final snackBar = SnackBar(content: Text(state.message));
+                Scaffold.of(context).showSnackBar(snackBar);
+              }
             },
+            child: BlocBuilder<GalleryBloc, GalleryState>(
+              builder: (context, state) {
+                _blocContext = context;
+                if (state is GalleryLoadingState) {
+                  return BuildLoading();
+                } else if (state is GalleryLoadedState) {
+                  return buildLoaded(artworkList: state.artworkList);
+                } else if (state is GalleryErrorState) {
+                  return buildError(context: context);
+                } else
+                  return buildInitial(context);
+              },
+            ),
           ),
         ),
       ),
@@ -84,7 +109,7 @@ class _GalleryPageState extends State<GalleryPage> {
             displayLocalizedString(context, TEXT_GALLERY_ERROR_STATE_MESSAGE)));
   }
 
-  Widget buildLoaded({@required BuildContext context, @required artworkList}) {
+  Widget buildLoaded({@required artworkList}) {
     return GalleryGrid(
       artworkList: artworkList,
       isStaggered: true,
