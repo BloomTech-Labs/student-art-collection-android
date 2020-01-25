@@ -14,11 +14,13 @@ class FilterDrawer extends StatefulWidget {
     List<FilterType> filterTypes,
     SortType sortType,
   ) onApplyPressed;
+  final bool isSchool;
 
   FilterDrawer({
     this.scaffold,
     this.onApplyPressed,
     this.innerDrawerKey,
+    this.isSchool,
   });
 
   @override
@@ -26,6 +28,7 @@ class FilterDrawer extends StatefulWidget {
         innerDrawerKey,
         scaffold: scaffold,
         onApplyPressed: onApplyPressed,
+        isSchool: isSchool,
       );
 }
 
@@ -38,18 +41,33 @@ class _FilterDrawerState extends State<FilterDrawer> {
   ) onApplyPressed;
   List<FilterType> selectedFilterTypes = [];
   SortType selectedSortType;
+  final bool isSchool;
 
   _FilterDrawerState(
     GlobalKey key, {
     this.scaffold,
     this.onApplyPressed,
+    this.isSchool,
   }) {
     _innerDrawerKey = key;
   }
 
-  List<String> sortLabels = [
+  List<String> schoolSortLabels = [
     'Artwork Title Asc.',
     'Artwork Title Desc.',
+    'Artist Name Asc.',
+    'Artist Name Desc.',
+    'Most Recent',
+    'Oldest',
+    'Most expensive',
+    'Least Expensive',
+  ];
+
+  List<String> buyerSortLabels = [
+    'Artwork Title Asc.',
+    'Artwork Title Desc.',
+    'School Name Asc.',
+    'School Name Desc.',
     'Artist Name Asc.',
     'Artist Name Desc.',
     'Most Recent',
@@ -142,7 +160,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       fontSize: 16,
                     ),
                     activeColor: accentColorOnPrimary,
-                    labels: sortLabels,
+                    labels: isSchool ? schoolSortLabels : buyerSortLabels,
                   ),
                 ),
                 Divider(

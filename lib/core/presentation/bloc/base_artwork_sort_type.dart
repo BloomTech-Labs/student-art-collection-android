@@ -14,12 +14,12 @@ class SortNameDesc extends SortType {
   List<Object> get props => null;
 }
 
-class SchoolNameAsc extends SortType {
+class SortSchoolNameAsc extends SortType {
   @override
   List<Object> get props => null;
 }
 
-class SchoolNameDesc extends SortType {
+class SortSchoolNameDesc extends SortType {
   @override
   List<Object> get props => null;
 }

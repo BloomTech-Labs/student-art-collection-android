@@ -22,11 +22,12 @@ abstract class BaseRemoteDataSource {
   Future<QueryResult> performQuery(
     String query,
     Map<String, dynamic> variables,
+    bool shouldCache,
   ) async {
     final QueryOptions queryOptions = QueryOptions(
       documentNode: gql(query),
       variables: variables,
-      fetchPolicy: FetchPolicy.noCache,
+      fetchPolicy: shouldCache ? FetchPolicy.cacheFirst : FetchPolicy.noCache,
     );
     return await graphQLClient.query(queryOptions);
   }

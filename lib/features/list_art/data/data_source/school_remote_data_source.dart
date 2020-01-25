@@ -56,6 +56,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
       <String, dynamic>{
         SCHOOL_SCHOOL_ID: uid,
       },
+      false,
     );
     return handleAuthResult(result, LOGIN_SCHOOL_QUERY_KEY);
   }
@@ -91,6 +92,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
       {
         SCHOOL_SCHOOL_ID: schoolId,
       },
+      true,
     );
     return convertResultToArtworkList(result, 'artBySchool');
   }

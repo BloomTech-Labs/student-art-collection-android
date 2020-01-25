@@ -60,8 +60,10 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   @override
   Widget build(BuildContext context) {
     return FilterDrawer(
+      isSchool: true,
       onApplyPressed: (filters, sort) {
         _dispatchGetSchoolArtEvent(filterTypes: filters, sortType: sort);
+        _toggle();
       },
       innerDrawerKey: _innerDrawerKey,
       scaffold: BlocProvider<SchoolGalleryBloc>(

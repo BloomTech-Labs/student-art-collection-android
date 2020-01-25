@@ -82,6 +82,18 @@ void _sortBySortType(
     artworks.sort((a, b) {
       return b.title.toLowerCase().compareTo(a.title.toLowerCase());
     });
+  } else if (sortType is SortSchoolNameAsc) {
+    artworks.sort((a, b) {
+      return a.schoolInfo.schoolName
+          .toLowerCase()
+          .compareTo(b.schoolInfo.schoolName.toLowerCase());
+    });
+  } else if (sortType is SortSchoolNameDesc) {
+    artworks.sort((a, b) {
+      return b.schoolInfo.schoolName
+          .toLowerCase()
+          .compareTo(a.schoolInfo.schoolName.toLowerCase());
+    });
   } else if (sortType is SortStudentNameAsc) {
     artworks.sort((a, b) {
       return a.artistName.toLowerCase().compareTo(b.artistName.toLowerCase());
@@ -115,9 +127,9 @@ SortType convertLabelToSortType(String label) {
   else if (label == 'Artwork Title Desc.')
     return SortNameDesc();
   else if (label == 'School Name Asc.')
-    return SchoolNameAsc();
+    return SortSchoolNameAsc();
   else if (label == 'School Name Desc.')
-    return SchoolNameDesc();
+    return SortSchoolNameDesc();
   else if (label == 'Artist Name Asc.')
     return SortStudentNameAsc();
   else if (label == 'Artist Name Desc.')
