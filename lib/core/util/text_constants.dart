@@ -88,6 +88,9 @@ const TEXT_SCHOOL_GALLERY_MESSAGES_TAG = 'school_gallery_messages_tag';
 const TEXT_GALLERY_APP_BAR_TITLE = 'gallery_app_bar_title';
 const TEXT_GALLERY_ERROR_STATE_MESSAGE = 'gallery_error_state_message';
 
+const TEXT_GALLERY_EMPTY_ARTWORKS_MESSAGE_LABEL =
+    'gallery_empty_artworks_message_label';
+
 //Artwork Details Page
 const TEXT_ARTWORK_DETAILS_TOP_BANNER_MESSAGE =
     'artwork_details_top_banner_message';

@@ -34,6 +34,7 @@ abstract class BaseArtworkBloc<EventType>
         return GalleryLoadedState(artworks);
       },
     );
+    yield GalleryLoadingState();
     if (galleryState is GalleryLoadedState) {
       await returnSortedArtworks(galleryState.artworkList, sortType);
       if (filterTypes != null)

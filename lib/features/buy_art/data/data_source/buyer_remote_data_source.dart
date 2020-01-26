@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
+import 'package:student_art_collection/core/data/data_source/base_remote_data_source.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/util/api_constants.dart';
@@ -17,18 +18,15 @@ abstract class BuyerRemoteDataSource {
       {@required ContactForm contactForm});
 }
 
-class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource {
-  final GraphQLClient client;
-
-  GraphQLBuyerRemoteDataSource({this.client});
+class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
+    implements BuyerRemoteDataSource {
+  GraphQLBuyerRemoteDataSource({client: GraphQLClient})
+      : super(graphQLClient: client);
 
   @override
   Future<List<Artwork>> getAllArtwork() async {
-    final QueryOptions queryOptions = QueryOptions(
-      fetchPolicy: FetchPolicy.noCache,
-      documentNode: gql(GET_ALL_ARTWORK_FOR_BUYER),
-    );
-    final QueryResult result = await client.query(queryOptions);
+    final QueryResult result =
+        await performQuery(GET_ALL_ARTWORK_FOR_BUYER, null, true);
     if (result.hasException) {
       throw ServerException();
     }
@@ -38,9 +36,9 @@ class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource {
   @override
   Future<ContactForm> contactFormConfirmation(
       {@required ContactForm contactForm}) async {
-    final MutationOptions options = MutationOptions(
-      documentNode: gql(SUBMIT_CONTACT_FORM_MUTATION),
-      variables: <String, dynamic>{
+    final QueryResult result = await performMutation(
+      SUBMIT_CONTACT_FORM_MUTATION,
+      {
         CONTACT_FORM_SEND_TO: contactForm.sendTo,
         CONTACT_FORM_FROM: contactForm.from,
         CONTACT_FORM_SUBJECT: contactForm.subject,
@@ -48,8 +46,6 @@ class GraphQLBuyerRemoteDataSource implements BuyerRemoteDataSource {
         CONTACT_FORM_NAME: contactForm.name
       },
     );
-
-    final QueryResult result = await client.mutate(options);
 
     if (result.hasException) {
       throw ServerException();

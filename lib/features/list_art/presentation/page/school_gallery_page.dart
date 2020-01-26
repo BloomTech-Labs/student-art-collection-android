@@ -117,6 +117,9 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
             listener: (context, state) {
               _blocContext = context;
               if (state is GalleryLoadedState) {
+                if (state.artworkList.length == 0) {
+                  showSnackBar(TEXT_GALLERY_EMPTY_ARTWORKS_MESSAGE_LABEL);
+                }
               } else if (state is Unauthorized) {
                 Navigator.pushReplacementNamed(context, LoginPage.ID);
               }
@@ -135,7 +138,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                           context, ArtworkUploadPage.ID,
                           arguments: artwork);
                       if (result is ArtworkToReturn) {
-                        showSnackBar(context, result.message);
+                        showSnackBar(result.message);
                         if (result.tag == 'update') {
                           setState(() {
                             artworks[index] = result.artwork;
@@ -167,7 +170,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
               final result =
                   await Navigator.pushNamed(context, ArtworkUploadPage.ID);
               if (result is ArtworkToReturn) {
-                showSnackBar(context, result.message);
+                showSnackBar(result.message);
                 setState(() {
                   artworks.add(result.artwork);
                 });
@@ -184,13 +187,11 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
               items: [
                 TitledNavigationBarItem(
                     title: displayLocalizedString(
-                      context,
                       TEXT_SCHOOL_GALLERY_HOME_TAG,
                     ),
                     icon: Icons.home),
                 TitledNavigationBarItem(
                     title: displayLocalizedString(
-                      context,
                       TEXT_SCHOOL_GALLERY_SEARCH_TAG,
                     ),
                     icon: Icons.search),
@@ -223,18 +224,17 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     );
   }
 
-  void showSnackBar(BuildContext context, String message) {
+  void showSnackBar(String message) {
     final snackBar = SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text(displayLocalizedString(
-          context,
           message,
         )));
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  String displayLocalizedString(BuildContext context, String label) {
+  String displayLocalizedString(String label) {
     return AppLocalizations.of(context).translate(label);
   }
 }

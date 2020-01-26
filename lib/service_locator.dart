@@ -61,7 +61,7 @@ Future init() async {
   // Data Sources
   sl.registerLazySingleton<BuyerRemoteDataSource>(
       () => GraphQLBuyerRemoteDataSource(
-            client: sl(),
+            client: sl<GraphQLClient>(),
           ));
 
   sl.registerLazySingleton<BuyerLocalDataSource>(

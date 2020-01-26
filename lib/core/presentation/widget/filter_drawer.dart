@@ -123,191 +123,197 @@ class _FilterDrawerState extends State<FilterDrawer> {
       child: InnerDrawer(
         key: _innerDrawerKey,
         rightChild: SingleChildScrollView(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 16),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Filter',
-                  style: TextStyle(
-                    inherit: false,
-                    fontSize: 24,
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 32, bottom: 16),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Filter',
+                    style: TextStyle(
+                      inherit: false,
+                      fontSize: 24,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 16,
-                    bottom: 8,
-                  ),
-                  child: Stack(
-                    children: <Widget>[
-                      TextField(
-                        style: TextStyle(
-                          color: accentColorOnPrimary,
-                        ),
-                        controller: searchTextController,
-                        onChanged: (value) {
-                          _searchQuery = value;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Search',
-                          labelStyle: TextStyle(
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 16,
+                      bottom: 8,
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        TextField(
+                          style: TextStyle(
                             color: accentColorOnPrimary,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                          controller: searchTextController,
+                          onChanged: (value) {
+                            _searchQuery = value;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Search',
+                            labelStyle: TextStyle(
+                              color: accentColorOnPrimary,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: accentColorOnPrimary,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: accentColorOnPrimary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 1,
+                          bottom: 1,
+                          child: IconButton(
+                            onPressed: () {
+                              clearSearch();
+                            },
+                            icon: Icon(
+                              Icons.clear,
                               color: accentColorOnPrimary,
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                        )
+                      ],
+                    ),
+                  ),
+                  Theme(
+                    data: ThemeData(
+                      canvasColor: primaryColor,
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: DropdownButton(
+                          hint: Text(
+                            'Select Category',
+                            style: TextStyle(
                               color: accentColorOnPrimary,
                             ),
                           ),
+                          items: categories.map((category) {
+                            return new DropdownMenuItem(
+                              value: category,
+                              child: Text(
+                                displayLocalizedString(category),
+                                style: TextStyle(
+                                  color: accentColorOnPrimary,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedCategory = value;
+                            });
+                          },
+                          value: _selectedCategory,
                         ),
                       ),
-                      Positioned(
-                        right: 0,
-                        top: 1,
-                        bottom: 1,
-                        child: IconButton(
-                          onPressed: () {
-                            clearSearch();
-                          },
-                          icon: Icon(
-                            Icons.clear,
-                            color: accentColorOnPrimary,
+                    ),
+                  ),
+                  !isSchool
+                      ? Theme(
+                          data: ThemeData(
+                            unselectedWidgetColor: accentColorOnPrimary,
                           ),
-                        ),
-                      )
-                    ],
+                          child: CheckboxGroup(
+                            onChange: (isChecked, label, index) async {
+                              nearMeSelected = isChecked;
+                            },
+                            labelStyle: TextStyle(
+                              color: accentColorOnPrimary,
+                              fontSize: 16,
+                            ),
+                            activeColor: primaryColor,
+                            labels: ['Only Art Near Me'],
+                          ),
+                        )
+                      : Container(),
+                  Text(
+                    'Sort',
+                    style: TextStyle(
+                      inherit: false,
+                      fontSize: 24,
+                    ),
                   ),
-                ),
-                Theme(
-                  data: ThemeData(
-                    canvasColor: primaryColor,
+                  Divider(
+                    color: accentColorOnPrimary,
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButton(
-                        hint: Text(
-                          'Select Category',
+                  Theme(
+                    data: ThemeData(
+                      unselectedWidgetColor: accentColorOnPrimary,
+                    ),
+                    child: RadioButtonGroup(
+                      onSelected: (label) {
+                        selectedSortType = convertLabelToSortType(label);
+                      },
+                      labelStyle: TextStyle(
+                        color: accentColorOnPrimary,
+                        fontSize: 16,
+                      ),
+                      activeColor: accentColorOnPrimary,
+                      labels: isSchool
+                          ? getLocalizedLabels(schoolSortLabels)
+                          : getLocalizedLabels(buyerSortLabels),
+                    ),
+                  ),
+                  Divider(
+                    color: accentColorOnPrimary,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      OutlineButton(
+                        highlightedBorderColor: primaryColor,
+                        splashColor: accentColorOnPrimary,
+                        child: Text(
+                          'Apply',
                           style: TextStyle(
                             color: accentColorOnPrimary,
                           ),
                         ),
-                        items: categories.map((category) {
-                          return new DropdownMenuItem(
-                            value: category,
-                            child: Text(
-                              displayLocalizedString(category),
-                              style: TextStyle(
-                                color: accentColorOnPrimary,
-                              ),
-                            ),
+                        onPressed: () async {
+                          filterTypeSearch =
+                              FilterTypeSearch(searchQuery: _searchQuery);
+                          filterTypeCategory = FilterTypeCategory(
+                              category:
+                                  categories.indexOf(_selectedCategory) + 1);
+                          if (nearMeSelected) {
+                            _zipcode = await getCurrentUserZipcode();
+                          }
+                          filterTypeZipCode = FilterTypeZipCode(
+                            zipcode: _zipcode,
                           );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCategory = value;
-                          });
+                          onApplyPressed({
+                            'category': filterTypeCategory,
+                            'zipcode': filterTypeZipCode,
+                            'search': filterTypeSearch
+                          }, selectedSortType);
                         },
-                        value: _selectedCategory,
-                      ),
-                    ),
-                  ),
-                ),
-                !isSchool
-                    ? Theme(
-                        data: ThemeData(
-                          unselectedWidgetColor: accentColorOnPrimary,
-                        ),
-                        child: CheckboxGroup(
-                          onChange: (isChecked, label, index) async {
-                            nearMeSelected = isChecked;
-                          },
-                          labelStyle: TextStyle(
-                            color: accentColorOnPrimary,
-                            fontSize: 16,
-                          ),
-                          activeColor: primaryColor,
-                          labels: ['Only Art Near Me'],
-                        ),
-                      )
-                    : Container(),
-                Text(
-                  'Sort',
-                  style: TextStyle(
-                    inherit: false,
-                    fontSize: 24,
-                  ),
-                ),
-                Divider(
-                  color: accentColorOnPrimary,
-                ),
-                Theme(
-                  data: ThemeData(
-                    unselectedWidgetColor: accentColorOnPrimary,
-                  ),
-                  child: RadioButtonGroup(
-                    onSelected: (label) {
-                      selectedSortType = convertLabelToSortType(label);
-                    },
-                    labelStyle: TextStyle(
-                      color: accentColorOnPrimary,
-                      fontSize: 16,
-                    ),
-                    activeColor: accentColorOnPrimary,
-                    labels: isSchool
-                        ? getLocalizedLabels(schoolSortLabels)
-                        : getLocalizedLabels(buyerSortLabels),
-                  ),
-                ),
-                Divider(
-                  color: accentColorOnPrimary,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    OutlineButton(
-                      highlightedBorderColor: primaryColor,
-                      splashColor: accentColorOnPrimary,
-                      child: Text(
-                        'Apply',
-                        style: TextStyle(
+                        borderSide: BorderSide(
                           color: accentColorOnPrimary,
                         ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
                       ),
-                      onPressed: () async {
-                        filterTypeSearch =
-                            FilterTypeSearch(searchQuery: _searchQuery);
-                        filterTypeCategory = FilterTypeCategory(
-                            category:
-                                categories.indexOf(_selectedCategory) + 1);
-                        if (nearMeSelected) {
-                          _zipcode = await getCurrentUserZipcode();
-                        }
-                        filterTypeZipCode = FilterTypeZipCode(
-                          zipcode: _zipcode,
-                        );
-                        onApplyPressed({
-                          'category': filterTypeCategory,
-                          'zipcode': filterTypeZipCode,
-                          'search': filterTypeSearch
-                        }, selectedSortType);
-                      },
-                      borderSide: BorderSide(
-                        color: accentColorOnPrimary,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

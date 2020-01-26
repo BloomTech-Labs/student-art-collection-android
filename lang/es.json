@@ -92,6 +92,7 @@
   "gallery_app_bar_title": "Galería",
   "gallery_error_state_message": "Error",
 
+  "gallery_empty_artworks_message_label": "Couldn't find any artworks",
 
   "artwork_details_top_banner_message": "¿Quieres comprar esta pieza? Rellena el siguiente formulario",
   "artwork_details_untitled_label": "Intitulado",

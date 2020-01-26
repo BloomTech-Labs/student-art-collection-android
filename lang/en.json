@@ -74,11 +74,11 @@
   "registration_email_label": "Enter Your Email",
   "registration_password_label": "Enter Your Password",
   "registration_password_confirmation_label": "Enter Your Password again",
-  "registration_street_address_label": "Enter Your School\"s Street Address",
-  "registration_school_name_label": "Enter Your School\"s Name",
-  "registration_city_label": "Enter Your School\"s City",
-  "registration_state_label": "Enter Your School\"s State",
-  "registration_zipcode_label": "Enter Your School\"s Zipcode",
+  "registration_street_address_label": "Enter Your School's Street Address",
+  "registration_school_name_label": "Enter Your School's Name",
+  "registration_city_label": "Enter Your School's City",
+  "registration_state_label": "Enter Your School's State",
+  "registration_zipcode_label": "Enter Your School's Zipcode",
   "registration_button_label" : "Register",
 
 
@@ -91,6 +91,7 @@
   "gallery_app_bar_title": "Gallery",
   "gallery_error_state_message": "Error",
 
+  "gallery_empty_artworks_message_label": "Couldn't find any artworks",
 
   "artwork_details_top_banner_message": "Want to purchase this piece? Fill out the form below",
   "artwork_details_untitled_label": "Untitled",

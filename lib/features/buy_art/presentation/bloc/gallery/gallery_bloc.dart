@@ -26,7 +26,11 @@ class GalleryBloc extends BaseArtworkBloc<GalleryEvent> {
 
     if (event is GetArtworkList) {
       final artworkResult = await getAllArtwork(NoParams());
-      yield* eitherArtworksOrError(artworkResult, event.sortType);
+      yield* eitherArtworksOrError(
+        artworkResult,
+        event.sortType,
+        filterTypes: event.filterTypes,
+      );
     }
   }
 }

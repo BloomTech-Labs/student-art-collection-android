@@ -82,16 +82,15 @@
   "registration_zipcode_label": "Entrez le code postal de votre école",
   "registration_button_label" : "S'inscrire",
 
-
   "school_gallery_app_bar_title": "Galerie D'art Scolaire",
   "school_gallery_home_tag": "Accueil",
   "school_gallery_search_tag": "Chercher",
   "school_gallery_messages_tag": "Messages",
 
-
   "gallery_app_bar_title": "Galerie",
   "gallery_error_state_message": "Erreur",
 
+  "gallery_empty_artworks_message_label": "Couldn't find any artworks",
 
   "artwork_details_top_banner_message": "Vouloir acheter? Remplissez le formulaire ci-dessous",
   "artwork_details_untitled_label": "Sans titre",
