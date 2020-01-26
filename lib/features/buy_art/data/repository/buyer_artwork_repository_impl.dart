@@ -8,6 +8,7 @@ import 'package:student_art_collection/features/buy_art/data/data_source/buyer_r
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'package:meta/meta.dart';
+import 'package:student_art_collection/features/buy_art/domain/usecase/get_all_artwork.dart';
 
 class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
   final BuyerRemoteDataSource remoteDataSource;
@@ -20,11 +21,13 @@ class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
       @required this.networkInfo});
 
   @override
-  Future<Either<Failure, List<Artwork>>> getAllArtwork() async {
+  Future<Either<Failure, List<Artwork>>> getAllArtwork(
+      {SearchFilters searchFilters}) async {
     // TODO: implement getAllArtwork
     if (await networkInfo.isConnected) {
       try {
-        final remoteArtworkList = await remoteDataSource.getAllArtwork();
+        final remoteArtworkList =
+            await remoteDataSource.getAllArtwork(searchFilters: searchFilters);
         localDataSource.cacheArtworkList(remoteArtworkList);
         return Right(remoteArtworkList);
       } on ServerException {

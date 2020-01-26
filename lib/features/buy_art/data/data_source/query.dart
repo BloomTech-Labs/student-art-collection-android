@@ -28,13 +28,13 @@ query getAllArtwork{
     ''';
 
 const String GET_ARTWORKS_BY_ZIPCODE = r'''
-query GetArtworksByZipcode(
-  $zipcode: String
+query GetArtworksByZip(
+  $zip: String
 ) {
   filter(
     filter: {
       zipcode: {
-        eq: "$zipcode"
+        eq: $zip
       }
     }
   ) {

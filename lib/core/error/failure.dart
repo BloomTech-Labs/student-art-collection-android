@@ -57,3 +57,12 @@ class ArtworkInputFailure extends Failure {
         message,
       ];
 }
+
+class SearchFiltersFailure extends Failure {
+  final String message;
+
+  SearchFiltersFailure({this.message});
+
+  @override
+  List<Object> get props => [message];
+}

@@ -38,7 +38,6 @@ import 'features/list_art/data/data_source/school_local_data_source.dart';
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
-import 'dart:convert';
 
 final sl = GetIt.instance;
 
@@ -46,12 +45,13 @@ Future init() async {
   /** Feature: Buy Art */
 
   // Bloc
-  sl.registerFactory(() => GalleryBloc(getAllArtwork: sl()));
+  sl.registerFactory(
+      () => GalleryBloc(getAllArtwork: sl(), inputConverter: sl()));
 
   sl.registerFactory(() => ArtworkDetailsBloc(artworkRepository: sl()));
 
   // Use Cases
-  sl.registerLazySingleton(() => GetAllArtwork(sl()));
+  sl.registerLazySingleton(() => GetArtwork(sl()));
 
   // Repository
   sl.registerLazySingleton<BuyerArtworkRepository>(() =>

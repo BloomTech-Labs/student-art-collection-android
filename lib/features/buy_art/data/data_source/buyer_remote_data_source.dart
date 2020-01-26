@@ -9,10 +9,11 @@ import 'package:student_art_collection/features/buy_art/data/data_source/mutatio
 import 'package:student_art_collection/features/buy_art/data/data_source/query.dart';
 import 'package:student_art_collection/features/buy_art/data/model/contact_form_model.dart';
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
+import 'package:student_art_collection/features/buy_art/domain/usecase/get_all_artwork.dart';
 
 abstract class BuyerRemoteDataSource {
   /// Throws a [ServerException] for all error codes
-  Future<List<Artwork>> getAllArtwork();
+  Future<List<Artwork>> getAllArtwork({SearchFilters searchFilters});
 
   Future<ContactForm> contactFormConfirmation(
       {@required ContactForm contactForm});
@@ -24,13 +25,26 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
       : super(graphQLClient: client);
 
   @override
-  Future<List<Artwork>> getAllArtwork() async {
-    final QueryResult result =
-        await performQuery(GET_ALL_ARTWORK_FOR_BUYER, null, true);
-    if (result.hasException) {
-      throw ServerException();
+  Future<List<Artwork>> getAllArtwork({SearchFilters searchFilters}) async {
+    if (searchFilters.zipcode != null) {
+      final QueryResult result = await performQuery(
+          GET_ARTWORKS_BY_ZIPCODE,
+          {
+            'zip': searchFilters.zipcode,
+          },
+          true);
+      if (result.hasException) {
+        throw ServerException();
+      }
+      return convertResultToArtworkList(result, "filter");
+    } else {
+      final QueryResult result =
+          await performQuery(GET_ALL_ARTWORK_FOR_BUYER, null, true);
+      if (result.hasException) {
+        throw ServerException();
+      }
+      return convertResultToArtworkList(result, "allArts");
     }
-    return convertResultToArtworkList(result, "allArts");
   }
 
   @override
