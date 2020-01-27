@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloudinary_client/cloudinary_client.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,7 +39,6 @@ import 'features/list_art/data/data_source/school_local_data_source.dart';
 import 'features/list_art/data/data_source/school_remote_data_source.dart';
 import 'features/list_art/domain/repository/school_artwork_repository.dart';
 import 'features/list_art/domain/repository/school_auth_repository.dart';
-import 'dart:convert';
 
 final sl = GetIt.instance;
 
@@ -46,12 +46,15 @@ Future init() async {
   /** Feature: Buy Art */
 
   // Bloc
-  sl.registerFactory(() => GalleryBloc(artworkRepository: sl()));
+  sl.registerFactory(() => GalleryBloc(
+        getAllArtwork: sl(),
+        inputConverter: sl(),
+      ));
 
   sl.registerFactory(() => ArtworkDetailsBloc(artworkRepository: sl()));
 
   // Use Cases
-  sl.registerLazySingleton(() => GetAllArtwork(sl()));
+  sl.registerLazySingleton(() => GetArtwork(sl()));
 
   // Repository
   sl.registerLazySingleton<BuyerArtworkRepository>(() =>
@@ -61,7 +64,8 @@ Future init() async {
   // Data Sources
   sl.registerLazySingleton<BuyerRemoteDataSource>(
       () => GraphQLBuyerRemoteDataSource(
-            client: sl(),
+            client: sl<GraphQLClient>(),
+            geolocator: sl<Geolocator>(),
           ));
 
   sl.registerLazySingleton<BuyerLocalDataSource>(
@@ -156,4 +160,6 @@ Future init() async {
   final decodedName = latin1.decode(base64.decode(secret.cloudName));
   sl.registerLazySingleton(
       () => CloudinaryClient(decodedKey, decodedSecret, decodedName));
+
+  sl.registerLazySingleton(() => Geolocator());
 }

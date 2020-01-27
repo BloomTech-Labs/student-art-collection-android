@@ -10,20 +10,16 @@ import 'package:student_art_collection/features/buy_art/domain/usecase/get_all_a
 class MockArtworkRepository extends Mock implements BuyerArtworkRepository {}
 
 void main() {
-  GetAllArtwork usecase;
+  GetArtwork usecase;
   MockArtworkRepository mockArtworkRepository;
 
   setUp(() {
     mockArtworkRepository = MockArtworkRepository();
-    usecase = GetAllArtwork(mockArtworkRepository);
+    usecase = GetArtwork(mockArtworkRepository);
   });
 
   final tSchoolInfo = SchoolInfoModel(
-      id: 1,
-      schoolId: "1",
-      email: 'test@gmail.com',
-      schoolName: 'test'
-  );
+      id: 1, schoolId: "1", email: 'test@gmail.com', schoolName: 'test');
 
   final tImagesList = [
     Image(imageId: 1, artId: 1, imageUrl: 'https://picsum.photos/200/300'),
@@ -39,7 +35,7 @@ void main() {
     when(mockArtworkRepository.getAllArtwork())
         .thenAnswer((_) async => Right(tArtworkList));
     //act
-    final result = await usecase(NoParams());
+    final result = await usecase(null);
 
     //assert
     expect(result, Right(tArtworkList));

@@ -1,10 +1,12 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:graphql/client.dart';
+import 'package:meta/meta.dart';
 
 abstract class BaseRemoteDataSource {
   final GraphQLClient graphQLClient;
 
   BaseRemoteDataSource({
-    this.graphQLClient,
+    @required this.graphQLClient,
   });
 
   Future<QueryResult> performMutation(
@@ -22,11 +24,12 @@ abstract class BaseRemoteDataSource {
   Future<QueryResult> performQuery(
     String query,
     Map<String, dynamic> variables,
+    bool shouldCache,
   ) async {
     final QueryOptions queryOptions = QueryOptions(
       documentNode: gql(query),
       variables: variables,
-      fetchPolicy: FetchPolicy.noCache,
+      fetchPolicy: shouldCache ? FetchPolicy.cacheFirst : FetchPolicy.noCache,
     );
     return await graphQLClient.query(queryOptions);
   }

@@ -2,13 +2,16 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:graphql/client.dart';
 import 'package:intl/intl.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:collection/collection.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 
 /// Generates a Random Number within a range
 Random randomNum = Random();
@@ -82,6 +85,18 @@ void _sortBySortType(
     artworks.sort((a, b) {
       return b.title.toLowerCase().compareTo(a.title.toLowerCase());
     });
+  } else if (sortType is SortSchoolNameAsc) {
+    artworks.sort((a, b) {
+      return a.schoolInfo.schoolName
+          .toLowerCase()
+          .compareTo(b.schoolInfo.schoolName.toLowerCase());
+    });
+  } else if (sortType is SortSchoolNameDesc) {
+    artworks.sort((a, b) {
+      return b.schoolInfo.schoolName
+          .toLowerCase()
+          .compareTo(a.schoolInfo.schoolName.toLowerCase());
+    });
   } else if (sortType is SortStudentNameAsc) {
     artworks.sort((a, b) {
       return a.artistName.toLowerCase().compareTo(b.artistName.toLowerCase());
@@ -107,4 +122,51 @@ void _sortBySortType(
       return b.datePosted.compareTo(a.datePosted);
     });
   }
+}
+
+Future<List<Artwork>> returnFilteredArtworks(
+  List<Artwork> artworks,
+  Map<String, FilterType> filters,
+) {
+  List<Artwork> filteredArtworks;
+  return Future(() {
+    filteredArtworks = _filterByFilterTypes(artworks, filters);
+  }).then((artworks) {
+    return filteredArtworks;
+  });
+}
+
+List<Artwork> _filterByFilterTypes(
+  List<Artwork> artworks,
+  Map<String, FilterType> filters,
+) {
+  List<Artwork> filteredList = artworks;
+  FilterTypeCategory categoryFilter = filters['category'];
+  if (categoryFilter.category != null &&
+      categoryFilter.category >= 1 &&
+      categoryFilter.category <= 5) {
+    filteredList = filteredList
+        .where(
+            (artwork) => artwork.category.categoryId == categoryFilter.category)
+        .toList();
+  }
+  FilterTypeSearch searchFilter = filters['search'];
+  if (searchFilter != null &&
+      searchFilter.searchQuery != null &&
+      searchFilter.searchQuery.isNotEmpty) {
+    filteredList = filteredList
+        .where(
+          (artwork) => (artwork.title
+                  .toLowerCase()
+                  .contains(searchFilter.searchQuery.toLowerCase()) ||
+              artwork.schoolInfo.schoolName
+                  .toLowerCase()
+                  .contains(searchFilter.searchQuery.toLowerCase()) ||
+              artwork.artistName
+                  .toLowerCase()
+                  .contains(searchFilter.searchQuery.toLowerCase())),
+        )
+        .toList();
+  }
+  return filteredList;
 }

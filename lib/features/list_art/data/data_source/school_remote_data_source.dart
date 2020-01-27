@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cloudinary_client/cloudinary_client.dart';
 import 'package:cloudinary_client/models/CloudinaryResponse.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql/client.dart';
 import 'package:student_art_collection/core/data/data_source/base_remote_data_source.dart';
 import 'package:student_art_collection/core/data/model/artwork_model.dart';
 import 'package:student_art_collection/core/data/model/image_model.dart';
@@ -56,6 +56,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
       <String, dynamic>{
         SCHOOL_SCHOOL_ID: uid,
       },
+      false,
     );
     return handleAuthResult(result, LOGIN_SCHOOL_QUERY_KEY);
   }
@@ -91,6 +92,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
       {
         SCHOOL_SCHOOL_ID: schoolId,
       },
+      true,
     );
     return convertResultToArtworkList(result, 'artBySchool');
   }

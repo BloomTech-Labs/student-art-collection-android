@@ -4,6 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/error/failure.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
+import 'package:student_art_collection/features/buy_art/domain/usecase/get_all_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
@@ -105,5 +107,29 @@ class InputConverter {
       return false;
     }
     return true;
+  }
+
+  Either<SearchFiltersFailure, SearchFilters> filterTypesToFilters(
+    Map<String, FilterType> filterTypes,
+  ) {
+    String searchQuery;
+    bool zipCode;
+    int category;
+    if (filterTypes != null) {
+      FilterTypeCategory categoryFilter = filterTypes['category'];
+      if (categoryFilter != null && categoryFilter.category != null) {
+        category = categoryFilter.category;
+      }
+      FilterTypeSearch searchFilter = filterTypes['search'];
+      if (searchFilter != null && checkNullOrEmpty(searchFilter.searchQuery)) {
+        searchQuery = searchFilter.searchQuery;
+      }
+      FilterTypeZipCode zipcodeFilter = filterTypes['zipcode'];
+      if (zipcodeFilter != null && zipcodeFilter.zipcode != null) {
+        zipCode = zipcodeFilter.zipcode;
+      }
+    }
+    return Right(SearchFilters(
+        searchQuery: searchQuery, zipcode: zipCode, category: category));
   }
 }

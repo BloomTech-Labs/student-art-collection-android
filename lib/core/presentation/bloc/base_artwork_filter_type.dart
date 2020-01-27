@@ -4,22 +4,35 @@ abstract class FilterType extends Equatable {
   const FilterType();
 }
 
-class FilterTypeArtworkTitle extends FilterType {
-  @override
-  List<Object> get props => null;
-}
+class FilterTypeSearch extends FilterType {
+  final String searchQuery;
 
-class FilterTypeArtistName extends FilterType {
-  @override
-  List<Object> get props => null;
-}
+  const FilterTypeSearch({
+    this.searchQuery,
+  });
 
-class FilterTypeSchoolName extends FilterType {
   @override
-  List<Object> get props => null;
+  List<Object> get props => [searchQuery];
 }
 
 class FilterTypeZipCode extends FilterType {
+  final bool zipcode;
+
+  const FilterTypeZipCode({
+    this.zipcode,
+  });
+
   @override
-  List<Object> get props => null;
+  List<Object> get props => [zipcode];
+}
+
+class FilterTypeCategory extends FilterType {
+  final int category;
+
+  const FilterTypeCategory({
+    this.category,
+  });
+
+  @override
+  List<Object> get props => [category];
 }

@@ -21,15 +21,14 @@ dependencies:
   data_connection_checker: ^0.3.4
   moor_flutter: ^2.0.0
   dio: ^3.0.7
-  flutter_bloc: ^2.1.1
+  flutter_bloc: ^3.1.0
   get_it: ^3.0.3
   extended_image: ^0.6.8
   flutter_screenutil: ^0.7.0
   flutter_staggered_grid_view: ^0.3.0
   flutter_swiper: ^1.1.6
   carousel_slider: ^1.4.0
-  graphql_flutter: ^2.1.1-beta.5
-  graphql: ^2.1.1-beta.5
+  graphql: ^3.0.0
   cached_network_image: ^2.0.0
   flutter_picker: ^1.1.0
   cloudinary_client: ^0.0.9
@@ -43,7 +42,8 @@ dependencies:
   flutter_svg: ^0.15.0
   flutter_inner_drawer: ^0.5.4
   grouped_buttons: ^1.0.4
-  dropdown_formfield: ^0.1.1
+  geolocator: ^5.2.0
+  geocoder: ^0.2.1
 
 dev_dependencies:
   intl_translation: ^0.17.9

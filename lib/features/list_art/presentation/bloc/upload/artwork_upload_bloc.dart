@@ -5,13 +5,13 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/session/session_manager.dart';
 import 'package:student_art_collection/core/util/input_converter.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/delete_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/update_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 
-import '../../list_art_text_constants.dart';
 import 'artwork_upload_event.dart';
 import 'artwork_upload_state.dart';
 import 'package:meta/meta.dart';

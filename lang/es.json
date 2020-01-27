@@ -32,6 +32,18 @@
   "artwork_upload_category_3": "Pintura",
   "artwork_upload_category_4": "Escultura",
   "artwork_upload_category_5": "Otro",
+  "artwork_upload_category_6": "Todos",
+
+  "artwork_sort_title_asc": "Artwork Title Asc.",
+  "artwork_sort_title_desc": "Artwork Title Desc.",
+  "artwork_sort_artist_name_asc": "Artist Name Asc.",
+  "artwork_sort_artist_name_desc": "Artist Name Desc.",
+  "artwork_sort_school_name_asc": "School Name Asc.",
+  "artwork_sort_school_name_desc": "School Name Desc.",
+  "artwork_sort_most_recent": "Most Recent",
+  "artwork_sort_oldest": "Oldest",
+  "artwork_sort_most_expensive": "Most Expensive",
+  "artwork_sort_least_expensive": "Least Expensive",
 
   "artwork_upload_artwork_title_label": "Ingrese el título de la obra de arte",
   "artwork_upload_student_name_label": "Ingrese el nombre del estudiante",
@@ -79,7 +91,8 @@
 
   "gallery_app_bar_title": "Galería",
   "gallery_error_state_message": "Error",
-
+  "gallery_empty_artworks_message_label": "Couldn't find any artworks",
+  "gallery_current_zipcode_error": "Couldn't locate your zipcode",
 
   "artwork_details_top_banner_message": "¿Quieres comprar esta pieza? Rellena el siguiente formulario",
   "artwork_details_untitled_label": "Intitulado",
@@ -94,7 +107,9 @@
 
 
   "carousel_widget_default_student_name": "Anónimo",
-  "gallery_grid_widget_default_artwork_title": "Intitulado"
+  "gallery_grid_widget_default_artwork_title": "Intitulado",
+
+  "network_failed_error_message_label": "Check your network connection and try again."
 }
 
 

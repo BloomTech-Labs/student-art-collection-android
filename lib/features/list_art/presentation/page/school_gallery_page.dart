@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/core/presentation/bloc/base_artwork_filter_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_sort_type.dart';
 import 'package:student_art_collection/core/presentation/bloc/base_artwork_state.dart';
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
@@ -59,12 +60,32 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
   @override
   Widget build(BuildContext context) {
     return FilterDrawer(
-      _innerDrawerKey,
+      isSchool: true,
+      onApplyPressed: (filters, sort) {
+        _dispatchGetSchoolArtEvent(
+          sortType: sort,
+          filterTypes: filters,
+        );
+        _toggle();
+      },
+      innerDrawerKey: _innerDrawerKey,
       scaffold: BlocProvider<SchoolGalleryBloc>(
         create: (context) => sl<SchoolGalleryBloc>(),
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 1.0),
+              child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
+                builder: (context, state) {
+                  _blocContext = context;
+                  if (state is GalleryLoadingState) {
+                    return AppBarLoading();
+                  }
+                  return EmptyContainer();
+                },
+              ),
+            ),
             centerTitle: true,
             actions: <Widget>[
               PopupMenuButton<SchoolGalleryChoice>(
@@ -103,29 +124,19 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
               )
             ],
             title: AppBarLogo(),
-            bottom: PreferredSize(
-              preferredSize: Size(double.infinity, 1.0),
-              child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
-                builder: (context, state) {
-                  _blocContext = context;
-                  if (state is GalleryLoadingState) {
-                    return AppBarLoading();
-                  }
-                  return EmptyContainer();
-                },
-              ),
-            ),
           ),
           body: BlocListener<SchoolGalleryBloc, GalleryState>(
             listener: (context, state) {
               _blocContext = context;
-              if (state is GalleryLoadedState) {
-              } else if (state is Unauthorized) {
+              if (state is Unauthorized) {
                 Navigator.pushReplacementNamed(context, LoginPage.ID);
+              } else if (state is GalleryErrorState) {
+                showSnackBar(state.message);
               }
             },
             child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
               builder: (context, state) {
+                _blocContext = context;
                 if (state is GalleryLoadedState) {
                   artworks = state.artworkList;
                   return GalleryGrid(
@@ -137,7 +148,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                           context, ArtworkUploadPage.ID,
                           arguments: artwork);
                       if (result is ArtworkToReturn) {
-                        showSnackBar(context, result.message);
+                        showSnackBar(result.message);
                         if (result.tag == 'update') {
                           setState(() {
                             artworks[index] = result.artwork;
@@ -151,7 +162,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                     },
                   );
                 } else if (state is GalleryInitialState) {
-                  _dispatchGetSchoolArtEvent(context);
+                  _dispatchGetSchoolArtEvent();
                 }
                 return EmptyContainer();
               },
@@ -169,7 +180,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
               final result =
                   await Navigator.pushNamed(context, ArtworkUploadPage.ID);
               if (result is ArtworkToReturn) {
-                showSnackBar(context, result.message);
+                showSnackBar(result.message);
                 setState(() {
                   artworks.add(result.artwork);
                 });
@@ -186,13 +197,11 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
               items: [
                 TitledNavigationBarItem(
                     title: displayLocalizedString(
-                      context,
                       TEXT_SCHOOL_GALLERY_HOME_TAG,
                     ),
                     icon: Icons.home),
                 TitledNavigationBarItem(
                     title: displayLocalizedString(
-                      context,
                       TEXT_SCHOOL_GALLERY_SEARCH_TAG,
                     ),
                     icon: Icons.search),
@@ -207,10 +216,14 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     );
   }
 
-  void _dispatchGetSchoolArtEvent(BuildContext context) {
-    BlocProvider.of<SchoolGalleryBloc>(context).add(
+  void _dispatchGetSchoolArtEvent({
+    Map<String, FilterType> filterTypes,
+    SortType sortType,
+  }) {
+    BlocProvider.of<SchoolGalleryBloc>(_blocContext).add(
       GetAllSchoolArtworkEvent(
-        sortType: SortNameAsc(),
+        sortType: sortType,
+        filterTypes: filterTypes,
       ),
     );
   }
@@ -221,18 +234,17 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
     );
   }
 
-  void showSnackBar(BuildContext context, String message) {
+  void showSnackBar(String message) {
     final snackBar = SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text(displayLocalizedString(
-          context,
           message,
         )));
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  String displayLocalizedString(BuildContext context, String label) {
+  String displayLocalizedString(String label) {
     return AppLocalizations.of(context).translate(label);
   }
 }
