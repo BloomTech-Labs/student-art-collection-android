@@ -113,13 +113,9 @@ class InputConverter {
     Map<String, FilterType> filterTypes,
   ) {
     String searchQuery;
-    String zipCode;
+    bool zipCode;
     int category;
     if (filterTypes != null) {
-      FilterTypeZipCode zipcodeFilter = filterTypes['zipcode'];
-      if (zipcodeFilter != null && checkNullOrEmpty(zipcodeFilter.zipcode)) {
-        zipCode = zipcodeFilter.zipcode;
-      }
       FilterTypeCategory categoryFilter = filterTypes['category'];
       if (categoryFilter != null && categoryFilter.category != null) {
         category = categoryFilter.category;
@@ -127,6 +123,10 @@ class InputConverter {
       FilterTypeSearch searchFilter = filterTypes['search'];
       if (searchFilter != null && checkNullOrEmpty(searchFilter.searchQuery)) {
         searchQuery = searchFilter.searchQuery;
+      }
+      FilterTypeZipCode zipcodeFilter = filterTypes['zipcode'];
+      if (zipcodeFilter != null && zipcodeFilter.zipcode != null) {
+        zipCode = zipcodeFilter.zipcode;
       }
     }
     return Right(SearchFilters(

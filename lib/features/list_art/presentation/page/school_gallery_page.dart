@@ -74,6 +74,18 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 1.0),
+              child: BlocBuilder<SchoolGalleryBloc, GalleryState>(
+                builder: (context, state) {
+                  _blocContext = context;
+                  if (state is GalleryLoadingState) {
+                    return AppBarLoading();
+                  }
+                  return EmptyContainer();
+                },
+              ),
+            ),
             centerTitle: true,
             actions: <Widget>[
               PopupMenuButton<SchoolGalleryChoice>(
@@ -116,12 +128,10 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
           body: BlocListener<SchoolGalleryBloc, GalleryState>(
             listener: (context, state) {
               _blocContext = context;
-              if (state is GalleryLoadedState) {
-                if (state.artworkList.length == 0) {
-                  showSnackBar(TEXT_GALLERY_EMPTY_ARTWORKS_MESSAGE_LABEL);
-                }
-              } else if (state is Unauthorized) {
+              if (state is Unauthorized) {
                 Navigator.pushReplacementNamed(context, LoginPage.ID);
+              } else if (state is GalleryErrorState) {
+                showSnackBar(state.message);
               }
             },
             child: BlocBuilder<SchoolGalleryBloc, GalleryState>(

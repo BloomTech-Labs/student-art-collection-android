@@ -89,8 +89,8 @@
 
   "gallery_app_bar_title": "Galerie",
   "gallery_error_state_message": "Erreur",
-
   "gallery_empty_artworks_message_label": "Couldn't find any artworks",
+  "gallery_current_zipcode_error": "Couldn't locate your zipcode",
 
   "artwork_details_top_banner_message": "Vouloir acheter? Remplissez le formulaire ci-dessous",
   "artwork_details_untitled_label": "Sans titre",
@@ -105,5 +105,7 @@
 
 
   "carousel_widget_default_student_name": "Anonyme",
-  "gallery_grid_widget_default_artwork_title": "Sans titre"
+  "gallery_grid_widget_default_artwork_title": "Sans titre",
+
+  "network_failed_error_message_label": "Check your network connection and try again."
 }

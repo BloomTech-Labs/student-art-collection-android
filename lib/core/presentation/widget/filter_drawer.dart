@@ -51,7 +51,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
   bool nearMeSelected = false;
   String _selectedCategory;
   String _searchQuery = '';
-  String _zipcode;
 
   final searchTextController = TextEditingController();
 
@@ -291,11 +290,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           filterTypeCategory = FilterTypeCategory(
                               category:
                                   categories.indexOf(_selectedCategory) + 1);
-                          if (nearMeSelected) {
-                            _zipcode = await getCurrentUserZipcode();
-                          }
                           filterTypeZipCode = FilterTypeZipCode(
-                            zipcode: _zipcode,
+                            zipcode: nearMeSelected,
                           );
                           onApplyPressed({
                             'category': filterTypeCategory,
@@ -366,21 +362,5 @@ class _FilterDrawerState extends State<FilterDrawer> {
       return SortPriceAsc();
     else
       return SortNameAsc();
-  }
-
-  Future<String> getCurrentUserZipcode() async {
-    try {
-      Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        Coordinates(
-          position.latitude,
-          position.longitude,
-        ),
-      );
-      return addresses.first.postalCode;
-    } on Exception {
-      return null;
-    }
   }
 }

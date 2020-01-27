@@ -1,10 +1,12 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:graphql/client.dart';
+import 'package:meta/meta.dart';
 
 abstract class BaseRemoteDataSource {
   final GraphQLClient graphQLClient;
 
   BaseRemoteDataSource({
-    this.graphQLClient,
+    @required this.graphQLClient,
   });
 
   Future<QueryResult> performMutation(

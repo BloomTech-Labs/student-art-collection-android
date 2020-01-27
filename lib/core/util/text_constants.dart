@@ -1,4 +1,6 @@
 //Starter Page
+import 'package:student_art_collection/core/error/failure.dart';
+
 const TEXT_STARTER_APP_NAME = 'starter_app_name';
 const TEXT_STARTER_LOGIN_BUTTON = 'starter_login_button';
 const TEXT_STARTER_GUEST_BUTTON = 'starter_guest_button';
@@ -62,6 +64,35 @@ const TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL =
 const TEXT_ARTWORK_UPLOAD_UPLOAD_BUTTON_LABEL =
     'artwork_upload_upload_button_label';
 
+const TEXT_ARTWORK_UPLOAD_UPLOADING_MESSAGE_LABEL =
+    'artwork_upload_uploading_message_label';
+const TEXT_ARTWORK_UPLOAD_UPDATING_MESSAGE_LABEL =
+    'artwork_upload_updating_message_label';
+const TEXT_IMAGE_UPLOADING_MESSAGE_LABEL = 'image_uploading_message_label';
+const TEXT_ARTWORK_UPLOAD_SUCCESS_LABEL = 'artwork_upload_success_label';
+const TEXT_ARTWORK_UPDATE_SUCCESS_LABEL = 'artwork_update_success_label';
+const TEXT_GENERIC_ERROR_MESSAGE_LABEL = 'generic_error_message_label';
+const TEXT_GENERIC_IMAGE_HOST_ERROR_MESSAGE_LABEL =
+    'generic_image_host_error_message_label';
+const TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL =
+    'artwork_uploading_wait_message_label';
+const TEXT_ARTWORK_DELETE_ERROR_MESSAGE_LABEL =
+    'artwork_delete_error_message_label';
+const TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL =
+    'artwork_delete_success_message_label';
+const TEXT_ARTWORK_DESCRIPTION_FORM_HINT_LABEL =
+    "artwork_description_form_hint_label";
+const TEXT_ARTWORK_DELETE_DIALOG_TITLE_LABEL = 'artwork_delete_dialog_title';
+const TEXT_ARTWORK_DELETE_DIALOG_DESCRIPTION_LABEL =
+    'artwork_delete_dialog_description';
+const TEXT_ARTWORK_IMAGE_DIALOG_TITLE_LABEL = 'artwork_dialog_image_title';
+const TEXT_ARTWORK_IMAGE_DIALOG_DESCRIPTION_LABEL =
+    'artwork_dialog_image_description';
+const TEXT_ARTWORK_IMAGE_DIALOG_CAMERA_TEXT_LABEL =
+    'artwork_image_dialog_camera_text_label';
+const TEXT_ARTWORK_IMAGE_DIALOG_GALLERY_TEXT_LABEL =
+    'artwork_image_dialog_gallery_text_label';
+
 //Registration Page
 const TEXT_REGISTRATION_APP_BAR_TITLE = 'registration_app_bar_title';
 const TEXT_REGISTRATION_APP_BAR_ERROR_STATE_MESSAGE =
@@ -87,9 +118,10 @@ const TEXT_SCHOOL_GALLERY_MESSAGES_TAG = 'school_gallery_messages_tag';
 //Gallery Page
 const TEXT_GALLERY_APP_BAR_TITLE = 'gallery_app_bar_title';
 const TEXT_GALLERY_ERROR_STATE_MESSAGE = 'gallery_error_state_message';
-
 const TEXT_GALLERY_EMPTY_ARTWORKS_MESSAGE_LABEL =
     'gallery_empty_artworks_message_label';
+const TEXT_GALLERY_CURRENT_ZIPCODE_ERROR_LABEL =
+    'gallery_current_zipcode_error';
 
 //Artwork Details Page
 const TEXT_ARTWORK_DETAILS_TOP_BANNER_MESSAGE =
@@ -114,3 +146,7 @@ const TEXT_CAROUSEL_WIDGET_DEFAULT_STUDENT_NAME =
     'carousel_widget_default_student_name';
 const TEXT_GALLERY_GRID_WIDGET_DEFAULT_ARTWORK_TITLE =
     'gallery_grid_widget_default_artwork_title';
+
+//NetworkFailure
+const TEXT_NETWORK_FAILED_ERROR_MESSAGE_LABEL = ''
+    '';

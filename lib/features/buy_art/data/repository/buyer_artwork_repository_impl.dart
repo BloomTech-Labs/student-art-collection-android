@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/services.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
+import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/buyer_local_data_source.dart';
 import 'package:student_art_collection/features/buy_art/data/data_source/buyer_remote_data_source.dart';
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
@@ -23,7 +25,6 @@ class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
   @override
   Future<Either<Failure, List<Artwork>>> getAllArtwork(
       {SearchFilters searchFilters}) async {
-    // TODO: implement getAllArtwork
     if (await networkInfo.isConnected) {
       try {
         final remoteArtworkList =
@@ -32,6 +33,10 @@ class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
         return Right(remoteArtworkList);
       } on ServerException {
         return Left(ServerFailure());
+      } on PlatformException {
+        return Left(
+          PlatformFailure(message: TEXT_GALLERY_CURRENT_ZIPCODE_ERROR_LABEL),
+        );
       }
     } else {
       try {
@@ -58,7 +63,6 @@ class BuyerArtworkRepositoryImpl implements BuyerArtworkRepository {
         return Left(ServerFailure());
       }
     } else {
-      //todo: Setup Queueing Service
       return Left(ServerFailure());
     }
   }

@@ -17,3 +17,8 @@ class GetArtworkList extends GalleryEvent {
   @override
   List<Object> get props => null;
 }
+
+class GetCurrentZipcodeEvent extends GalleryEvent {
+  @override
+  List<Object> get props => null;
+}

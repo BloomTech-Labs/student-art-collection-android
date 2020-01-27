@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:graphql/client.dart';
 import 'package:student_art_collection/core/data/data_source/base_remote_data_source.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
@@ -17,20 +20,26 @@ abstract class BuyerRemoteDataSource {
 
   Future<ContactForm> contactFormConfirmation(
       {@required ContactForm contactForm});
+
+  Future<String> getCurrentZipcode();
 }
 
 class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
     implements BuyerRemoteDataSource {
-  GraphQLBuyerRemoteDataSource({client: GraphQLClient})
-      : super(graphQLClient: client);
+  final Geolocator geolocator;
+
+  GraphQLBuyerRemoteDataSource({
+    client: GraphQLClient,
+    @required this.geolocator,
+  }) : super(graphQLClient: client);
 
   @override
   Future<List<Artwork>> getAllArtwork({SearchFilters searchFilters}) async {
-    if (searchFilters.zipcode != null) {
+    if (searchFilters.zipcode != null && searchFilters.zipcode == true) {
       final QueryResult result = await performQuery(
           GET_ARTWORKS_BY_ZIPCODE,
           {
-            'zip': searchFilters.zipcode,
+            'zip': await getCurrentZipcode(),
           },
           true);
       if (result.hasException) {
@@ -66,5 +75,18 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
     }
 
     return ContactFormModel.fromJson(result.data['action']);
+  }
+
+  @override
+  Future<String> getCurrentZipcode() async {
+    Position position = await geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(
+      Coordinates(
+        position.latitude,
+        position.longitude,
+      ),
+    );
+    return addresses.first.postalCode;
   }
 }

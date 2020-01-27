@@ -57,7 +57,7 @@
   "image_uploading_message_label": "Uploading Image",
   "artwork_upload_success_label": "Art was successfully uploaded!",
   "artwork_update_success_label": "Art was successfully updated!",
-  "generic_error_message_label": "Something went wrong",
+  "generic_error_message_label": "Something went wrong, try again",
   "generic_image_host_error_message_label": "There was a problem uploading your image",
   "artwork_uploading_wait_message_label": "Please wait until uploading is complete",
   "artwork_delete_error_message_label": "There was a problem deleting the artwork",
@@ -90,8 +90,8 @@
 
   "gallery_app_bar_title": "Gallery",
   "gallery_error_state_message": "Error",
-
   "gallery_empty_artworks_message_label": "Couldn't find any artworks",
+  "gallery_current_zipcode_error": "Couldn't locate your zipcode",
 
   "artwork_details_top_banner_message": "Want to purchase this piece? Fill out the form below",
   "artwork_details_untitled_label": "Untitled",
@@ -106,7 +106,9 @@
 
 
   "carousel_widget_default_student_name": "Anonymous",
-  "gallery_grid_widget_default_artwork_title": "Untitled"
+  "gallery_grid_widget_default_artwork_title": "Untitled",
+
+  "network_failed_error_message_label": "Check your network connection and try again."
 }
 
 

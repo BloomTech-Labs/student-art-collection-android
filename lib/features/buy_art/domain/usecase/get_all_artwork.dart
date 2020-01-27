@@ -19,7 +19,7 @@ class GetArtwork implements UseCase<List<Artwork>, SearchFilters> {
 
 class SearchFilters extends Equatable {
   final String searchQuery;
-  final String zipcode;
+  final bool zipcode;
   final int category;
 
   const SearchFilters({

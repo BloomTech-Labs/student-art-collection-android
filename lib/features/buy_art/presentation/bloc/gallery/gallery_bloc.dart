@@ -11,7 +11,6 @@ import 'package:student_art_collection/core/presentation/bloc/base_artwork_state
 import 'package:student_art_collection/core/util/input_converter.dart';
 import 'package:student_art_collection/features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'package:student_art_collection/features/buy_art/domain/usecase/get_all_artwork.dart';
-
 part 'gallery_event.dart';
 
 class GalleryBloc extends BaseArtworkBloc<GalleryEvent> {

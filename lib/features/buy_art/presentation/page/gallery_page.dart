@@ -95,8 +95,7 @@ class _GalleryPageState extends State<GalleryPage> {
             listener: (context, state) {
               _blocContext = context;
               if (state is GalleryErrorState) {
-                final snackBar = SnackBar(content: Text(state.message));
-                Scaffold.of(context).showSnackBar(snackBar);
+                showSnackBar(context, state.message);
               }
             },
             child: BlocBuilder<GalleryBloc, GalleryState>(

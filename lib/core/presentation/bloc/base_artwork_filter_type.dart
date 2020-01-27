@@ -8,7 +8,7 @@ class FilterTypeSearch extends FilterType {
   final String searchQuery;
 
   const FilterTypeSearch({
-    this.searchQuery = '',
+    this.searchQuery,
   });
 
   @override
@@ -16,7 +16,7 @@ class FilterTypeSearch extends FilterType {
 }
 
 class FilterTypeZipCode extends FilterType {
-  final String zipcode;
+  final bool zipcode;
 
   const FilterTypeZipCode({
     this.zipcode,

@@ -66,3 +66,12 @@ class SearchFiltersFailure extends Failure {
   @override
   List<Object> get props => [message];
 }
+
+class PlatformFailure extends Failure {
+  final String message;
+
+  PlatformFailure({this.message});
+
+  @override
+  List<Object> get props => [message];
+}
