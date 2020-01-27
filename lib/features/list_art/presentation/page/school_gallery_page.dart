@@ -123,7 +123,10 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                 icon: Icon(Icons.filter_list),
               )
             ],
-            title: AppBarLogo(),
+            title: Text(
+              'Admin',
+              style: TextStyle(fontSize: 24),
+            ),
           ),
           body: BlocListener<SchoolGalleryBloc, GalleryState>(
             listener: (context, state) {
@@ -202,9 +205,9 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                     icon: Icons.home),
                 TitledNavigationBarItem(
                     title: displayLocalizedString(
-                      TEXT_SCHOOL_GALLERY_SEARCH_TAG,
+                      TEXT_SCHOOL_GALLERY_PROFILE_TAG,
                     ),
-                    icon: Icons.search),
+                    icon: Icons.person),
               ],
               activeColor: accentColor,
             ),

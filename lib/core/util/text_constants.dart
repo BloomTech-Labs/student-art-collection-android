@@ -112,7 +112,7 @@ const TEXT_REGISTRATION_BUTTON_LABEL = 'registration_button_label';
 //School Gallery Page
 const TEXT_SCHOOL_GALLERY_APP_BAR_TITLE = 'school_gallery_app_bar_title';
 const TEXT_SCHOOL_GALLERY_HOME_TAG = 'school_gallery_home_tag';
-const TEXT_SCHOOL_GALLERY_SEARCH_TAG = 'school_gallery_search_tag';
+const TEXT_SCHOOL_GALLERY_PROFILE_TAG = 'school_gallery_profile_tag';
 const TEXT_SCHOOL_GALLERY_MESSAGES_TAG = 'school_gallery_messages_tag';
 
 //Gallery Page
@@ -122,6 +122,7 @@ const TEXT_GALLERY_EMPTY_ARTWORKS_MESSAGE_LABEL =
     'gallery_empty_artworks_message_label';
 const TEXT_GALLERY_CURRENT_ZIPCODE_ERROR_LABEL =
     'gallery_current_zipcode_error';
+const TEXT_SCHOOL_GALLERY_CART_TAG = 'school_gallery_cart_tag';
 
 //Artwork Details Page
 const TEXT_ARTWORK_DETAILS_TOP_BANNER_MESSAGE =
