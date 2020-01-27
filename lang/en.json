@@ -84,7 +84,7 @@
 
   "school_gallery_app_bar_title": "School Art Gallery",
   "school_gallery_home_tag": "Home",
-  "school_gallery_search_tag": "Search",
+  "school_gallery_profile_tag": "Profile",
   "school_gallery_messages_tag": "Messages",
 
 
@@ -92,6 +92,7 @@
   "gallery_error_state_message": "Error",
   "gallery_empty_artworks_message_label": "Couldn't find any artworks",
   "gallery_current_zipcode_error": "Couldn't locate your zipcode",
+  "school_gallery_cart_tag": "Cart",
 
   "artwork_details_top_banner_message": "Want to purchase this piece? Fill out the form below",
   "artwork_details_untitled_label": "Untitled",

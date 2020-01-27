@@ -11,8 +11,10 @@ import 'package:student_art_collection/core/presentation/widget/empty_container.
 import 'package:student_art_collection/core/presentation/widget/filter_drawer.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
+import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import '../../../../app_localization.dart';
 import '../../../../service_locator.dart';
 import 'artwork_details_page.dart';
@@ -28,6 +30,7 @@ class _GalleryPageState extends State<GalleryPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BuildContext _blocContext;
   List<Artwork> artworks;
+
   //  Current State of InnerDrawerState
   final GlobalKey<InnerDrawerState> _innerDrawerKey =
       GlobalKey<InnerDrawerState>();
@@ -54,43 +57,39 @@ class _GalleryPageState extends State<GalleryPage> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
-            bottom: PreferredSize(
-              preferredSize: Size(double.infinity, 1.0),
-              child: BlocBuilder<GalleryBloc, GalleryState>(
-                builder: (context, state) {
-                  _blocContext = context;
-                  if (state is GalleryLoadingState) {
-                    return AppBarLoading();
-                  }
-                  return EmptyContainer();
-                },
+              bottom: PreferredSize(
+                preferredSize: Size(double.infinity, 1.0),
+                child: BlocBuilder<GalleryBloc, GalleryState>(
+                  builder: (context, state) {
+                    _blocContext = context;
+                    if (state is GalleryLoadingState) {
+                      return AppBarLoading();
+                    }
+                    return EmptyContainer();
+                  },
+                ),
               ),
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () {
-                  buildInitial();
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.filter_list),
-                onPressed: () {
-                  _toggle();
-                },
-              ),
-            ],
-            centerTitle: true,
-            title: Hero(
-              tag: 'logo',
-              child: SvgPicture.asset(
-                'assets/artco_logo_large.svg',
-                color: Colors.white,
-                semanticsLabel: 'App Logo',
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () {
+                    buildInitial();
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.filter_list),
+                  onPressed: () {
+                    _toggle();
+                  },
+                ),
+              ],
+              centerTitle: true,
+              title: Text(
+                'Browse',
+                style: TextStyle(
+                  fontSize: 24,
+                ),
+              )),
           body: BlocListener<GalleryBloc, GalleryState>(
             listener: (context, state) {
               _blocContext = context;
@@ -108,6 +107,32 @@ class _GalleryPageState extends State<GalleryPage> {
                 return EmptyContainer();
               },
             ),
+          ),
+          bottomNavigationBar: BottomAppBar(
+            color: Colors.transparent,
+            child: TitledBottomNavigationBar(
+              currentIndex: 0, // Use this to update the Bar giving a position
+              onTap: (index) {
+                print("Selected Index: $index");
+              },
+              items: [
+                TitledNavigationBarItem(
+                    title: displayLocalizedString(
+                      context,
+                      TEXT_SCHOOL_GALLERY_HOME_TAG,
+                    ),
+                    icon: Icons.home),
+                TitledNavigationBarItem(
+                    title: displayLocalizedString(
+                      context,
+                      TEXT_SCHOOL_GALLERY_CART_TAG,
+                    ),
+                    icon: Icons.shopping_cart),
+              ],
+              activeColor: accentColor,
+            ),
+            shape: CircularNotchedRectangle(),
+            notchMargin: 4.0,
           ),
         ),
       ),
