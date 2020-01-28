@@ -35,11 +35,13 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
 
   @override
   Future<List<Artwork>> getAllArtwork({SearchFilters searchFilters}) async {
-    if (searchFilters.zipcode != null && searchFilters.zipcode == true) {
+    if (searchFilters.zipcode != null && searchFilters.category != null) {
       final QueryResult result = await performQuery(
-          GET_ARTWORKS_BY_ZIPCODE,
+          GET_ARTWORKS_BY_FILTER,
           {
-            'zip': await getCurrentZipcode(),
+            'zipcode':
+                searchFilters.zipcode == true ? await getCurrentZipcode() : '',
+            'category': searchFilters.category.toString(),
           },
           true);
       if (result.hasException) {
