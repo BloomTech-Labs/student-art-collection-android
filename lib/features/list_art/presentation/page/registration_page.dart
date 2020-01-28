@@ -43,6 +43,7 @@ class _SchoolRegistrationPageState extends State<SchoolRegistrationPage> {
         key: _scaffoldKey,
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(
+          centerTitle: true,
           title: Text(
             AppLocalizations.of(context)
                 .translate(TEXT_REGISTRATION_APP_BAR_TITLE),
@@ -154,18 +155,20 @@ class _SchoolRegistrationPageState extends State<SchoolRegistrationPage> {
                             .translate(TEXT_REGISTRATION_ZIPCODE_LABEL)),
                   ),
                   SizedBox(height: 10),
-                  FlatButton(
-                      color: accentColor,
-                      child: Text(
-                        AppLocalizations.of(context)
-                            .translate(TEXT_REGISTRATION_BUTTON_LABEL),
-                        style: TextStyle(
-                          color: Colors.white,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FloatingActionButton(
+                        onPressed: () {
+                          dispatchRegistration();
+                        },
+                        child: Icon(
+                          Icons.arrow_forward,
+                          size: 40,
                         ),
-                      ),
-                      onPressed: () {
-                        dispatchRegistration();
-                      })
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
