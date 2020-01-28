@@ -343,7 +343,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget middleButton(
       {@required double position, Function onTap, Widget icon}) {
     return Positioned(
-      right: 16,
+      right: 8,
       bottom: position,
       child: Container(
         child: Padding(

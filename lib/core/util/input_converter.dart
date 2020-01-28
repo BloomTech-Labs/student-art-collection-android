@@ -37,6 +37,23 @@ class InputConverter {
     state: String,
     zipcode: String,
   }) {
+    if (!checkNullOrEmpty(email) ||
+        !checkNullOrEmpty(password) ||
+        !checkNullOrEmpty(verifyPassword) ||
+        !checkNullOrEmpty(schoolName) ||
+        !checkNullOrEmpty(address) ||
+        !checkNullOrEmpty(city) ||
+        !checkNullOrEmpty(state) ||
+        !checkNullOrEmpty(zipcode)) {
+      return Left(
+          UserInputFailure(message: 'Please make sure no fields are empty.'));
+    } else if (password != verifyPassword) {
+      return Left(UserInputFailure(message: 'Your passwords do not match.'));
+    } else if (password.toString().length < 8 ||
+        password.toString().length > 64) {
+      return Left(UserInputFailure(
+          message: 'Password should be between 8 and 64 characters.'));
+    }
     return Right(SchoolToRegister(
       email: email,
       password: password,
