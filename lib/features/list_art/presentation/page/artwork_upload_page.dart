@@ -137,6 +137,17 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
   }
 
   @override
+  void dispose() {
+    titleTextController.dispose();
+    studentTextController.dispose();
+    descriptionTextController.dispose();
+    dateTextController.dispose();
+    priceTextController.dispose();
+    categoryTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider<ArtworkUploadBloc>(
       create: (context) => _artworkUploadBloc,

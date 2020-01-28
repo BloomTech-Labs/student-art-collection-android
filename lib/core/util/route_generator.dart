@@ -6,6 +6,8 @@ import 'package:student_art_collection/features/list_art/presentation/page/artwo
 import 'package:student_art_collection/core/presentation/page/login_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_home_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_profile_page.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -28,8 +30,12 @@ class RouteGenerator {
         }
       case SchoolRegistrationPage.ID:
         return MaterialPageRoute(builder: (_) => SchoolRegistrationPage());
+      case SchoolHomePage.ID:
+        return MaterialPageRoute(builder: (_) => SchoolHomePage());
       case SchoolGalleryPage.ID:
         return MaterialPageRoute(builder: (_) => SchoolGalleryPage());
+      case SchoolProfilePage.ID:
+        return MaterialPageRoute(builder: (_) => SchoolProfilePage());
       case ArtworkUploadPage.ID:
         {
           if (args is Artwork) {

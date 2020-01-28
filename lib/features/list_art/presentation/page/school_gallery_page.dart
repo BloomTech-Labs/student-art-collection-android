@@ -171,8 +171,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
               },
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: FloatingActionButton(
             elevation: 6.0,
             child: Icon(
@@ -189,30 +188,6 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
                 });
               }
             },
-          ),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.transparent,
-            child: TitledBottomNavigationBar(
-              currentIndex: 0, // Use this to update the Bar giving a position
-              onTap: (index) {
-                print("Selected Index: $index");
-              },
-              items: [
-                TitledNavigationBarItem(
-                    title: displayLocalizedString(
-                      TEXT_SCHOOL_GALLERY_HOME_TAG,
-                    ),
-                    icon: Icons.home),
-                TitledNavigationBarItem(
-                    title: displayLocalizedString(
-                      TEXT_SCHOOL_GALLERY_PROFILE_TAG,
-                    ),
-                    icon: Icons.person),
-              ],
-              activeColor: accentColor,
-            ),
-            shape: CircularNotchedRectangle(),
-            notchMargin: 4.0,
           ),
         ),
       ),

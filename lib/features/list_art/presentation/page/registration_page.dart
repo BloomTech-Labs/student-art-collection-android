@@ -8,6 +8,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/auth/
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_home_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
@@ -65,7 +66,7 @@ class _SchoolRegistrationPageState extends State<SchoolRegistrationPage> {
         body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
           listener: (context, state) {
             if (state is Authorized) {
-              Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
+              Navigator.pushReplacementNamed(context, SchoolHomePage.ID);
             } else if (state is SchoolAuthError) {
               showSnackBar(state.message);
             }

@@ -13,6 +13,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/auth/
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_state.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/registration_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
+import 'package:student_art_collection/features/list_art/presentation/page/school_home_page.dart';
 
 import '../../../features/buy_art/presentation/page/gallery_page.dart';
 import '../../../features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
@@ -33,7 +34,7 @@ class LoginPage extends StatelessWidget {
         body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
           listener: (context, state) {
             if (state is Authorized) {
-              Navigator.pushReplacementNamed(context, SchoolGalleryPage.ID);
+              Navigator.pushReplacementNamed(context, SchoolHomePage.ID);
             } else if (state is SchoolAuthError) {
               if (state.message != null) {
                 showSnackBar(context, state.message);
@@ -199,8 +200,6 @@ class _LoginFormState extends State<LoginForm> {
                   size: 40,
                   color: Colors.black,
                 ),
-                /* label: AppLocalizations.of(context)*/
-                /*     .translate(TEXT_LOGIN_LOGIN_BUTTON),*/
                 onTap: () {
                   dispatchLogin();
                 },
@@ -208,20 +207,16 @@ class _LoginFormState extends State<LoginForm> {
             } else {
               return Stack(children: <Widget>[
                 middleButton(
-                  position: positionMiddleButton,
-                  onTap: () {},
-                ),
+                    position: positionMiddleButton,
+                    onTap: () {},
+                    icon: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.black))),
                 SizedBox.expand(
                   child: Container(
                     color: Colors.black.withOpacity(.7),
                   ),
                 ),
-                Positioned(
-                  bottom: positionMiddleButton + 18,
-                  right: 34,
-                  child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
-                )
               ]);
             }
           },
