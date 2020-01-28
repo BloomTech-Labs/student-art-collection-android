@@ -23,10 +23,12 @@ import 'package:student_art_collection/features/list_art/domain/usecase/login_sc
 import 'package:student_art_collection/features/list_art/domain/usecase/logout_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/update_artwork.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/update_school_info.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/gallery/school_gallery_bloc.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/profile/school_profile_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 
 import 'core/util/secret_loader.dart';
@@ -97,11 +99,17 @@ Future init() async {
         deleteArtwork: sl(),
       ));
 
+  sl.registerFactory(() => SchoolProfileBloc(
+        sessionManager: sl(),
+        updateSchoolInfo: sl(),
+      ));
+
   // Use cases
   sl.registerLazySingleton(() => LoginSchool(sl()));
   sl.registerLazySingleton(() => RegisterNewSchool(sl()));
   sl.registerLazySingleton(() => LoginSchoolOnReturn(sl()));
   sl.registerLazySingleton(() => LogoutSchool(sl()));
+  sl.registerLazySingleton(() => UpdateSchoolInfo(sl()));
 
   sl.registerLazySingleton(() => GetAllSchoolArt(sl()));
   sl.registerLazySingleton(() => UploadArtwork(sl()));

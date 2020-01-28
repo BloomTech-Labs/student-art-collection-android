@@ -27,6 +27,33 @@ const String ADD_SCHOOL_MUTATION = r'''
     }
 ''';
 
+const String UPDATE_SCHOOL_MUTATION = r'''
+  mutation AddSchool(
+    school_id: ID!, 
+    $school_name: String!,
+    $email: String!,
+    $address: String!,
+    $city: String!,
+    $zipcode: String!) {
+      action: updateSchool(
+        school_id: $school_id,
+        school_name: $school_name,
+        email: $email,
+        address: $address,
+        city: $city,
+        zipcode: $zipcode
+       ) {
+        id,
+        school_id,
+        school_name,
+        email, 
+        address,
+        city,
+        zipcode
+      }
+    }
+''';
+
 const String ADD_ARTWORK_MUTATION = r'''
   mutation AddArtworkToSchool(
     $school_id: ID!,

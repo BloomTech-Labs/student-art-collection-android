@@ -20,6 +20,7 @@ import 'package:student_art_collection/features/list_art/data/mock_data.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/delete_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/update_school_info.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 import 'package:meta/meta.dart';
@@ -38,6 +39,8 @@ abstract class SchoolRemoteDataSource {
   Future<ReturnedImageUrl> hostImage(File file);
 
   Future<ArtworkToDeleteId> deleteArtwork(int id);
+
+  Future<School> updateSchoolInfo(SchoolToUpdate schoolToUpdate);
 }
 
 class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
@@ -204,5 +207,21 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     final int deletedId =
         int.parse(result.data[SCHOOL_MUTATION_RESULT_KEY][ARTWORK_ID]);
     return ArtworkToDeleteId(artId: deletedId);
+  }
+
+  @override
+  Future<School> updateSchoolInfo(SchoolToUpdate schoolToUpdate) async {
+    final QueryResult result = await performMutation(
+      ADD_SCHOOL_MUTATION,
+      <String, dynamic>{
+        SCHOOL_SCHOOL_ID: schoolToUpdate.id,
+        SCHOOL_NAME: schoolToUpdate.schoolName,
+        SCHOOL_EMAIL: schoolToUpdate.email,
+        SCHOOL_ADDRESS: schoolToUpdate.address,
+        SCHOOL_CITY: schoolToUpdate.city,
+        SCHOOL_ZIPCODE: schoolToUpdate.zipcode
+      },
+    );
+    return handleAuthResult(result, SCHOOL_MUTATION_RESULT_KEY);
   }
 }
