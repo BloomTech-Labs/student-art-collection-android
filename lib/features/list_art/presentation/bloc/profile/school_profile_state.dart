@@ -5,10 +5,10 @@ abstract class SchoolProfileState extends Equatable {
   const SchoolProfileState();
 }
 
-class InitialSchoolProfileState extends SchoolProfileState {
+class SchoolProfileInitial extends SchoolProfileState {
   final School school;
 
-  InitialSchoolProfileState({
+  SchoolProfileInitial({
     this.school,
   });
 

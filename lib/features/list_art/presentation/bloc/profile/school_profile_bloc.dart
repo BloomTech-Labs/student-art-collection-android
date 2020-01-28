@@ -20,11 +20,11 @@ class SchoolProfileBloc extends Bloc<SchoolProfileEvent, SchoolProfileState> {
   SchoolProfileState get initialState {
     final currentUser = sessionManager.currentUser;
     if (currentUser is Authorized) {
-      return InitialSchoolProfileState(
+      return SchoolProfileInitial(
         school: currentUser.school,
       );
     } else {
-      return InitialSchoolProfileState();
+      return SchoolProfileInitial();
     }
   }
 
