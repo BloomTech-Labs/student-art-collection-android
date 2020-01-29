@@ -118,6 +118,7 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
       try {
         final updatedSchool =
             await remoteDataSource.updateSchoolInfo(schoolToUpdate);
+        localDataSource.storeSchool(updatedSchool);
         return Right(updatedSchool);
       } on ServerException {
         return Left(ServerFailure());

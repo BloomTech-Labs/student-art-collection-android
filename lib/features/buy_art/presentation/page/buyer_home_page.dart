@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
-import 'package:student_art_collection/features/list_art/presentation/page/school_gallery_page.dart';
-import 'package:student_art_collection/features/list_art/presentation/page/school_profile_page.dart';
-import 'package:titled_navigation_bar/titled_navigation_bar.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/buyer_cart_page.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 
 import '../../../../app_localization.dart';
 
-class SchoolHomePage extends StatefulWidget {
-  static const String ID = "school_home";
+class BuyerHomePage extends StatefulWidget {
+  static const String ID = "buyer_home";
 
   @override
-  _SchoolHomePageState createState() => _SchoolHomePageState();
+  _BuyerHomePageState createState() => _BuyerHomePageState();
 }
 
-class _SchoolHomePageState extends State<SchoolHomePage> {
+class _BuyerHomePageState extends State<BuyerHomePage> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    SchoolGalleryPage(),
-    SchoolProfilePage(),
+    GalleryPage(),
+    BuyerCartPage(),
   ];
 
   void onTabTapped(int index) {
@@ -54,10 +53,10 @@ class _SchoolHomePageState extends State<SchoolHomePage> {
             BottomNavigationBarItem(
               title: Text(
                 displayLocalizedString(
-                  TEXT_SCHOOL_GALLERY_PROFILE_TAG,
+                  TEXT_SCHOOL_GALLERY_CART_TAG,
                 ),
               ),
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.shopping_cart),
             ),
           ],
         ),

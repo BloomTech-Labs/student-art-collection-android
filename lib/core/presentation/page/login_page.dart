@@ -7,6 +7,7 @@ import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/buyer_home_page.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
@@ -117,7 +118,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    double positionTopBanner = screenHeight * (.77);
+    double positionTopBanner = screenHeight * (.70);
     double positionTopTextField = screenHeight * (.62);
     double positionBottomTextField = screenHeight * (.50);
     double positionCheckBox = screenHeight * (.45);
@@ -167,7 +168,7 @@ class _LoginFormState extends State<LoginForm> {
           label: AppLocalizations.of(context)
               .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
           onTap: () {
-            Navigator.pushNamed(context, GalleryPage.ID);
+            Navigator.pushNamed(context, BuyerHomePage.ID);
           },
         ),
         footerWidget(
@@ -181,7 +182,7 @@ class _LoginFormState extends State<LoginForm> {
                     text: AppLocalizations.of(context)
                         .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
-                      color: textLinkOnBlack,
+                      color: actionColor,
                     ),
                   ),
                   TextSpan(
@@ -270,15 +271,15 @@ class _LoginFormState extends State<LoginForm> {
       @required double fontSize}) {
     return Positioned(
         bottom: position,
-        left: 24,
+        left: 1,
+        right: 1,
         child: Hero(
           tag: 'logo',
           child: SvgPicture.asset(
             'assets/artco_logo_large.svg',
-            color: Colors.white,
             semanticsLabel: 'App Logo',
-            width: 140,
-            height: 60,
+            width: 200,
+            height: 200,
           ),
         ));
   }
@@ -318,7 +319,7 @@ class _LoginFormState extends State<LoginForm> {
               margin: EdgeInsets.only(right: 8),
               child: CustomCheckbox(
                 value: shouldRemember,
-                activeColor: accentColor,
+                activeColor: actionColor,
                 materialTapTargetSize: null,
                 onChanged: (value) => onChanged(value),
                 useTapTarget: false,

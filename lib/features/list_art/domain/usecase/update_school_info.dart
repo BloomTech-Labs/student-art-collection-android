@@ -18,7 +18,7 @@ class UpdateSchoolInfo implements UseCase<School, SchoolToUpdate> {
 
 class SchoolToUpdate {
   String email;
-  String id;
+  int id;
   String schoolName;
   String address;
   String city;

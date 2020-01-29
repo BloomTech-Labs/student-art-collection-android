@@ -102,6 +102,7 @@ Future init() async {
   sl.registerFactory(() => SchoolProfileBloc(
         sessionManager: sl(),
         updateSchoolInfo: sl(),
+        inputConverter: sl(),
       ));
 
   // Use cases

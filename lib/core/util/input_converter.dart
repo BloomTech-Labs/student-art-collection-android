@@ -8,6 +8,7 @@ import 'package:student_art_collection/core/presentation/bloc/base_artwork_filte
 import 'package:student_art_collection/features/buy_art/domain/usecase/get_all_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/update_school_info.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
 
 class InputConverter {
@@ -62,6 +63,33 @@ class InputConverter {
       state: state,
       zipcode: zipcode,
     ));
+  }
+
+  Either<UserInputFailure, SchoolToUpdate> updateInfoToSchool(
+      {email: String,
+      id: int,
+      schoolName: String,
+      address: String,
+      city: String,
+      zipcode: String,
+      state: String}) {
+    if (!checkNullOrEmpty(schoolName) ||
+        !checkNullOrEmpty(address) ||
+        !checkNullOrEmpty(city) ||
+        !checkNullOrEmpty(zipcode)) {
+      return Left(
+          UserInputFailure(message: 'Please make sure no fields are empty.'));
+    } else {
+      return Right(SchoolToUpdate(
+        email: email,
+        id: id,
+        state: state,
+        schoolName: schoolName,
+        address: address,
+        city: city,
+        zipcode: zipcode,
+      ));
+    }
   }
 
   Either<ArtworkInputFailure, ArtworkToUpload> uploadInfoToArtwork(

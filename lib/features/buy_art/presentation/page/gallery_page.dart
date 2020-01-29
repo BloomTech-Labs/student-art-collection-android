@@ -117,32 +117,6 @@ class _GalleryPageState extends State<GalleryPage> {
               },
             ),
           ),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.transparent,
-            child: TitledBottomNavigationBar(
-              currentIndex: 0, // Use this to update the Bar giving a position
-              onTap: (index) {
-                print("Selected Index: $index");
-              },
-              items: [
-                TitledNavigationBarItem(
-                    title: displayLocalizedString(
-                      context,
-                      TEXT_SCHOOL_GALLERY_HOME_TAG,
-                    ),
-                    icon: Icons.home),
-                TitledNavigationBarItem(
-                    title: displayLocalizedString(
-                      context,
-                      TEXT_SCHOOL_GALLERY_CART_TAG,
-                    ),
-                    icon: Icons.shopping_cart),
-              ],
-              activeColor: accentColor,
-            ),
-            shape: CircularNotchedRectangle(),
-            notchMargin: 4.0,
-          ),
         ),
       ),
     );

@@ -28,15 +28,15 @@ const String ADD_SCHOOL_MUTATION = r'''
 ''';
 
 const String UPDATE_SCHOOL_MUTATION = r'''
-  mutation AddSchool(
-    school_id: ID!, 
+  mutation UpdateSchool(
+    $id: ID!, 
     $school_name: String!,
     $email: String!,
     $address: String!,
     $city: String!,
     $zipcode: String!) {
       action: updateSchool(
-        school_id: $school_id,
+        id: $id,
         school_name: $school_name,
         email: $email,
         address: $address,

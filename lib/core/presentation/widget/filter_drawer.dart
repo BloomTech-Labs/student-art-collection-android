@@ -155,18 +155,24 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             _searchQuery = value;
                           },
                           decoration: InputDecoration(
+                            counterText: '',
                             labelText: 'Search',
                             labelStyle: TextStyle(
                               color: accentColorOnPrimary,
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: accentColorOnPrimary,
+                                color: actionColor,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: accentColorOnPrimary,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: actionColor,
                               ),
                             ),
                           ),
@@ -236,7 +242,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                               color: accentColorOnPrimary,
                               fontSize: 16,
                             ),
-                            activeColor: primaryColor,
+                            activeColor: actionColor,
                             labels: ['Only Art Near Me'],
                           ),
                         )
@@ -263,7 +269,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         color: accentColorOnPrimary,
                         fontSize: 16,
                       ),
-                      activeColor: accentColorOnPrimary,
+                      activeColor: actionColor,
                       labels: isSchool
                           ? getLocalizedLabels(schoolSortLabels)
                           : getLocalizedLabels(buyerSortLabels),
