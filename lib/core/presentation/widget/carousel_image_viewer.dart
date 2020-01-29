@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart' as aw;
@@ -16,18 +17,17 @@ class CarouselImageViewer extends StatefulWidget {
   final bool isEditable;
   final List<String> imageList;
 
-  const CarouselImageViewer(
-      {Key key,
-      @required this.artwork,
-      @required this.height,
-      this.isEditable,
-      this.imageList})
-      : super(key: key);
+  const CarouselImageViewer({
+    Key key,
+    @required this.artwork,
+    @required this.height,
+    this.isEditable,
+    this.imageList,
+  }) : super(key: key);
 
   @override
   _CarouselImageViewerState createState() => _CarouselImageViewerState(
-        imageList:
-            artwork != null ? imageListToUrlList(artwork.images) : imageList,
+        imageList: isEditable ? imageList : imageListToUrlList(artwork.images),
         height: height,
         isEditable: isEditable,
         artistName: artwork != null ? artwork.artistName : "",
@@ -84,11 +84,7 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
                     children: <Widget>[
                       imageBorderWidget(context: context),
                       BuildLoading(),
-                      imageType is String
-                          ? imageUrlWidget(
-                              context: context, imageUrl: imageType)
-                          : imageFileWidget(
-                              context: context, imageFile: imageType),
+                      imageUrlWidget(context: context, imageUrl: imageType),
                       !isEditable
                           ? artistNameWidget()
                           : closeButton(onPressed: () {
@@ -96,7 +92,9 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
                                 imageList.removeAt(index);
                               });
                             }),
-                      !isEditable && isSold ? soldWidget() : Container(),
+                      !isEditable && isSold != null && isSold
+                          ? soldWidget()
+                          : Container(),
                     ],
                   );
                 },
@@ -137,20 +135,6 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
     );
   }
 
-  Widget imageFileWidget(
-      {@required BuildContext context, @required var imageFile}) {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(carouselCardCornerRadius),
-          image: DecorationImage(
-            image: FileImage(imageFile),
-            fit: BoxFit.fill,
-          ),
-        ));
-  }
-
   Widget imageUrlWidget(
       {@required BuildContext context, @required String imageUrl}) {
     return Material(
@@ -159,8 +143,8 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
         margin: EdgeInsets.only(right: 16.0, left: 16, top: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(carouselCardCornerRadius),
-          image:
-              DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
+          image: DecorationImage(
+              image: CachedNetworkImageProvider(imageUrl), fit: BoxFit.cover),
         ),
       ),
     );

@@ -56,7 +56,9 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
 
   _ArtworkUploadPageState({
     this.artwork,
-  });
+  }) {
+    sold = artwork.sold;
+  }
 
   List<String> _getPrices() {
     return [
@@ -242,7 +244,7 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.3,
                                 imageList: imageUrls,
-                                artwork: null,
+                                artwork: artwork,
                               ),
                               onPressed: () {},
                               shape: RoundedRectangleBorder(
@@ -431,8 +433,26 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
                             ),
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Text(
+                                    'Mark as Sold',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  Switch(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        sold = value;
+                                      });
+                                    },
+                                    value: sold,
+                                  ),
+                                ],
+                              ),
                               BlocBuilder<ArtworkUploadBloc,
                                   ArtworkUploadState>(
                                 builder: (context, state) {

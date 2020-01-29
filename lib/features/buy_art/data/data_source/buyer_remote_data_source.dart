@@ -55,7 +55,7 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
       return convertResultToArtworkList(result, "filter");
     } else {
       final QueryResult result =
-          await performQuery(GET_ALL_ARTWORK_FOR_BUYER, null, true);
+          await performQuery(GET_ALL_ARTWORK_FOR_BUYER, null, false);
       if (result.hasException) {
         throw ServerException();
       }

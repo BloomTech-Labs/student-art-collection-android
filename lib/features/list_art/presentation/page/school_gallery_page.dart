@@ -214,7 +214,7 @@ class _SchoolGalleryPageState extends State<SchoolGalleryPage> {
 
   void showSnackBar(String message) {
     final snackBar = SnackBar(
-        behavior: SnackBarBehavior.floating,
+        behavior: SnackBarBehavior.fixed,
         content: Text(displayLocalizedString(
           message,
         )));

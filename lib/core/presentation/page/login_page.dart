@@ -117,7 +117,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    double positionTopBanner = screenHeight * (.77);
+    double positionTopBanner = screenHeight * (.70);
     double positionTopTextField = screenHeight * (.62);
     double positionBottomTextField = screenHeight * (.50);
     double positionCheckBox = screenHeight * (.45);
@@ -270,15 +270,15 @@ class _LoginFormState extends State<LoginForm> {
       @required double fontSize}) {
     return Positioned(
         bottom: position,
-        left: 24,
+        left: 1,
+        right: 1,
         child: Hero(
           tag: 'logo',
           child: SvgPicture.asset(
             'assets/artco_logo_large.svg',
-            color: Colors.white,
             semanticsLabel: 'App Logo',
-            width: 140,
-            height: 60,
+            width: 200,
+            height: 200,
           ),
         ));
   }
