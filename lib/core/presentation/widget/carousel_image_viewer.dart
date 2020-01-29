@@ -26,11 +26,13 @@ class CarouselImageViewer extends StatefulWidget {
 
   @override
   _CarouselImageViewerState createState() => _CarouselImageViewerState(
-      imageList:
-          artwork != null ? imageListToUrlList(artwork.images) : imageList,
-      height: height,
-      isEditable: isEditable,
-      artistName: artwork != null ? artwork.artistName : "");
+        imageList:
+            artwork != null ? imageListToUrlList(artwork.images) : imageList,
+        height: height,
+        isEditable: isEditable,
+        artistName: artwork != null ? artwork.artistName : "",
+        isSold: artwork.sold,
+      );
 }
 
 class _CarouselImageViewerState extends State<CarouselImageViewer> {
@@ -38,13 +40,16 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
   var height;
   bool isEditable = false;
   final String artistName;
+  final bool isSold;
   int _current = 0;
 
-  _CarouselImageViewerState(
-      {this.artistName,
-      @required this.imageList,
-      @required this.height,
-      @required this.isEditable});
+  _CarouselImageViewerState({
+    this.artistName,
+    @required this.imageList,
+    @required this.height,
+    @required this.isEditable,
+    @required this.isSold,
+  });
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -90,7 +95,8 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
                               setState(() {
                                 imageList.removeAt(index);
                               });
-                            })
+                            }),
+                      !isEditable && isSold ? soldWidget() : Container(),
                     ],
                   );
                 },
@@ -109,7 +115,8 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _current == index ? Colors.black : indicatorColorInactive,
+                  color:
+                      _current == index ? Colors.black : indicatorColorInactive,
                 ),
               );
             }),
@@ -175,6 +182,23 @@ class _CarouselImageViewerState extends State<CarouselImageViewer> {
         padding: EdgeInsets.all(4),
       ),
       right: 24,
+      bottom: 8,
+    );
+  }
+
+  Widget soldWidget() {
+    return Positioned(
+      child: Container(
+        child: Text(
+          'Sold',
+          style: TextStyle(color: Colors.white),
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(carouselCardCornerRadius / 2),
+            color: Colors.red.withOpacity(.5)),
+        padding: EdgeInsets.all(4),
+      ),
+      left: 24,
       bottom: 8,
     );
   }
