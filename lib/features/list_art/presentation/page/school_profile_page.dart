@@ -4,6 +4,7 @@ import 'package:student_art_collection/core/domain/entity/school.dart';
 import 'package:student_art_collection/core/presentation/widget/empty_container.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/profile/school_profile_bloc.dart';
+import 'package:student_art_collection/features/list_art/presentation/bloc/profile/school_profile_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/profile/school_profile_state.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
@@ -31,6 +32,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
   String address;
   String city;
   String zipcode;
+  String state;
 
   void setSchoolInfo(School school) {
     schoolNameController.text = school.schoolName;
@@ -175,4 +177,16 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
           ),
         ),
       );
+
+  dispatchUpdate() {
+    BlocProvider.of<SchoolProfileBloc>(_blocContext).add(
+      UpdateSchoolInfoEvent(
+        schoolName: schoolName,
+        city: city,
+        address: address,
+        zipcode: zipcode,
+        state: state,
+      ),
+    );
+  }
 }

@@ -181,7 +181,7 @@ class _LoginFormState extends State<LoginForm> {
                     text: AppLocalizations.of(context)
                         .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
                     style: TextStyle(
-                      color: textLinkOnBlack,
+                      color: actionColor,
                     ),
                   ),
                   TextSpan(
@@ -318,7 +318,7 @@ class _LoginFormState extends State<LoginForm> {
               margin: EdgeInsets.only(right: 8),
               child: CustomCheckbox(
                 value: shouldRemember,
-                activeColor: accentColor,
+                activeColor: actionColor,
                 materialTapTargetSize: null,
                 onChanged: (value) => onChanged(value),
                 useTapTarget: false,

@@ -7,6 +7,7 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/error/exception.dart';
 import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
+import 'package:student_art_collection/features/list_art/data/data_source/school_local_data_source.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/school_remote_data_source.dart';
 import 'package:student_art_collection/features/list_art/domain/repository/school_artwork_repository.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/delete_artwork.dart';
@@ -17,10 +18,12 @@ import 'package:student_art_collection/features/list_art/domain/usecase/upload_i
 class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
   final NetworkInfo networkInfo;
   final SchoolRemoteDataSource remoteDataSource;
+  final SchoolLocalDataSource localDataSource;
 
   SchoolArtworkRepositoryImpl({
     @required this.networkInfo,
     @required this.remoteDataSource,
+    @required this.localDataSource,
   });
 
   @override

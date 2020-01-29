@@ -102,6 +102,7 @@ Future init() async {
   sl.registerFactory(() => SchoolProfileBloc(
         sessionManager: sl(),
         updateSchoolInfo: sl(),
+        inputConverter: sl(),
       ));
 
   // Use cases
@@ -129,6 +130,7 @@ Future init() async {
       () => SchoolArtworkRepositoryImpl(
             networkInfo: sl(),
             remoteDataSource: sl(),
+            localDataSource: sl(),
           ));
 
   // Data Sources

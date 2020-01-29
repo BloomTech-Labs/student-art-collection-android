@@ -34,6 +34,9 @@ class _SchoolHomePaState extends State<SchoolHomePage> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.transparent,
         child: BottomNavigationBar(
+          selectedItemColor: actionColor,
+          unselectedItemColor: accentColorOnPrimary,
+          backgroundColor: primaryColor,
           currentIndex: _currentIndex,
           // Use this to update the Bar giving a position
           onTap: (index) {

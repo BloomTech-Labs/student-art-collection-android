@@ -6,10 +6,9 @@ abstract class SchoolProfileEvent extends Equatable {
 }
 
 class UpdateSchoolInfoEvent extends SchoolProfileEvent {
-  final String email, schoolName, address, city, state, zipcode;
+  final String schoolName, address, city, state, zipcode;
 
   UpdateSchoolInfoEvent({
-    @required this.email,
     @required this.schoolName,
     @required this.address,
     @required this.city,
@@ -19,7 +18,6 @@ class UpdateSchoolInfoEvent extends SchoolProfileEvent {
 
   @override
   List<Object> get props => [
-        email,
         schoolName,
         address,
         city,

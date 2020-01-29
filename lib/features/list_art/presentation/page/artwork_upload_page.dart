@@ -40,7 +40,7 @@ class ArtworkUploadPage extends StatefulWidget {
 class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
   Artwork artwork;
   String title, artistName, description;
-  bool sold;
+  bool sold = false;
   int category, price;
   List<String> imageUrls;
   ArtworkUploadBloc _artworkUploadBloc;
@@ -57,7 +57,9 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
   _ArtworkUploadPageState({
     this.artwork,
   }) {
-    sold = artwork.sold;
+    if (artwork != null) {
+      sold = artwork.sold;
+    }
   }
 
   List<String> _getPrices() {
@@ -155,7 +157,12 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
       create: (context) => _artworkUploadBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: AppBarLogo(),
+          title: Text(
+            'Details',
+            style: TextStyle(
+              fontSize: 24,
+            ),
+          ),
           centerTitle: true,
           actions: <Widget>[
             IconButton(

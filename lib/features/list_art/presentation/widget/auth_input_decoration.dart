@@ -10,12 +10,12 @@ InputDecoration getAuthInputDecoration(String hint) {
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: accentColor,
+        color: actionColor,
       ),
     ),
     border: OutlineInputBorder(
       borderSide: BorderSide(
-        color: accentColor,
+        color: actionColor,
       ),
     ),
   );

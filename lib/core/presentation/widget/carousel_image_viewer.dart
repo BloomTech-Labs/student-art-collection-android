@@ -31,14 +31,14 @@ class CarouselImageViewer extends StatefulWidget {
         height: height,
         isEditable: isEditable,
         artistName: artwork != null ? artwork.artistName : "",
-        isSold: artwork.sold,
+        isSold: artwork != null ? artwork.sold : false,
       );
 }
 
 class _CarouselImageViewerState extends State<CarouselImageViewer> {
   final List imageList;
   var height;
-  bool isEditable = false;
+  bool isEditable;
   final String artistName;
   final bool isSold;
   int _current = 0;
