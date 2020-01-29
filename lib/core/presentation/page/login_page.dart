@@ -7,6 +7,7 @@ import 'package:student_art_collection/app_localization.dart';
 import 'package:student_art_collection/core/presentation/widget/custom_checkbox.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
 import 'package:student_art_collection/core/util/theme_constants.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/buyer_home_page.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/auth/school_auth_event.dart';
@@ -167,7 +168,7 @@ class _LoginFormState extends State<LoginForm> {
           label: AppLocalizations.of(context)
               .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
           onTap: () {
-            Navigator.pushNamed(context, GalleryPage.ID);
+            Navigator.pushNamed(context, BuyerHomePage.ID);
           },
         ),
         footerWidget(
