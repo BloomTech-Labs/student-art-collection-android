@@ -41,6 +41,7 @@ class ArtworkModel extends Artwork {
     for (Map<String, dynamic> jsonImage in jsonImageList) {
       imageList.add(ImageModel.fromJson(jsonImage));
     }
+    var i = 0;
     return ArtworkModel(
         title: json[ARTWORK_TITLE],
         category: CategoryModel.fromJson(json[ARTWORK_CATEGORY]),

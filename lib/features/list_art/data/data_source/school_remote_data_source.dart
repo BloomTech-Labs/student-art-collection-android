@@ -105,7 +105,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     final QueryResult result = await performMutation(
       ADD_ARTWORK_MUTATION,
       {
-        SCHOOL_SCHOOL_ID: 2,
+        SCHOOL_SCHOOL_ID: artworkToUpload.schoolId,
         ARTWORK_CATEGORY: artworkToUpload.category,
         ARTWORK_PRICE: artworkToUpload.price,
         ARTWORK_SOLD: artworkToUpload.sold,
@@ -182,7 +182,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
     await Future.forEach(imagesToUpload, (imageUrl) async {
       final QueryResult imageResult = await performMutation(
         ADD_IMAGE_TO_ARTWORK_MUTATION,
-        {ARTWORK_ID: artId, IMAGE_URL: imageUrl},
+        {IMAGE_ART_ID: artId, IMAGE_URL: imageUrl},
       );
       if (imageResult.hasException) {
         throw ServerException();

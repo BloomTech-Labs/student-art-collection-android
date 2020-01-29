@@ -251,14 +251,24 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
                             ),
                           ),
                           Positioned(
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.camera_alt,
-                                color: accentColor,
-                              ),
-                              iconSize: 40,
-                              onPressed: () {
-                                _getImage();
+                            child: BlocBuilder<ArtworkUploadBloc,
+                                ArtworkUploadState>(
+                              builder: (context, state) {
+                                return IconButton(
+                                  icon: Icon(
+                                    Icons.camera_alt,
+                                    color: accentColor,
+                                  ),
+                                  iconSize: 40,
+                                  onPressed: () {
+                                    if (state is ArtworkUploadLoading) {
+                                      showSnackBar(context,
+                                          TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL);
+                                    } else {
+                                      _getImage();
+                                    }
+                                  },
+                                );
                               },
                             ),
                             bottom: 0,

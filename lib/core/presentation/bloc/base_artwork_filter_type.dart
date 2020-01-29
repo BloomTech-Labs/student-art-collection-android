@@ -30,7 +30,7 @@ class FilterTypeCategory extends FilterType {
   final int category;
 
   const FilterTypeCategory({
-    this.category,
+    this.category = 6,
   });
 
   @override

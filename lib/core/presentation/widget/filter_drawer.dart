@@ -48,7 +48,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   ) onApplyPressed;
   final bool isSchool;
 
-  bool nearMeSelected = false;
+  bool nearMeSelected = true;
   String _selectedCategory;
   String _searchQuery = '';
 
