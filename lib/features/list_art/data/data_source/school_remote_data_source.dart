@@ -95,7 +95,7 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
       {
         SCHOOL_SCHOOL_ID: schoolId,
       },
-      true,
+      false,
     );
     return convertResultToArtworkList(result, 'artBySchool');
   }

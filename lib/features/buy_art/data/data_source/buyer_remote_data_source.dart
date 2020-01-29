@@ -41,9 +41,11 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
           {
             'zipcode':
                 searchFilters.zipcode == true ? await getCurrentZipcode() : '',
-            'category': searchFilters.category.toString(),
+            'category': searchFilters.category > 0 && searchFilters.category < 6
+                ? searchFilters.category.toString()
+                : '',
           },
-          true);
+          false);
       if (result.hasException) {
         throw ServerException();
       }

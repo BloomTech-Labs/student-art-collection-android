@@ -45,7 +45,7 @@ class _GalleryPageState extends State<GalleryPage> {
 
   Map<String, FilterType> filterTypes = {
     'zipcode': FilterTypeZipCode(
-      zipcode: true,
+      zipcode: false,
     ),
     'category': FilterTypeCategory(),
     'search': FilterTypeSearch(),
