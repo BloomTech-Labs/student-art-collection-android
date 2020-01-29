@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:student_art_collection/core/domain/entity/school.dart';
@@ -39,15 +40,15 @@ class SchoolProfileBloc extends Bloc<SchoolProfileEvent, SchoolProfileState> {
     SchoolProfileEvent event,
   ) async* {
     final currentState = sessionManager.currentUser;
-    if (currentState is Authorized) {
+    if (currentState is Authorized && event is UpdateSchoolInfoEvent) {
       final updateInfo = inputConverter.updateInfoToSchool(
         email: currentState.school.email,
         id: currentState.school.id,
-        schoolName: currentState.school.schoolName,
-        address: currentState.school.schoolName,
-        city: currentState.school.city,
-        zipcode: currentState.school.zipcode,
-        state: currentState.school.state,
+        schoolName: event.schoolName,
+        address: event.address,
+        city: event.city,
+        zipcode: event.zipcode,
+        state: event.state,
       );
       yield* updateInfo.fold(
         (failure) async* {

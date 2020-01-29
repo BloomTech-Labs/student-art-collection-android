@@ -130,7 +130,6 @@ Future init() async {
       () => SchoolArtworkRepositoryImpl(
             networkInfo: sl(),
             remoteDataSource: sl(),
-            localDataSource: sl(),
           ));
 
   // Data Sources

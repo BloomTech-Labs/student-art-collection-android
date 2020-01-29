@@ -212,9 +212,9 @@ class GraphQLSchoolRemoteDataSource extends BaseRemoteDataSource
   @override
   Future<School> updateSchoolInfo(SchoolToUpdate schoolToUpdate) async {
     final QueryResult result = await performMutation(
-      ADD_SCHOOL_MUTATION,
+      UPDATE_SCHOOL_MUTATION,
       <String, dynamic>{
-        SCHOOL_SCHOOL_ID: schoolToUpdate.id,
+        SCHOOL_ID: schoolToUpdate.id,
         SCHOOL_NAME: schoolToUpdate.schoolName,
         SCHOOL_EMAIL: schoolToUpdate.email,
         SCHOOL_ADDRESS: schoolToUpdate.address,

@@ -18,12 +18,10 @@ import 'package:student_art_collection/features/list_art/domain/usecase/upload_i
 class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
   final NetworkInfo networkInfo;
   final SchoolRemoteDataSource remoteDataSource;
-  final SchoolLocalDataSource localDataSource;
 
   SchoolArtworkRepositoryImpl({
     @required this.networkInfo,
     @required this.remoteDataSource,
-    @required this.localDataSource,
   });
 
   @override

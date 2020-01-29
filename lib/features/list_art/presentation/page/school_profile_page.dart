@@ -50,6 +50,7 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
   Widget build(BuildContext context) => BlocProvider<SchoolProfileBloc>(
         create: (context) => sl<SchoolProfileBloc>(),
         child: Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             bottom: PreferredSize(
               preferredSize: Size(double.infinity, 1.0),
@@ -93,6 +94,17 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
             listener: (context, state) {
               if (state is SchoolProfileInitial) {
                 setSchoolInfo(state.school);
+              } else if (state is SchoolProfileUpdated) {
+                setState(() {
+                  schoolNameController.text = state.school.schoolName;
+                  schoolAddressController.text = state.school.address;
+                  schoolCityController.text = state.school.city;
+                  schoolZipcodeController.text = state.school.zipcode;
+                });
+              } else if (state is SchoolProfileError) {
+                showSnackBar(state.message);
+              } else if (state is SchoolProfileUpdated) {
+                showSnackBar('School Information was updated!');
               }
             },
             child: BlocBuilder<SchoolProfileBloc, SchoolProfileState>(
@@ -114,7 +126,9 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                             height: 10.0,
                           ),
                           TextField(
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              schoolName = value;
+                            },
                             decoration: getAuthInputDecoration('Name'),
                             controller: schoolNameController,
                           ),
@@ -122,7 +136,9 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                             height: 10.0,
                           ),
                           TextField(
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              address = value;
+                            },
                             decoration:
                                 getAuthInputDecoration('Street Address'),
                             controller: schoolAddressController,
@@ -135,7 +151,9 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                               Flexible(
                                 flex: 1,
                                 child: TextField(
-                                  onChanged: (value) {},
+                                  onChanged: (value) {
+                                    city = value;
+                                  },
                                   decoration: getAuthInputDecoration('City'),
                                   controller: schoolCityController,
                                 ),
@@ -146,7 +164,9 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                               Flexible(
                                 flex: 1,
                                 child: TextField(
-                                  onChanged: (value) {},
+                                  onChanged: (value) {
+                                    zipcode = value;
+                                  },
                                   decoration: getAuthInputDecoration('Zipcode'),
                                   controller: schoolZipcodeController,
                                 ),
@@ -161,7 +181,14 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
                             children: <Widget>[
                               FloatingActionButton(
                                 elevation: 4,
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (state is SchoolProfileLoading) {
+                                    showSnackBar(
+                                        'Please wait until loading is complete');
+                                  } else {
+                                    dispatchUpdate();
+                                  }
+                                },
                                 backgroundColor: accentColor,
                                 child: Icon(Icons.check),
                               ),
@@ -177,6 +204,13 @@ class _SchoolProfilePageState extends State<SchoolProfilePage> {
           ),
         ),
       );
+
+  void showSnackBar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
 
   dispatchUpdate() {
     BlocProvider.of<SchoolProfileBloc>(_blocContext).add(
