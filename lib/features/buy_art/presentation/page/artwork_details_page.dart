@@ -114,7 +114,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   }
 
   Widget topBannerWidget({@required double screenHeight}) {
-    double topBannerHeight = screenHeight * .04;
+    double topBannerHeight = screenHeight * .06;
     return Container(
       height: topBannerHeight,
       alignment: Alignment.center,
@@ -131,10 +131,10 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
 
     //Todo: replace hard coded values with real default price when backend is updated
     String price = artwork.price == 0 ? '20' : artwork.price.toString();
-    String artworkTitle = artwork.title == ""
+    String schoolName = artwork.schoolInfo.schoolName == ""
         ? displayLocalizedString(context, TEXT_ARTWORK_DETAILS_UNTITLED_LABEL)
-        : artwork.title;
-    String artworkDate = artwork.datePosted == null
+        : artwork.schoolInfo.schoolName;
+    String artworkDate = artwork == null
         ? DateTime.now().year.toString()
         : artwork.datePosted.year.toString();
 
@@ -148,21 +148,25 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           ),
           Positioned(
             bottom: 5,
-            left: 24,
-            child: Container(
-              child: Text.rich(
-                TextSpan(
-                  children: [
+            left: 16,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Text.rich(
                     TextSpan(
-                      text: artworkTitle + '\n',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      children: [
+                        TextSpan(
+                          text: schoolName + '\n',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(text: artworkDate),
+                      ],
                     ),
-                    TextSpan(text: artworkDate),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
           Positioned(
@@ -269,39 +273,33 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
             ],
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(right: 16),
-          alignment: Alignment.bottomRight,
-          child: Container(
-            width: 90,
-            height: 40,
-            alignment: Alignment.center,
-            child: MaterialButton(
-              elevation: 5,
-              color: Colors.black,
-              onPressed: () {
-                artworkDetailsBloc.add(SubmitContactForm(ContactForm(
-                    sendTo: artwork.schoolInfo.email,
-                    from: emailController.text,
-                    message: displayLocalizedString(
-                            context, TEXT_ARTWORK_DETAILS_REPLY_TO) +
-                        emailController.text +
-                        "\n\n" +
-                        messageController.text,
-                    subject: nameController.text +
-                        displayLocalizedString(
-                            context, TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) +
-                        artwork.title +
-                        " #: " +
-                        artwork.artId.toString(),
-                    name: nameController.text)));
-              },
-              child: Text(
-                displayLocalizedString(
-                    context, TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL),
-                style: TextStyle(color: Colors.white),
+        Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              FloatingActionButton(
+                elevation: 5,
+                onPressed: () {
+                  artworkDetailsBloc.add(SubmitContactForm(ContactForm(
+                      sendTo: artwork.schoolInfo.email,
+                      from: emailController.text,
+                      message: displayLocalizedString(
+                              context, TEXT_ARTWORK_DETAILS_REPLY_TO) +
+                          emailController.text +
+                          "\n\n" +
+                          messageController.text,
+                      subject: nameController.text +
+                          displayLocalizedString(
+                              context, TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) +
+                          artwork.title +
+                          " #: " +
+                          artwork.artId.toString(),
+                      name: nameController.text)));
+                },
+                child: Icon(Icons.check),
               ),
-            ),
+            ],
           ),
         )
       ],

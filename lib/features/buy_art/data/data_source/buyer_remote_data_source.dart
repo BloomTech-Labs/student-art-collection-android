@@ -35,7 +35,10 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
 
   @override
   Future<List<Artwork>> getAllArtwork({SearchFilters searchFilters}) async {
-    if (searchFilters.zipcode != null && searchFilters.category != null) {
+    if (searchFilters.zipcode != null &&
+        searchFilters.category != null &&
+        searchFilters.category > 0 &&
+        searchFilters.category < 6) {
       final QueryResult result = await performQuery(
           GET_ARTWORKS_BY_FILTER,
           {
