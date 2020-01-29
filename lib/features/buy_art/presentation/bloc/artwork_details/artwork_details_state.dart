@@ -21,7 +21,6 @@ class ArtworkDetailsErrorState extends ArtworkDetailsState {
   List<Object> get props => null;
 }
 
-
 class ArtworkDetailsLoadingState extends ArtworkDetailsState {
   const ArtworkDetailsLoadingState();
 

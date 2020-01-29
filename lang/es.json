@@ -1,0 +1,122 @@
+{
+  "starter_app_name": "ArtCo",
+  "starter_login_button": "Iniciar sesión como administrador de la escuela",
+  "starter_guest_button": "Continua como invitado",
+
+
+  "login_header_text": "¡Dar una buena \nacogida!",
+  "login_email_address_label": "Email",
+  "login_remember_me_box": "¿Recuérdame?",
+  "login_password_label": "Contraseña",
+  "login_guest_login_button": "Continua como invitado",
+  "login_divider_text": "O",
+  "login_register_here_prefix": "¿Aún no eres miembro? \n      Regístrate ",
+  "login_register_here_main": "¡Aquí!",
+  "login_register_here_suffix": "\n   Escuelas solamente",
+  "login_login_button": "Iniciar sesión",
+
+
+  "artwork_upload_price_1": "$5",
+  "artwork_upload_price_2": "$10",
+  "artwork_upload_price_3": "$15",
+  "artwork_upload_price_4": "$20",
+  "artwork_upload_price_5": "$25",
+  "artwork_upload_price_6": "$30",
+  "artwork_upload_price_7": "$35",
+  "artwork_upload_price_8": "$40",
+  "artwork_upload_price_9": "$45",
+  "artwork_upload_price_10": "$50",
+
+  "artwork_upload_category_1": "Fotografía",
+  "artwork_upload_category_2": "Dibujo",
+  "artwork_upload_category_3": "Pintura",
+  "artwork_upload_category_4": "Escultura",
+  "artwork_upload_category_5": "Otro",
+  "artwork_upload_category_6": "Todos",
+
+  "artwork_sort_title_asc": "Artwork Title Asc.",
+  "artwork_sort_title_desc": "Artwork Title Desc.",
+  "artwork_sort_artist_name_asc": "Artist Name Asc.",
+  "artwork_sort_artist_name_desc": "Artist Name Desc.",
+  "artwork_sort_school_name_asc": "School Name Asc.",
+  "artwork_sort_school_name_desc": "School Name Desc.",
+  "artwork_sort_most_recent": "Most Recent",
+  "artwork_sort_oldest": "Oldest",
+  "artwork_sort_most_expensive": "Most Expensive",
+  "artwork_sort_least_expensive": "Least Expensive",
+
+  "artwork_upload_artwork_title_label": "Ingrese el título de la obra de arte",
+  "artwork_upload_student_name_label": "Ingrese el nombre del estudiante",
+  "artwork_upload_date_selection_label": "Fecha",
+  "artwork_upload_price_selection_label": "Precio",
+  "artwork_upload_category_selection_label": "Seleccionar categoría de ilustraciones",
+  "artwork_description_form_hint_label": "Ingrese la descripción",
+  "artwork_upload_upload_button_label": "Enviar",
+
+  "artwork_upload_uploading_message_label": "Subiendo ilustraciones, por favor no cierre la aplicación",
+  "artwork_upload_updating_message_label": "Actualizando las ilustraciones, por favor no cierre la aplicación",
+  "image_uploading_message_label": "Subiendo imagen",
+  "artwork_upload_success_label": "¡El arte se subió con éxito!",
+  "artwork_update_success_label": "¡El arte se actualizó con éxito!",
+  "generic_error_message_label": "Algo salió mal",
+  "generic_image_host_error_message_label": "Hubo un problema al subir tu imagen",
+  "artwork_uploading_wait_message_label": "Espere hasta que se complete la carga",
+  "artwork_delete_error_message_label": "Hubo un problema al eliminar la obra de arte",
+  "artwork_delete_success_message_label": "¡Las ilustraciones se eliminaron con éxito!",
+  "artwork_delete_dialog_title": "¿Eliminar arte?",
+  "artwork_delete_dialog_description": "¿Estas seguro que quieres borrarlo? Las ilustraciones no se pueden recuperar.",
+  "artwork_dialog_image_title": "Fuente",
+  "artwork_dialog_image_description": "Seleccione de dónde desea obtener una imagen.",
+  "artwork_image_dialog_camera_text_label": "Cámara",
+  "artwork_image_dialog_gallery_text_label": "Galería",
+
+  "registration_app_bar_title": "Registrarse",
+  "registration_app_bar_error_state_message": "Error",
+  "registration_email_label": "Introduce tu correo electrónico",
+  "registration_password_label": "Ingresa tu contraseña",
+  "registration_password_confirmation_label": "Ingrese su contraseña nuevamente",
+  "registration_street_address_label": "Ingrese la dirección de su escuela",
+  "registration_school_name_label": "Ingrese el nombre de su escuela",
+  "registration_city_label": "Ingrese la ciudad de su escuela",
+  "registration_state_label": "Ingrese el estado de su escuela",
+  "registration_zipcode_label": "Ingrese el código postal de su escuela",
+  "registration_button_label" : "Registrarse",
+
+
+  "school_gallery_app_bar_title": "Galería de arte escolar",
+  "school_gallery_home_tag": "Hogar",
+  "school_gallery_profile_tag": "Perfil",
+  "school_gallery_messages_tag": "Mensajes",
+
+
+  "gallery_app_bar_title": "Galería",
+  "gallery_error_state_message": "Error",
+  "gallery_empty_artworks_message_label": "Couldn't find any artworks",
+  "gallery_current_zipcode_error": "Couldn't locate your zipcode",
+  "school_gallery_cart_tag": "Carrito",
+
+  "artwork_details_top_banner_message": "¿Quieres comprar esta pieza? Rellena el siguiente formulario",
+  "artwork_details_untitled_label": "Intitulado",
+  "artwork_details_suggested_donation": "Donación sugerida:",
+  "artwork_details_name_label": "Nombre",
+  "artwork_details_email_label": "Email",
+  "artwork_details_message_label": "Mensaje",
+  "artwork_details_reply_to": "Responder a: ",
+  "artwork_details_inquires_about": "Consultas sobre:",
+  "artwork_details_submit_button_label": "Enviar",
+  "artwork_details_form_submitted_message": "Formulario enviado",
+
+
+  "carousel_widget_default_student_name": "Anónimo",
+  "gallery_grid_widget_default_artwork_title": "Intitulado",
+
+  "network_failed_error_message_label": "Check your network connection and try again."
+}
+
+
+
+
+
+
+
+

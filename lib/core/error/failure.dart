@@ -13,6 +13,9 @@ class ServerFailure extends Failure {
 }
 
 class CacheFailure extends Failure {
+  final String message;
+
+  CacheFailure({this.message});
   @override
   List<Object> get props => null;
 }
@@ -53,4 +56,22 @@ class ArtworkInputFailure extends Failure {
   List<Object> get props => [
         message,
       ];
+}
+
+class SearchFiltersFailure extends Failure {
+  final String message;
+
+  SearchFiltersFailure({this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class PlatformFailure extends Failure {
+  final String message;
+
+  PlatformFailure({this.message});
+
+  @override
+  List<Object> get props => [message];
 }

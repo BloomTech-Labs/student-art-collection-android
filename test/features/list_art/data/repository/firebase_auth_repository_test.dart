@@ -25,6 +25,7 @@ void main() {
   MockFirebaseAuth mockFirebaseAuth;
   MockAuthResult mockAuthResult;
   MockFirebaseUser mockFirebaseUser;
+  MockLocalDataSource mockLocalDataSource;
 
   setUp(() {
     mockRemoteDataSource = MockRemoteDataSource();
@@ -32,11 +33,13 @@ void main() {
     mockFirebaseAuth = MockFirebaseAuth();
     mockAuthResult = MockAuthResult();
     mockFirebaseUser = MockFirebaseUser();
+    mockLocalDataSource = MockLocalDataSource();
 
     repository = FirebaseAuthRepository(
         networkInfo: mockNetworkInfo,
         remoteDataSource: mockRemoteDataSource,
-        firebaseAuth: mockFirebaseAuth);
+        firebaseAuth: mockFirebaseAuth,
+        localDataSource: mockLocalDataSource);
   });
 
   void runTestsOnline(Function body) {
@@ -211,7 +214,7 @@ void main() {
       final result = await repository.logoutSchool();
 
       verify(mockFirebaseAuth.signOut());
-      expect(result, Right(true));
+      expect(result, Right(null));
     });
   });
 
@@ -221,11 +224,10 @@ void main() {
         () async {
       when(mockFirebaseAuth.currentUser())
           .thenAnswer((_) async => mockFirebaseUser);
-      when(mockRemoteDataSource.loginSchool(any))
+      when(mockLocalDataSource.getCurrentlyStoredSchool(any))
           .thenAnswer(((_) async => tRegisteredSchool));
 
       final result = await repository.loginSchoolOnReturn();
-
       verify(mockFirebaseAuth.currentUser());
       expect(result, Right(tRegisteredSchool));
     });
@@ -243,7 +245,8 @@ void main() {
     test(
         'should return ServerFailure and logout firebase user when server does not return school',
         () async {
-      when(mockRemoteDataSource.loginSchool(any)).thenThrow(ServerException());
+      when(mockLocalDataSource.getCurrentlyStoredSchool(any))
+          .thenThrow(ServerException());
       when(mockFirebaseAuth.currentUser())
           .thenAnswer((_) async => mockFirebaseUser);
       when(mockFirebaseUser.uid).thenReturn('test');

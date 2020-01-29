@@ -22,6 +22,8 @@ const ARTWORK_DESCRIPTION = 'description';
 const ARTWORK_DATE_POSTED = 'date_posted';
 const ARTWORK_IMAGES = 'images'; //not implemented yet
 
+const ARTWORK_UPLOAD_MAP_KEY = 'input';
+
 //School
 const SCHOOL_ID = 'id';
 const SCHOOL_SCHOOL_ID = 'school_id';
@@ -33,10 +35,14 @@ const SCHOOL_STATE = 'state'; //not implemented yet
 const SCHOOL_ZIPCODE = 'zipcode';
 const SCHOOL_ARTWORKS = 'artworks'; //not implemented yet
 
+const LOGIN_SCHOOL_QUERY_KEY = 'schoolBySchoolId';
+
 //TODO: fill this in when backend is setup
 //Contact Form
-const CONTACT_FORM_SEND_TO =  'sendto';
+const CONTACT_FORM_SEND_TO = 'sendto';
 const CONTACT_FORM_NAME = 'name';
-const CONTACT_FORM_MESSAGE =  'message';
-const CONTACT_FORM_FROM =  'fromUser';
-const CONTACT_FORM_SUBJECT =  'subject';
+const CONTACT_FORM_MESSAGE = 'message';
+const CONTACT_FORM_FROM = 'fromUser';
+const CONTACT_FORM_SUBJECT = 'subject';
+
+const SCHOOL_MUTATION_RESULT_KEY = 'action';

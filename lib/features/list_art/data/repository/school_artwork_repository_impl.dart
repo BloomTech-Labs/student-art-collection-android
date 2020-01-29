@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,8 +9,10 @@ import 'package:student_art_collection/core/error/failure.dart';
 import 'package:student_art_collection/core/network/network_info.dart';
 import 'package:student_art_collection/features/list_art/data/data_source/school_remote_data_source.dart';
 import 'package:student_art_collection/features/list_art/domain/repository/school_artwork_repository.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/delete_artwork.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/get_all_school_art.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/upload_artwork.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/upload_image.dart';
 
 class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
   final NetworkInfo networkInfo;
@@ -51,7 +55,52 @@ class SchoolArtworkRepositoryImpl implements SchoolArtworkRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, Artwork>> updateArtwork(
+      ArtworkToUpload artworkToUpdate) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final uploadedArtwork =
+            await remoteDataSource.updateArtwork(artworkToUpdate);
+        return Right(uploadedArtwork);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ReturnedImageUrl>> hostImage(File file) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final hostedImage = await remoteDataSource.hostImage(file);
+        return Right(hostedImage);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
   Future<bool> _isNetworkAvailable() {
     return networkInfo.isConnected;
+  }
+
+  @override
+  Future<Either<Failure, ArtworkToDeleteId>> deleteArtwork(
+      ArtworkToDeleteId id) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final deletedId = await remoteDataSource.deleteArtwork(id.artId);
+        return Right(deletedId);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 }

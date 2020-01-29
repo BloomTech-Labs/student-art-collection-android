@@ -3,6 +3,7 @@ import 'package:student_art_collection/core/util/theme_constants.dart';
 
 InputDecoration getAuthInputDecoration(String hint) {
   return InputDecoration(
+    counterText: '',
     labelText: hint,
     labelStyle: TextStyle(
       color: Colors.black54,
