@@ -43,7 +43,6 @@ class InputConverter {
         !checkNullOrEmpty(schoolName) ||
         !checkNullOrEmpty(address) ||
         !checkNullOrEmpty(city) ||
-        !checkNullOrEmpty(state) ||
         !checkNullOrEmpty(zipcode)) {
       return Left(
           UserInputFailure(message: 'Please make sure no fields are empty.'));

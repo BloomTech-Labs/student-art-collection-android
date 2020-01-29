@@ -122,6 +122,7 @@ void _sortBySortType(
       return b.datePosted.compareTo(a.datePosted);
     });
   }
+  return;
 }
 
 Future<List<Artwork>> returnFilteredArtworks(

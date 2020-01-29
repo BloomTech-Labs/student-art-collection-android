@@ -43,13 +43,22 @@ class _GalleryPageState extends State<GalleryPage> {
         direction: InnerDrawerDirection.end);
   }
 
+  Map<String, FilterType> filterTypes = {
+    'zipcode': FilterTypeZipCode(
+      zipcode: false,
+    ),
+    'category': FilterTypeCategory(),
+    'search': FilterTypeSearch(),
+  };
+
   @override
   Widget build(BuildContext context) {
     return FilterDrawer(
       innerDrawerKey: _innerDrawerKey,
       isSchool: false,
       onApplyPressed: (filters, sort) {
-        getArtworkList(sortType: sort, filterTypes: filters);
+        filterTypes = filters;
+        getArtworkList(sortType: sort, filterTypes: filterTypes);
         _toggle();
       },
       scaffold: BlocProvider<GalleryBloc>(
@@ -140,7 +149,7 @@ class _GalleryPageState extends State<GalleryPage> {
   }
 
   Widget buildInitial() {
-    getArtworkList();
+    getArtworkList(filterTypes: filterTypes);
     return Center();
   }
 
