@@ -8,7 +8,6 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
-import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
@@ -106,6 +105,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           children: <Widget>[
             topBannerWidget(screenHeight: screenHeight),
             carouselWidget(screenHeight: screenHeight),
+            descriptionWidget(),
             contactFormWidget(screenHeight: screenHeight, context: context)
           ],
         ),
@@ -149,24 +149,20 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           Positioned(
             bottom: 5,
             left: 16,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: Text.rich(
+            child: Container(
+              child: Text.rich(
+                TextSpan(
+                  children: [
                     TextSpan(
-                      children: [
-                        TextSpan(
-                          text: schoolName + '\n',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(text: artworkDate),
-                      ],
+                      text: schoolName + '\n',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                    TextSpan(text: artworkDate),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           Positioned(
@@ -206,6 +202,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
         Container(
           child: Column(
             children: <Widget>[
+
               Container(
                 height: smallBoxHeight / 2,
                 child: Center(
@@ -333,5 +330,15 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
     );
     _scaffoldKey.currentState.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  Widget descriptionWidget(){
+    return Container(
+      padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+      child: Text.rich(TextSpan(children: [
+      TextSpan(text: 'Description: \n', style: TextStyle(fontWeight: FontWeight.bold)),
+      TextSpan(text: artwork.description)
+      ])),
+    );
   }
 }
