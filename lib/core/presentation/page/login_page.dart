@@ -75,6 +75,10 @@ class _LoginFormState extends State<LoginForm> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  void _resetFocus() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+
   _LoginFormState(this.screenHeight);
 
   void _onCheckboxChange() {
@@ -126,103 +130,111 @@ class _LoginFormState extends State<LoginForm> {
     double positionDivider = screenHeight * (.27);
     double positionBottomButton = screenHeight * (.16);
 
-    return Stack(
-      children: <Widget>[
-        topBanner(
-            position: positionTopBanner,
-            text:
-                AppLocalizations.of(context).translate(TEXT_LOGIN_HEADER_TEXT),
-            fontSize: 40),
-        textFieldWidget(
-            controller: emailController,
-            position: positionTopTextField,
-            text: AppLocalizations.of(context)
-                .translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        _resetFocus();
+      },
+      child: Stack(
+        children: <Widget>[
+          topBanner(
+              position: positionTopBanner,
+              text: AppLocalizations.of(context)
+                  .translate(TEXT_LOGIN_HEADER_TEXT),
+              fontSize: 40),
+          textFieldWidget(
+              controller: emailController,
+              position: positionTopTextField,
+              text: AppLocalizations.of(context)
+                  .translate(TEXT_LOGIN_EMAIL_ADDRESS_LABEL),
+              onChanged: (value) {
+                email = value;
+              },
+              isObscured: false),
+          textFieldWidget(
+              controller: passwordController,
+              position: positionBottomTextField,
+              text: AppLocalizations.of(context)
+                  .translate(TEXT_LOGIN_PASSWORD_LABEL),
+              onChanged: (value) {
+                password = value;
+              },
+              isObscured: true),
+          checkBoxWithLabel(
+            position: positionCheckBox,
+            label: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_REMEMBER_ME_BOX),
             onChanged: (value) {
-              email = value;
+              _resetFocus();
+              _onCheckboxChange();
             },
-            isObscured: false),
-        textFieldWidget(
-            controller: passwordController,
-            position: positionBottomTextField,
-            text: AppLocalizations.of(context)
-                .translate(TEXT_LOGIN_PASSWORD_LABEL),
-            onChanged: (value) {
-              password = value;
+          ),
+          divider(
+              position: positionDivider,
+              text: AppLocalizations.of(context)
+                  .translate(TEXT_LOGIN_DIVIDER_TEXT)),
+          longButton(
+            position: positionBottomButton,
+            label: AppLocalizations.of(context)
+                .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
+            onTap: () {
+              Navigator.pushNamed(context, BuyerHomePage.ID);
             },
-            isObscured: true),
-        checkBoxWithLabel(
-          position: positionCheckBox,
-          label: AppLocalizations.of(context)
-              .translate(TEXT_LOGIN_REMEMBER_ME_BOX),
-          onChanged: (value) {
-            _onCheckboxChange();
-          },
-        ),
-        divider(
-            position: positionDivider,
-            text: AppLocalizations.of(context)
-                .translate(TEXT_LOGIN_DIVIDER_TEXT)),
-        longButton(
-          position: positionBottomButton,
-          label: AppLocalizations.of(context)
-              .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
-          onTap: () {
-            Navigator.pushNamed(context, BuyerHomePage.ID);
-          },
-        ),
-        footerWidget(
-            textSpan: TextSpan(
-                text: AppLocalizations.of(context)
-                    .translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: AppLocalizations.of(context)
-                        .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
-                    style: TextStyle(
-                      color: actionColor,
+          ),
+          footerWidget(
+              textSpan: TextSpan(
+                  text: AppLocalizations.of(context)
+                      .translate(TEXT_LOGIN_REGISTER_HERE_PREFIX),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: AppLocalizations.of(context)
+                          .translate(TEXT_LOGIN_REGISTER_HERE_MAIN),
+                      style: TextStyle(
+                        color: actionColor,
+                      ),
+                    ),
+                    TextSpan(
+                        text: AppLocalizations.of(context)
+                            .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
+                        style: TextStyle(color: Colors.white))
+                  ]),
+              onTap: dispatchRegistration),
+          BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
+            builder: (BuildContext context, state) {
+              if (state is! SchoolAuthLoading) {
+                return middleButton(
+                  position: positionMiddleButton,
+                  icon: Icon(
+                    Icons.arrow_forward,
+                    size: 40,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    _resetFocus();
+                    dispatchLogin();
+                  },
+                );
+              } else {
+                return Stack(children: <Widget>[
+                  middleButton(
+                      position: positionMiddleButton,
+                      onTap: () {},
+                      icon: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.black))),
+                  SizedBox.expand(
+                    child: Container(
+                      color: Colors.black.withOpacity(.7),
                     ),
                   ),
-                  TextSpan(
-                      text: AppLocalizations.of(context)
-                          .translate(TEXT_LOGIN_REGISTER_HERE_SUFFIX),
-                      style: TextStyle(color: Colors.white))
-                ]),
-            onTap: dispatchRegistration),
-        BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
-          builder: (BuildContext context, state) {
-            if (state is! SchoolAuthLoading) {
-              return middleButton(
-                position: positionMiddleButton,
-                icon: Icon(
-                  Icons.arrow_forward,
-                  size: 40,
-                  color: Colors.black,
-                ),
-                onTap: () {
-                  dispatchLogin();
-                },
-              );
-            } else {
-              return Stack(children: <Widget>[
-                middleButton(
-                    position: positionMiddleButton,
-                    onTap: () {},
-                    icon: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.black))),
-                SizedBox.expand(
-                  child: Container(
-                    color: Colors.black.withOpacity(.7),
-                  ),
-                ),
-              ]);
-            }
-          },
-        ),
-      ],
+                ]);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
