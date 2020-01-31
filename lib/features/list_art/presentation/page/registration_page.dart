@@ -36,141 +36,151 @@ class _SchoolRegistrationPageState extends State<SchoolRegistrationPage> {
   GlobalKey<ScaffoldState> _scaffoldKey =
       new GlobalKey<ScaffoldState>(); // The app's "state".
 
+  void _resetFocus() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SchoolAuthBloc>(
-      create: (context) => sl<SchoolAuthBloc>(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        resizeToAvoidBottomPadding: true,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            AppLocalizations.of(context)
-                .translate(TEXT_REGISTRATION_APP_BAR_TITLE),
-            style: TextStyle(),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 1.0),
-            child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
-              builder: (context, state) {
-                _blocContext = context;
-                if (state is SchoolAuthLoading) {
-                  return AppBarLoading();
-                }
-                return EmptyContainer();
-              },
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        _resetFocus();
+      },
+      child: BlocProvider<SchoolAuthBloc>(
+        create: (context) => sl<SchoolAuthBloc>(),
+        child: Scaffold(
+          key: _scaffoldKey,
+          resizeToAvoidBottomPadding: true,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              AppLocalizations.of(context)
+                  .translate(TEXT_REGISTRATION_APP_BAR_TITLE),
+              style: TextStyle(),
+            ),
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 1.0),
+              child: BlocBuilder<SchoolAuthBloc, SchoolAuthState>(
+                builder: (context, state) {
+                  _blocContext = context;
+                  if (state is SchoolAuthLoading) {
+                    return AppBarLoading();
+                  }
+                  return EmptyContainer();
+                },
+              ),
             ),
           ),
-        ),
-        body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
-          listener: (context, state) {
-            if (state is Authorized) {
-              Navigator.pushReplacementNamed(context, SchoolHomePage.ID);
-            } else if (state is SchoolAuthError) {
-              showSnackBar(state.message);
-            }
-          },
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: ListView(
-                children: <Widget>[
-                  TextField(
-                    maxLength: 40,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    decoration: getAuthInputDecoration(
-                        AppLocalizations.of(context)
-                            .translate(TEXT_REGISTRATION_EMAIL_LABEL)),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    maxLength: 64,
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    onChanged: (value) {
-                      password = value;
-                    },
-                    decoration: getAuthInputDecoration(
-                        AppLocalizations.of(context)
-                            .translate(TEXT_REGISTRATION_PASSWORD_LABEL)),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    maxLength: 64,
-                    obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
-                    onChanged: (value) {
-                      verifyPassword = value;
-                    },
-                    decoration: getAuthInputDecoration(
-                        AppLocalizations.of(context).translate(
-                            TEXT_REGISTRATION_PASSWORD_CONFIRMATION_LABEL)),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    maxLength: 80,
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) {
-                      address = value;
-                    },
-                    decoration: getAuthInputDecoration(
-                        AppLocalizations.of(context)
-                            .translate(TEXT_REGISTRATION_STREET_ADDRESS_LABEL)),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    maxLength: 64,
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) {
-                      schoolName = value;
-                    },
-                    decoration: getAuthInputDecoration(
-                        AppLocalizations.of(context)
-                            .translate(TEXT_REGISTRATION_SCHOOL_NAME_LABEL)),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    maxLength: 64,
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) {
-                      city = value;
-                    },
-                    decoration: getAuthInputDecoration(
-                        AppLocalizations.of(context)
-                            .translate(TEXT_REGISTRATION_CITY_LABEL)),
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(height: 10),
-                  TextField(
-                    maxLength: 5,
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      zipcode = value;
-                    },
-                    decoration: getAuthInputDecoration(
-                        AppLocalizations.of(context)
-                            .translate(TEXT_REGISTRATION_ZIPCODE_LABEL)),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      FloatingActionButton(
-                        onPressed: () {
-                          dispatchRegistration();
-                        },
-                        child: Icon(
-                          Icons.arrow_forward,
-                          size: 40,
-                        ),
-                      )
-                    ],
-                  )
-                ],
+          body: BlocListener<SchoolAuthBloc, SchoolAuthState>(
+            listener: (context, state) {
+              if (state is Authorized) {
+                Navigator.pushReplacementNamed(context, SchoolHomePage.ID);
+              } else if (state is SchoolAuthError) {
+                showSnackBar(state.message);
+              }
+            },
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: ListView(
+                  children: <Widget>[
+                    TextField(
+                      maxLength: 40,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) {
+                        email = value;
+                      },
+                      decoration: getAuthInputDecoration(
+                          AppLocalizations.of(context)
+                              .translate(TEXT_REGISTRATION_EMAIL_LABEL)),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      maxLength: 64,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      decoration: getAuthInputDecoration(
+                          AppLocalizations.of(context)
+                              .translate(TEXT_REGISTRATION_PASSWORD_LABEL)),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      maxLength: 64,
+                      obscureText: true,
+                      keyboardType: TextInputType.visiblePassword,
+                      onChanged: (value) {
+                        verifyPassword = value;
+                      },
+                      decoration: getAuthInputDecoration(
+                          AppLocalizations.of(context).translate(
+                              TEXT_REGISTRATION_PASSWORD_CONFIRMATION_LABEL)),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      maxLength: 80,
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        address = value;
+                      },
+                      decoration: getAuthInputDecoration(
+                          AppLocalizations.of(context).translate(
+                              TEXT_REGISTRATION_STREET_ADDRESS_LABEL)),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      maxLength: 64,
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        schoolName = value;
+                      },
+                      decoration: getAuthInputDecoration(
+                          AppLocalizations.of(context)
+                              .translate(TEXT_REGISTRATION_SCHOOL_NAME_LABEL)),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      maxLength: 64,
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        city = value;
+                      },
+                      decoration: getAuthInputDecoration(
+                          AppLocalizations.of(context)
+                              .translate(TEXT_REGISTRATION_CITY_LABEL)),
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(height: 10),
+                    TextField(
+                      maxLength: 5,
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        zipcode = value;
+                      },
+                      decoration: getAuthInputDecoration(
+                          AppLocalizations.of(context)
+                              .translate(TEXT_REGISTRATION_ZIPCODE_LABEL)),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        FloatingActionButton(
+                          onPressed: () {
+                            dispatchRegistration();
+                          },
+                          child: Icon(
+                            Icons.arrow_forward,
+                            size: 40,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
