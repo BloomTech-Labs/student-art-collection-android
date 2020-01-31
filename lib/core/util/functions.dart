@@ -155,19 +155,22 @@ List<Artwork> _filterByFilterTypes(
   if (searchFilter != null &&
       searchFilter.searchQuery != null &&
       searchFilter.searchQuery.isNotEmpty) {
-    filteredList = filteredList
-        .where(
-          (artwork) => (artwork.title
-                  .toLowerCase()
-                  .contains(searchFilter.searchQuery.toLowerCase()) ||
-              artwork.schoolInfo.schoolName
-                  .toLowerCase()
-                  .contains(searchFilter.searchQuery.toLowerCase()) ||
-              artwork.artistName
-                  .toLowerCase()
-                  .contains(searchFilter.searchQuery.toLowerCase())),
-        )
-        .toList();
+    filteredList = filteredList.where(
+      (artwork) {
+        return ((artwork.title != null &&
+                artwork.title
+                    .toLowerCase()
+                    .contains(searchFilter.searchQuery.toLowerCase())) ||
+            (artwork.schoolInfo.schoolName != null &&
+                artwork.schoolInfo.schoolName
+                    .toLowerCase()
+                    .contains(searchFilter.searchQuery.toLowerCase())) ||
+            (artwork.artistName != null &&
+                artwork.artistName
+                    .toLowerCase()
+                    .contains(searchFilter.searchQuery.toLowerCase())));
+      },
+    ).toList();
   }
   return filteredList;
 }

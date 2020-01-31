@@ -39,19 +39,15 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
         searchFilters.category != null &&
         searchFilters.category > 0 &&
         searchFilters.category < 6) {
-      final QueryResult result = await performQuery(
-          GET_ARTWORKS_BY_FILTER,
-          {
-            'zipcode':
-                searchFilters.zipcode == true ? await getCurrentZipcode() : '',
-            'category': searchFilters.category > 0 && searchFilters.category < 6
-                ? searchFilters.category.toString()
-                : '',
-          },
-          false);
+      final QueryResult result =
+          await performFilterArtworkMutation(searchFilters);
       if (result.hasException) {
         throw ServerException();
       }
+      return convertResultToArtworkList(result, "filter");
+    } else if (searchFilters.zipcode == true) {
+      final QueryResult result =
+          await performFilterArtworkMutation(searchFilters);
       return convertResultToArtworkList(result, "filter");
     } else {
       final QueryResult result =
@@ -61,6 +57,25 @@ class GraphQLBuyerRemoteDataSource extends BaseRemoteDataSource
       }
       return convertResultToArtworkList(result, "allArts");
     }
+  }
+
+  Future<QueryResult> performAllArtworkMutation() async {
+    return await performQuery(GET_ALL_ARTWORK_FOR_BUYER, null, false);
+  }
+
+  Future<QueryResult> performFilterArtworkMutation(
+      SearchFilters searchFilters) async {
+    return await performQuery(
+      GET_ARTWORKS_BY_FILTER,
+      {
+        'zipcode':
+            searchFilters.zipcode == true ? await getCurrentZipcode() : '',
+        'category': searchFilters.category > 0 && searchFilters.category < 6
+            ? searchFilters.category.toString()
+            : '',
+      },
+      false,
+    );
   }
 
   @override
