@@ -12,6 +12,7 @@ import 'package:student_art_collection/features/list_art/domain/repository/schoo
 import 'package:student_art_collection/features/list_art/domain/usecase/login_school.dart';
 import 'package:student_art_collection/features/list_art/domain/usecase/register_new_school.dart';
 import 'package:meta/meta.dart';
+import 'package:student_art_collection/features/list_art/domain/usecase/update_school_info.dart';
 
 class FirebaseAuthRepository implements SchoolAuthRepository {
   final NetworkInfo networkInfo;
@@ -107,6 +108,23 @@ class FirebaseAuthRepository implements SchoolAuthRepository {
     } on CacheException {
       firebaseAuth.signOut();
       return Left(CacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, School>> updateSchoolInfo(
+      SchoolToUpdate schoolToUpdate) async {
+    if (await _isNetworkAvailable()) {
+      try {
+        final updatedSchool =
+            await remoteDataSource.updateSchoolInfo(schoolToUpdate);
+        localDataSource.storeSchool(updatedSchool);
+        return Right(updatedSchool);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
     }
   }
 }

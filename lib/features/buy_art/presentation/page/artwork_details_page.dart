@@ -8,7 +8,6 @@ import 'package:student_art_collection/core/domain/entity/artwork.dart';
 import 'package:student_art_collection/core/presentation/widget/build_loading.dart';
 import 'package:student_art_collection/core/presentation/widget/gallery_grid.dart';
 import 'package:student_art_collection/core/util/text_constants.dart';
-import 'package:student_art_collection/core/util/theme_constants.dart';
 import 'package:student_art_collection/features/buy_art/domain/entity/contact_form.dart';
 import 'package:student_art_collection/features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
 import 'package:student_art_collection/core/presentation/widget/carousel_image_viewer.dart';
@@ -106,6 +105,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           children: <Widget>[
             topBannerWidget(screenHeight: screenHeight),
             carouselWidget(screenHeight: screenHeight),
+            descriptionWidget(),
             contactFormWidget(screenHeight: screenHeight, context: context)
           ],
         ),
@@ -114,7 +114,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
   }
 
   Widget topBannerWidget({@required double screenHeight}) {
-    double topBannerHeight = screenHeight * .04;
+    double topBannerHeight = screenHeight * .06;
     return Container(
       height: topBannerHeight,
       alignment: Alignment.center,
@@ -131,10 +131,10 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
 
     //Todo: replace hard coded values with real default price when backend is updated
     String price = artwork.price == 0 ? '20' : artwork.price.toString();
-    String artworkTitle = artwork.title == ""
+    String schoolName = artwork.schoolInfo.schoolName == ""
         ? displayLocalizedString(context, TEXT_ARTWORK_DETAILS_UNTITLED_LABEL)
-        : artwork.title;
-    String artworkDate = artwork.datePosted == null
+        : artwork.schoolInfo.schoolName;
+    String artworkDate = artwork == null
         ? DateTime.now().year.toString()
         : artwork.datePosted.year.toString();
 
@@ -148,13 +148,13 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
           ),
           Positioned(
             bottom: 5,
-            left: 24,
+            left: 16,
             child: Container(
               child: Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: artworkTitle + '\n',
+                      text: schoolName + '\n',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -202,6 +202,7 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
         Container(
           child: Column(
             children: <Widget>[
+
               Container(
                 height: smallBoxHeight / 2,
                 child: Center(
@@ -269,39 +270,33 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
             ],
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(right: 16),
-          alignment: Alignment.bottomRight,
-          child: Container(
-            width: 90,
-            height: 40,
-            alignment: Alignment.center,
-            child: MaterialButton(
-              elevation: 5,
-              color: accentColor,
-              onPressed: () {
-                artworkDetailsBloc.add(SubmitContactForm(ContactForm(
-                    sendTo: artwork.schoolInfo.email,
-                    from: emailController.text,
-                    message: displayLocalizedString(
-                            context, TEXT_ARTWORK_DETAILS_REPLY_TO) +
-                        emailController.text +
-                        "\n\n" +
-                        messageController.text,
-                    subject: nameController.text +
-                        displayLocalizedString(
-                            context, TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) +
-                        artwork.title +
-                        " #: " +
-                        artwork.artId.toString(),
-                    name: nameController.text)));
-              },
-              child: Text(
-                displayLocalizedString(
-                    context, TEXT_ARTWORK_DETAILS_SUBMIT_BUTTON_LABEL),
-                style: TextStyle(color: Colors.white),
+        Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              FloatingActionButton(
+                elevation: 5,
+                onPressed: () {
+                  artworkDetailsBloc.add(SubmitContactForm(ContactForm(
+                      sendTo: artwork.schoolInfo.email,
+                      from: emailController.text,
+                      message: displayLocalizedString(
+                              context, TEXT_ARTWORK_DETAILS_REPLY_TO) +
+                          emailController.text +
+                          "\n\n" +
+                          messageController.text,
+                      subject: nameController.text +
+                          displayLocalizedString(
+                              context, TEXT_ARTWORK_DETAILS_INQUIRES_ABOUT) +
+                          artwork.title +
+                          " #: " +
+                          artwork.artId.toString(),
+                      name: nameController.text)));
+                },
+                child: Icon(Icons.check),
               ),
-            ),
+            ],
           ),
         )
       ],
@@ -335,5 +330,15 @@ class _ArtworkDetailsPageState extends State<ArtworkDetailsPage> {
     );
     _scaffoldKey.currentState.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  Widget descriptionWidget(){
+    return Container(
+      padding: EdgeInsets.only(left: 16, top: 8, right: 16),
+      child: Text.rich(TextSpan(children: [
+      TextSpan(text: 'Description: \n', style: TextStyle(fontWeight: FontWeight.bold)),
+      TextSpan(text: artwork.description)
+      ])),
+    );
   }
 }

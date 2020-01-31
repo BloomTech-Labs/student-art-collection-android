@@ -1,6 +1,8 @@
-part of 'gallery_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:meta/meta.dart';
 
-abstract class GalleryState extends Equatable{
+abstract class GalleryState extends Equatable {
   const GalleryState();
 }
 
@@ -20,6 +22,7 @@ class GalleryLoadingState extends GalleryState {
 
 class GalleryLoadedState extends GalleryState {
   final List<Artwork> artworkList;
+
   const GalleryLoadedState(this.artworkList);
 
   @override
@@ -28,8 +31,26 @@ class GalleryLoadedState extends GalleryState {
 
 class GalleryErrorState extends GalleryState {
   final String message;
+
   const GalleryErrorState({@required this.message});
 
   @override
   List<Object> get props => [message];
+}
+
+class GalleryZipcodeReturnedState extends GalleryState {
+  final String zipcode;
+
+  const GalleryZipcodeReturnedState({
+    @required this.zipcode,
+  });
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [zipcode];
+}
+
+class Unauthorized extends GalleryState {
+  @override
+  List<Object> get props => null;
 }

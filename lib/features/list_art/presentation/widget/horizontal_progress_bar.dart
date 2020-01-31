@@ -6,7 +6,7 @@ class AppBarLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: LinearProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(accentColor),
+        valueColor: AlwaysStoppedAnimation<Color>(actionColor),
         backgroundColor: backgroundColor,
       ),
     );

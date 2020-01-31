@@ -15,9 +15,6 @@
   "login_register_here_suffix": "\n     Schools Only",
   "login_login_button": "Login",
 
-
-
-
   "artwork_upload_price_1": "$5",
   "artwork_upload_price_2": "$10",
   "artwork_upload_price_3": "$15",
@@ -34,6 +31,18 @@
   "artwork_upload_category_3": "Painting",
   "artwork_upload_category_4": "Sculpture",
   "artwork_upload_category_5": "Other",
+  "artwork_upload_category_6": "All",
+
+  "artwork_sort_title_asc": "Artwork Title Asc.",
+  "artwork_sort_title_desc": "Artwork Title Desc.",
+  "artwork_sort_artist_name_asc": "Artist Name Asc.",
+  "artwork_sort_artist_name_desc": "Artist Name Desc.",
+  "artwork_sort_school_name_asc": "School Name Asc.",
+  "artwork_sort_school_name_desc": "School Name Desc.",
+  "artwork_sort_most_recent": "Most Recent",
+  "artwork_sort_oldest": "Oldest",
+  "artwork_sort_most_expensive": "Most Expensive",
+  "artwork_sort_least_expensive": "Least Expensive",
 
   "artwork_upload_artwork_title_label": "Enter Artwork Title",
   "artwork_upload_student_name_label": "Enter Student Name",
@@ -48,7 +57,7 @@
   "image_uploading_message_label": "Uploading Image",
   "artwork_upload_success_label": "Art was successfully uploaded!",
   "artwork_update_success_label": "Art was successfully updated!",
-  "generic_error_message_label": "Something went wrong",
+  "generic_error_message_label": "Something went wrong, try again",
   "generic_image_host_error_message_label": "There was a problem uploading your image",
   "artwork_uploading_wait_message_label": "Please wait until uploading is complete",
   "artwork_delete_error_message_label": "There was a problem deleting the artwork",
@@ -65,23 +74,25 @@
   "registration_email_label": "Enter Your Email",
   "registration_password_label": "Enter Your Password",
   "registration_password_confirmation_label": "Enter Your Password again",
-  "registration_street_address_label": "Enter Your School\"s Street Address",
-  "registration_school_name_label": "Enter Your School\"s Name",
-  "registration_city_label": "Enter Your School\"s City",
-  "registration_state_label": "Enter Your School\"s State",
-  "registration_zipcode_label": "Enter Your School\"s Zipcode",
+  "registration_street_address_label": "Enter Your School's Street Address",
+  "registration_school_name_label": "Enter Your School's Name",
+  "registration_city_label": "Enter Your School's City",
+  "registration_state_label": "Enter Your School's State",
+  "registration_zipcode_label": "Enter Your School's Zipcode",
   "registration_button_label" : "Register",
 
 
   "school_gallery_app_bar_title": "School Art Gallery",
-  "school_gallery_home_tag": "Home",
-  "school_gallery_search_tag": "Search",
+  "school_gallery_home_tag": "Gallery",
+  "school_gallery_profile_tag": "Profile",
   "school_gallery_messages_tag": "Messages",
 
 
   "gallery_app_bar_title": "Gallery",
   "gallery_error_state_message": "Error",
-
+  "gallery_empty_artworks_message_label": "Couldn't find any artworks",
+  "gallery_current_zipcode_error": "Couldn't locate your zipcode",
+  "school_gallery_cart_tag": "Cart",
 
   "artwork_details_top_banner_message": "Want to purchase this piece? Fill out the form below",
   "artwork_details_untitled_label": "Untitled",
@@ -96,7 +107,9 @@
 
 
   "carousel_widget_default_student_name": "Anonymous",
-  "gallery_grid_widget_default_artwork_title": "Untitled"
+  "gallery_grid_widget_default_artwork_title": "Untitled",
+
+  "network_failed_error_message_label": "Check your network connection and try again."
 }
 
 

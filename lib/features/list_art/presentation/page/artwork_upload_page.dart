@@ -20,7 +20,6 @@ import 'package:student_art_collection/features/list_art/presentation/artwork_to
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_bloc.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_event.dart';
 import 'package:student_art_collection/features/list_art/presentation/bloc/upload/artwork_upload_state.dart';
-import 'package:student_art_collection/features/list_art/presentation/list_art_text_constants.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/auth_input_decoration.dart';
 import 'package:student_art_collection/features/list_art/presentation/widget/horizontal_progress_bar.dart';
 
@@ -41,7 +40,7 @@ class ArtworkUploadPage extends StatefulWidget {
 class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
   Artwork artwork;
   String title, artistName, description;
-  bool sold;
+  bool sold = false;
   int category, price;
   List<String> imageUrls;
   ArtworkUploadBloc _artworkUploadBloc;
@@ -57,7 +56,15 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
 
   _ArtworkUploadPageState({
     this.artwork,
-  });
+  }) {
+    if (artwork != null) {
+      sold = artwork.sold;
+    }
+  }
+
+  void _resetFocus() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
 
   List<String> _getPrices() {
     return [
@@ -138,307 +145,368 @@ class _ArtworkUploadPageState extends State<ArtworkUploadPage> {
   }
 
   @override
+  void dispose() {
+    titleTextController.dispose();
+    studentTextController.dispose();
+    descriptionTextController.dispose();
+    dateTextController.dispose();
+    priceTextController.dispose();
+    categoryTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider<ArtworkUploadBloc>(
-      create: (context) => _artworkUploadBloc,
-      child: Scaffold(
-        appBar: AppBar(
-          title: AppBarLogo(),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.WARNING,
-                    animType: AnimType.BOTTOMSLIDE,
-                    tittle: displayLocalizedString(
-                        TEXT_ARTWORK_DELETE_DIALOG_TITLE_LABEL),
-                    desc: displayLocalizedString(
-                        TEXT_ARTWORK_DELETE_DIALOG_DESCRIPTION_LABEL),
-                    btnCancelOnPress: () {},
-                    btnOkOnPress: () {
-                      dispatchDelete();
-                    }).show();
-              },
-            )
-          ],
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 1.0),
-            child: BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(
-              builder: (context, state) {
-                if (state is ArtworkUploadLoading) {
-                  return AppBarLoading();
-                }
-                return EmptyContainer();
-              },
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        _resetFocus();
+      },
+      child: BlocProvider<ArtworkUploadBloc>(
+        create: (context) => _artworkUploadBloc,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Details',
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+            centerTitle: true,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  _resetFocus();
+                  AwesomeDialog(
+                      btnOkColor: actionColor,
+                      btnCancelColor: primaryColor,
+                      context: context,
+                      dialogType: DialogType.WARNING,
+                      animType: AnimType.BOTTOMSLIDE,
+                      tittle: displayLocalizedString(
+                          TEXT_ARTWORK_DELETE_DIALOG_TITLE_LABEL),
+                      desc: displayLocalizedString(
+                          TEXT_ARTWORK_DELETE_DIALOG_DESCRIPTION_LABEL),
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {
+                        dispatchDelete();
+                      }).show();
+                },
+              )
+            ],
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 1.0),
+              child: BlocBuilder<ArtworkUploadBloc, ArtworkUploadState>(
+                builder: (context, state) {
+                  if (state is ArtworkUploadLoading) {
+                    return AppBarLoading();
+                  }
+                  return EmptyContainer();
+                },
+              ),
             ),
           ),
-        ),
-        body: BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
-          listener: (context, state) {
-            if (state is ArtworkUploadSuccess) {
-              popAndReturn(
-                context,
-                'upload',
-                state.artwork,
-                state.message,
-              );
-            } else if (state is ArtworkUpdateSuccess) {
-              popAndReturn(
-                context,
-                'update',
-                state.artwork,
-                state.message,
-              );
-            } else if (state is EditArtworkInitialState) {
-              setState(() {
-                populateData(state.artwork);
-              });
-            } else if (state is ImageHostSuccess) {
-              setState(() {
-                imageUrls.add(state.imageUrl);
-              });
-            } else if (state is ArtworkUploadLoading) {
-            } else if (state is ArtworkUploadError) {
-              showSnackBar(context, state.message);
-            } else if (state is ArtworkDeleteSuccess) {
-              popAndReturn(
-                context,
-                'delete',
-                null,
-                TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL,
-              );
-            }
-          },
-          child: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      width: double.infinity,
-                      child: Stack(
-                        children: <Widget>[
-                          Material(
-                            elevation: 2,
-                            child: OutlineButton(
-                              child: CarouselImageViewer(
-                                isEditable: true,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.3,
-                                imageList: imageUrls,
-                                artwork: null,
-                              ),
-                              onPressed: () {},
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.camera_alt,
-                                color: accentColor,
-                              ),
-                              iconSize: 40,
-                              onPressed: () {
-                                _getImage();
-                              },
-                            ),
-                            bottom: 0,
-                            left: 0,
-                          )
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      flex: 6,
-                      fit: FlexFit.loose,
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(height: 10),
-                          Material(
-                            child: TextField(
-                              controller: titleTextController,
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                title = value;
-                              },
-                              decoration: getAuthInputDecoration(
-                                  displayLocalizedString(
-                                      TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Material(
-                            child: TextField(
-                              controller: studentTextController,
-                              keyboardType: TextInputType.text,
-                              onChanged: (value) {
-                                artistName = value;
-                              },
-                              decoration: getAuthInputDecoration(
-                                  displayLocalizedString(
-                                      TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Flexible(
-                                flex: 1,
-                                child: Stack(
-                                  overflow: Overflow.visible,
-                                  children: <Widget>[
-                                    Material(
-                                      child: TextField(
-                                        enabled: false,
-                                        decoration: getAuthInputDecoration(
-                                            displayLocalizedString(
-                                                TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
-                                        controller: dateTextController,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.date_range,
-                                            color: accentColor,
-                                          ),
-                                          onPressed: () {
-                                            _selectDate(context);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+          body: BlocListener<ArtworkUploadBloc, ArtworkUploadState>(
+            listener: (context, state) {
+              if (state is ArtworkUploadSuccess) {
+                popAndReturn(
+                  context,
+                  'upload',
+                  state.artwork,
+                  state.message,
+                );
+              } else if (state is ArtworkUpdateSuccess) {
+                popAndReturn(
+                  context,
+                  'update',
+                  state.artwork,
+                  state.message,
+                );
+              } else if (state is EditArtworkInitialState) {
+                setState(() {
+                  populateData(state.artwork);
+                });
+              } else if (state is ImageHostSuccess) {
+                setState(() {
+                  imageUrls.add(state.imageUrl);
+                });
+              } else if (state is ArtworkUploadLoading) {
+              } else if (state is ArtworkUploadError) {
+                showSnackBar(context, state.message);
+              } else if (state is ArtworkDeleteSuccess) {
+                popAndReturn(
+                  context,
+                  'delete',
+                  null,
+                  TEXT_ARTWORK_DELETE_SUCCESS_MESSAGE_LABEL,
+                );
+              }
+            },
+            child: SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        width: double.infinity,
+                        child: Stack(
+                          children: <Widget>[
+                            Material(
+                              elevation: 2,
+                              child: OutlineButton(
+                                child: CarouselImageViewer(
+                                  isEditable: true,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  imageList: imageUrls,
+                                  artwork: artwork,
+                                ),
+                                onPressed: () {
+                                  _resetFocus();
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: Stack(
-                                  overflow: Overflow.visible,
-                                  children: <Widget>[
-                                    Material(
-                                      child: TextField(
-                                        enabled: false,
-                                        decoration: getAuthInputDecoration(
-                                            displayLocalizedString(
-                                                TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
-                                        controller: priceTextController,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.attach_money,
-                                            color: accentColor,
-                                          ),
-                                          onPressed: () {
-                                            _showPricePicker(context);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Stack(
-                            overflow: Overflow.visible,
-                            children: <Widget>[
-                              Material(
-                                child: TextField(
-                                  enabled: false,
-                                  decoration: getAuthInputDecoration(
-                                      displayLocalizedString(
-                                          TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
-                                  controller: categoryTextController,
-                                ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: IconButton(
-                                    icon: Icon(
-                                      Icons.category,
-                                      color: accentColor,
-                                    ),
-                                    onPressed: () {
-                                      _showCategoryPicker(context);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Material(
-                            child: TextField(
-                              controller: descriptionTextController,
-                              maxLines: null,
-                              maxLength: 200,
-                              decoration: getAuthInputDecoration(
-                                  displayLocalizedString(
-                                      TEXT_ARTWORK_DESCRIPTION_FORM_HINT_LABEL)),
-                              onChanged: (value) {
-                                description = value;
-                              },
                             ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              BlocBuilder<ArtworkUploadBloc,
+                            Positioned(
+                              child: BlocBuilder<ArtworkUploadBloc,
                                   ArtworkUploadState>(
                                 builder: (context, state) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: FloatingActionButton(
-                                        elevation: 4,
-                                        onPressed: () {
-                                          if (state is ArtworkUploadLoading) {
-                                            showSnackBar(context,
-                                                TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL);
-                                          } else {
-                                            dispatchUploadOrUpdate();
-                                          }
-                                        },
-                                        backgroundColor: accentColor,
-                                        child: Icon(Icons.check)),
+                                  return IconButton(
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      color: accentColor,
+                                    ),
+                                    iconSize: 40,
+                                    onPressed: () {
+                                      _resetFocus();
+                                      if (state is ArtworkUploadLoading) {
+                                        showSnackBar(context,
+                                            TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL);
+                                      } else {
+                                        _getImage();
+                                      }
+                                    },
                                   );
                                 },
                               ),
-                            ],
-                          ),
-                        ],
+                              bottom: 0,
+                              left: 0,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Flexible(
+                        flex: 6,
+                        fit: FlexFit.loose,
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 10),
+                            Material(
+                              child: TextField(
+                                controller: titleTextController,
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+                                  title = value;
+                                },
+                                decoration: getAuthInputDecoration(
+                                    displayLocalizedString(
+                                        TEXT_ARTWORK_UPLOAD_ARTWORK_TITLE_LABEL)),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Material(
+                              child: TextField(
+                                controller: studentTextController,
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+                                  artistName = value;
+                                },
+                                decoration: getAuthInputDecoration(
+                                    displayLocalizedString(
+                                        TEXT_ARTWORK_UPLOAD_STUDENT_NAME_LABEL)),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Flexible(
+                                  flex: 1,
+                                  child: Stack(
+                                    overflow: Overflow.visible,
+                                    children: <Widget>[
+                                      Material(
+                                        child: TextField(
+                                          enabled: false,
+                                          decoration: getAuthInputDecoration(
+                                              displayLocalizedString(
+                                                  TEXT_ARTWORK_UPLOAD_DATE_SELECTION_LABEL)),
+                                          controller: dateTextController,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: IconButton(
+                                            icon: Icon(
+                                              Icons.date_range,
+                                              color: accentColor,
+                                            ),
+                                            onPressed: () {
+                                              _resetFocus();
+                                              _selectDate(context);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Stack(
+                                    overflow: Overflow.visible,
+                                    children: <Widget>[
+                                      Material(
+                                        child: TextField(
+                                          enabled: false,
+                                          decoration: getAuthInputDecoration(
+                                              displayLocalizedString(
+                                                  TEXT_ARTWORK_UPLOAD_PRICE_SELECTION_LABEL)),
+                                          controller: priceTextController,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: IconButton(
+                                            icon: Icon(
+                                              Icons.attach_money,
+                                              color: accentColor,
+                                            ),
+                                            onPressed: () {
+                                              _resetFocus();
+                                              _showPricePicker(context);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Stack(
+                              overflow: Overflow.visible,
+                              children: <Widget>[
+                                Material(
+                                  child: TextField(
+                                    enabled: false,
+                                    decoration: getAuthInputDecoration(
+                                        displayLocalizedString(
+                                            TEXT_ARTWORK_UPLOAD_CATEGORY_SELECTION_LABEL)),
+                                    controller: categoryTextController,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.category,
+                                        color: accentColor,
+                                      ),
+                                      onPressed: () {
+                                        _resetFocus();
+                                        _showCategoryPicker(context);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Material(
+                              child: TextField(
+                                controller: descriptionTextController,
+                                maxLines: null,
+                                maxLength: 200,
+                                decoration: getAuthInputDecoration(
+                                    displayLocalizedString(
+                                        TEXT_ARTWORK_DESCRIPTION_FORM_HINT_LABEL)),
+                                onChanged: (value) {
+                                  description = value;
+                                },
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Mark as Sold',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Switch(
+                                      activeColor: actionColor,
+                                      onChanged: (value) {
+                                        _resetFocus();
+                                        setState(() {
+                                          sold = value;
+                                        });
+                                      },
+                                      value: sold,
+                                    ),
+                                  ],
+                                ),
+                                BlocBuilder<ArtworkUploadBloc,
+                                    ArtworkUploadState>(
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: FloatingActionButton(
+                                          elevation: 4,
+                                          onPressed: () {
+                                            if (state is ArtworkUploadLoading) {
+                                              showSnackBar(context,
+                                                  TEXT_ARTWORK_UPLOADING_WAIT_MESSAGE_LABEL);
+                                            } else {
+                                              dispatchUploadOrUpdate();
+                                            }
+                                          },
+                                          backgroundColor: accentColor,
+                                          child: Icon(Icons.check)),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

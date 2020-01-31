@@ -7,7 +7,7 @@ class BuildLoading extends StatelessWidget {
     return Container(
       child: Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(accentColor),
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
         ),
       ),
     );
