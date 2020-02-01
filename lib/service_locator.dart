@@ -34,6 +34,7 @@ import 'package:student_art_collection/features/list_art/presentation/bloc/uploa
 import 'core/util/secret_loader.dart';
 import 'features/buy_art/data/data_source/buyer_local_data_source.dart';
 import 'features/buy_art/data/data_source/buyer_remote_data_source.dart';
+import 'features/buy_art/data/data_source/local_cart_database.dart';
 import 'features/buy_art/domain/repository/buyer_artwork_repository.dart';
 import 'features/buy_art/domain/usecase/get_all_artwork.dart';
 import 'features/buy_art/presentation/bloc/artwork_details/artwork_details_bloc.dart';
@@ -72,6 +73,10 @@ Future init() async {
 
   sl.registerLazySingleton<BuyerLocalDataSource>(
       () => BuyerLocalDataSourceImpl());
+
+  sl.registerLazySingleton<CartDatabase>(() => CartDatabase());
+
+  sl.registerLazySingleton<CartEntriesDao>(() => CartEntriesDao(db: sl()));
 
   /** Feature: List Art */
 
