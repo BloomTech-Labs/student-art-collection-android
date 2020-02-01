@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:student_art_collection/core/domain/entity/artwork.dart';
+import 'package:student_art_collection/features/buy_art/data/data_source/local_cart_database.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/artwork_details_page.dart';
+import 'package:student_art_collection/features/buy_art/presentation/page/buyer_cart_test_page.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/buyer_home_page.dart';
 import 'package:student_art_collection/features/buy_art/presentation/page/gallery_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/artwork_upload_page.dart';
@@ -10,11 +13,19 @@ import 'package:student_art_collection/features/list_art/presentation/page/schoo
 import 'package:student_art_collection/features/list_art/presentation/page/school_home_page.dart';
 import 'package:student_art_collection/features/list_art/presentation/page/school_profile_page.dart';
 
+final db =CartDatabase();
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
 
     switch (settings.name) {
+      case BuyerCartTestPage.ID:
+        return MaterialPageRoute(builder: (_) => MultiProvider(
+            providers: [
+              Provider(create: (_) => db.cartEntriesDao),
+            ],
+            child: BuyerCartTestPage(),
+    ));
       case LoginPage.ID:
         return MaterialPageRoute(builder: (_) => LoginPage());
       case BuyerHomePage.ID:
