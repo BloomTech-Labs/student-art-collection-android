@@ -104,7 +104,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void dispatchGuest() {
-    Navigator.pushNamed(context, GalleryPage.ID);
+    Navigator.pushNamed(context, BuyerHomePage.ID);
   }
 
   @override
@@ -178,7 +178,7 @@ class _LoginFormState extends State<LoginForm> {
             label: AppLocalizations.of(context)
                 .translate(TEXT_LOGIN_GUEST_LOGIN_BUTTON),
             onTap: () {
-              Navigator.pushNamed(context, BuyerHomePage.ID);
+              dispatchGuest();
             },
           ),
           footerWidget(

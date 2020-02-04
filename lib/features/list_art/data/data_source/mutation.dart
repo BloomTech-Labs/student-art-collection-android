@@ -72,7 +72,7 @@ const String ADD_ARTWORK_MUTATION = r'''
         title: $title,
         artist_name: $artist_name,
         description: $description,
-        image_url: $image_url
+        image_url: [$image_url]
       ) {
         id,
         category {
